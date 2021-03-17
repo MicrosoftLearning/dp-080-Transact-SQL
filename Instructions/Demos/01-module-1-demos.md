@@ -32,5 +32,6 @@ Throughout the course, students use a hosted environment that includes **Azure D
 
 ## Run basic SELECT queries
 
-Use these queries at appropriate points during the module presentation.
+Use these example queries at appropriate points during the module presentation.
 
+1. In Azure Data Studio, open the file at 
