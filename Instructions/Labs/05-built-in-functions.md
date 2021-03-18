@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Use Built-in Functions'
-    module: 'Module 5: Built-in Functions'
+    module: 'Module 5: Using Built-in Functions'
 ---
 
 # Use Built-in Functions

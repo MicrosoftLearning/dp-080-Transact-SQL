@@ -56,7 +56,7 @@ Often, multiple rows in a table may contain the same values for a given subset o
 
 ## Sort results using the ORDER BY clause
 
-It's often useful to sort query results into a particular order. 
+It's often useful to sort query results into a particular order.
 
 1. Modify the existing query to return the **Name** and **ListPrice** of all products:
 

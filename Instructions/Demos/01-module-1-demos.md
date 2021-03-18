@@ -29,11 +29,12 @@ Throughout the course, students use a hosted environment that includes **Azure D
     ```
 
 12. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes all fields for all products.
+13. in the results pane, select the **Messages** tab. This tab provides output messages from the query, and is a useful way to check the number of rows returned by the query.
 
 ## Run basic SELECT queries
 
 Use these example queries at appropriate points during the module presentation.
 
-1. In Azure Data Studio, open the file at https://raw.githubusercontent.com/MicrosoftLearning/dp-080-Transact-SQL/master/Scripts/module01-demos.sql
+1. In Azure Data Studio, open the file at **https://raw.githubusercontent.com/MicrosoftLearning/dp-080-Transact-SQL/master/Scripts/module01-demos.sql**
 2. Connect the script to the saved **AdventureWorks** connection.
 3. Select and run each query when relevant (when text is selected in the script editor, the **&#x23f5;Run** button runs only the selected text).
