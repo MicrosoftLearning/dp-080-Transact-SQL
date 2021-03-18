@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Use Subqueries'
-    module: 'Module 4: Using Subqueries'
+    module: 'Module 3: Using Joins and Subqueries'
 ---
 
 # Use Subqueries

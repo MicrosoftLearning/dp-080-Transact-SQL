@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Modify Data'
-    module: 'Module 6: Modifying Data'
+    module: 'Module 5: Modifying Data'
 ---
 
 # Modify Data

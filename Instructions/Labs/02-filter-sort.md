@@ -1,7 +1,7 @@
 ---
 lab:
-    title: 'Filter and Sort Query Results'
-    module: 'Module 2: Filtering and Sorting Query Results'
+    title: 'Sort and Filter Query Results'
+    module: 'Module 2: Sorting and Filtering Query Results'
 ---
 
 # Filter and Sort Query Results
@@ -11,48 +11,6 @@ In this lab, you'll use the Transact-SQL **SELECT** statement to query and filte
 ![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
 
 > **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
-
-## Use the ALL and DISTINCT arguments
-
-Often, multiple rows in a table may contain the same values for a given subset of fields. For example, a table of products might contain a **Color** field that identifies the color of a given product. It's not unreasonable to assume that there may be multiple products of the same color. Similarly, the table might contain a **Size** field; and again it's not unreasonable to assume that there may be multiple products of the same size; or even multiple products with the same combination of size and color.
-
-1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
-2. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-3. In the query editor, enter the following code:
-
-    ```
-    SELECT Color
-    FROM SalesLT.Product;
-    ```
-
-4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes the color of each product in the table.
-
-5. Modify the query as follows, and re-run it.
-
-    ```
-    SELECT ALL Color
-    FROM SalesLT.Product;
-    ```
-
-    The results should be the same as before. The **ALL** parameter is the default behavior, and is applied implicitly to return a row for every record that meets the query criteria.
-
-6. Modify the query to replace **ALL** with **DISTINCT**, as shown here:
-
-    ```
-    SELECT DISTINCT Color
-    FROM SalesLT.Product;
-    ```
-
-7. Run the modified query and note that the results include one row for each unique **Color** value. This ability to remove duplicates from the results can often be useful - for example to retrieve values in order to populate a drop-down list of color options in a user interface.
-
-9. Modify the query to add the **Size** field as shown here:
-
-    ```
-    SELECT DISTINCT Color, Size
-    FROM SalesLT.Product;
-    ```
-
-8. Run the modified query and note that it returns each unique combination of color and size.
 
 ## Sort results using the ORDER BY clause
 
@@ -155,6 +113,48 @@ User interfaces and reports often present large volumes of data as pages, you ma
     FROM SalesLT.Product
     ORDER BY Name OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;
     ```
+
+## Use the ALL and DISTINCT arguments
+
+Often, multiple rows in a table may contain the same values for a given subset of fields. For example, a table of products might contain a **Color** field that identifies the color of a given product. It's not unreasonable to assume that there may be multiple products of the same color. Similarly, the table might contain a **Size** field; and again it's not unreasonable to assume that there may be multiple products of the same size; or even multiple products with the same combination of size and color.
+
+1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
+2. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
+3. In the query editor, enter the following code:
+
+    ```
+    SELECT Color
+    FROM SalesLT.Product;
+    ```
+
+4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes the color of each product in the table.
+
+5. Modify the query as follows, and re-run it.
+
+    ```
+    SELECT ALL Color
+    FROM SalesLT.Product;
+    ```
+
+    The results should be the same as before. The **ALL** parameter is the default behavior, and is applied implicitly to return a row for every record that meets the query criteria.
+
+6. Modify the query to replace **ALL** with **DISTINCT**, as shown here:
+
+    ```
+    SELECT DISTINCT Color
+    FROM SalesLT.Product;
+    ```
+
+7. Run the modified query and note that the results include one row for each unique **Color** value. This ability to remove duplicates from the results can often be useful - for example to retrieve values in order to populate a drop-down list of color options in a user interface.
+
+9. Modify the query to add the **Size** field as shown here:
+
+    ```
+    SELECT DISTINCT Color, Size
+    FROM SalesLT.Product;
+    ```
+
+8. Run the modified query and note that it returns each unique combination of color and size.
 
 ## Filter results with the WHERE clause
 
@@ -268,7 +268,7 @@ Now that you've seen some examples of filtering and sorting data, it's your chan
 The logistics manager at Adventure Works has asked you to generate some reports containing details of the company’s customers to help to reduce transportation costs.
 
 1. Retrieve a list of cities
-    - Initially, you need to produce a list of all of you customers' locations. Write a Transact-SQL query that queries the **SalesLT.Address** table and retrieves all values for **City** and **StateProvince**, removing duplicates.
+    - Initially, you need to produce a list of all of you customers' locations. Write a Transact-SQL query that queries the **SalesLT.Address** table and retrieves the values for **City** and **StateProvince**, removing duplicates and sorted in ascending order of city.
 2. Retrieve the heaviest products
     - Transportation costs are increasing and you need to identify the heaviest products. Retrieve the names of the top ten percent of products by weight.
 
@@ -296,6 +296,7 @@ This section contains suggested solutions for the challenge queries.
     ```
     SELECT DISTINCT City, StateProvince
     FROM SalesLT.Address
+    ORDFER BY City
     ```
  
 2. Retrieve the heaviest products:

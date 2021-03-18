@@ -1,7 +1,7 @@
 ---
 lab:
-    title: 'Query Multiple Tables'
-    module: 'Module 3: Querying Multiple Tables'
+    title: 'Query Multiple Tables with Joins'
+    module: 'Module 3: Using Joins and Subqueries'
 ---
 
 # Query Multiple Tables

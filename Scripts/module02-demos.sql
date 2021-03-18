@@ -1,26 +1,6 @@
 -- This script contains demo code for Module 2 of the Transact-SQL course
 
 
--- ALL and DISTINCT
-
--- Implicit all
-SELECT City
-FROM SalesLT.Address;
-
--- Explicit all
-SELECT ALL City
-FROM SalesLT.Address;
-
--- Distinct
-SELECT DISTINCT City
-FROM SalesLT.Address;
-
--- Distinct combination
-SELECT DISTINCT City, PostalCode
-FROM SalesLT.Address;
-
-
-
 -- ORDER BY
 
 -- Sort by column
@@ -70,6 +50,26 @@ ORDER BY ModifiedDate DESC OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;
 SELECT AddressLine1, ModifiedDate
 FROM SalesLT.Address
 ORDER BY ModifiedDate DESC OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;
+
+
+
+-- ALL and DISTINCT
+
+-- Implicit all
+SELECT City
+FROM SalesLT.Address;
+
+-- Explicit all
+SELECT ALL City
+FROM SalesLT.Address;
+
+-- Distinct
+SELECT DISTINCT City
+FROM SalesLT.Address;
+
+-- Distinct combination
+SELECT DISTINCT City, PostalCode
+FROM SalesLT.Address;
 
 
 

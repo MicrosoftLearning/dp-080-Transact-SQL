@@ -1,7 +1,7 @@
 ---
 demo:
     title: 'Module 3 Demonstrations'
-    module: 'Module 3: Querying Multiple Tables'
+    module: 'Module 3: Using Joins and Subqueries'
 ---
 
 # Module 3 Demonstrations

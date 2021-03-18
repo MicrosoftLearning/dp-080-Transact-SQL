@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Use Built-in Functions'
-    module: 'Module 5: Using Built-in Functions'
+    module: 'Module 4: Using Built-in Functions'
 ---
 
 # Use Built-in Functions
@@ -12,7 +12,7 @@ In this lab, you'll use built-in functions to retrieve and aggregate data in the
 
 > **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
 
-## Get started with functions
+## Scalar functions
 
 Transact-SQL provides a large number of functions that you can use to extract additional information from your data. Most of these functions are *scalar* functions that return a single value based on one or more input parameters, often a data field.
 

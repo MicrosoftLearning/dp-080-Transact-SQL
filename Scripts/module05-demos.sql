@@ -1,133 +1,127 @@
--- This script contains demo code for Module 5 of the Transact-SQL course
+-- This script contains demo code for Module 6 of the Transact-SQL course
 
 
 
--- Basic scalar functions
+-- CREATE A TABLE FOR THE DEMOS
 
--- Dates
-SELECT  AddressID, AddressLine1,
-        YEAR(ModifiedDate) AS ModifiedYear,
-        DATENAME(mm,ModifiedDate) AS ModifiedMonth,
-        DAY(ModifiedDate) AS ModifiedDay,
-        DATENAME(dw, ModifiedDate) AS ModifiedWeekDay,
-        DATEDIFF(yy,ModifiedDate, GETDATE()) AS TimeSinceModification
-FROM SalesLT.Address
-ORDER BY ModifiedDate
+CREATE TABLE SalesLT.Promotion
+    (
+        PromotionID int IDENTITY PRIMARY KEY NOT NULL,
+        PromotionName varchar(20),
+        StartDate datetime NOT NULL DEFAULT GETDATE(),
+        ProductModelID int NOT NULL REFERENCES SalesLT.ProductModel(ProductModelID),
+        Discount decimal(4,2) NOT NULL,
+        Notes nvarchar(max) NULL
+    );
 
-
--- Math
-SELECT TaxAmt,
-       ROUND(TaxAmt, 0) AS Rounded,
-       FLOOR(TaxAmt) AS Floor,
-       CEILING(TaxAmt) AS Ceiling,
-       SQUARE(TaxAmt) AS Squared,
-       SQRT(TaxAmt) AS Root,
-       LOG(TaxAmt) AS Log,
-       TaxAmt * RAND() AS Randomized
-FROM SalesLT.SalesOrderHeader
-
-
--- Text
-SELECT  CompanyName,
-        UPPER(CompanyName) AS UpperCase,
-        LOWER(CompanyName) AS LowerCase,
-        LEN(CompanyName) AS Length,
-        REVERSE(CompanyName) AS Reversed,
-        CHARINDEX(' ', CompanyName) AS FirstSpace,
-        LEFT(CompanyName, CHARINDEX(' ', CompanyName)) AS FirstWord,
-        SUBSTRING(CompanyName, CHARINDEX(' ', CompanyName) + 1, LEN(CompanyName)) AS RestOfName
-FROM SalesLT.Customer;
+-- Show it's empty
+SELECT * FROM SalesLT.Promotion;
 
 
 
+-- INSERT
 
--- Logical
+-- Basic insert with all columns by position
+INSERT INTO SalesLT.Promotion
+VALUES
+('Clearance Sale', '01/01/2021', 23, 0.1, '10% discount')
 
--- IIF
-SELECT AddressType, -- Evaluation       if True    if False    
-       IIF(AddressType = 'Main Office', 'Billing', 'Mailing') AS AddressDescription
-FROM SalesLT.CustomerAddress;
-
-
--- CHOOSE
-
--- Prepare by updating status to a value between 1 and 5
-UPDATE SalesLT.SalesOrderHeader
-SET Status = SalesOrderID % 5 + 1
-
--- Now use CHOOSE to map the status code to a value in a list
-SELECT SalesOrderID, Status,
-       CHOOSE(Status, 'Ordered', 'Confirmed', 'Shipped', 'Delivered', 'Completed') AS OrderStatus
-FROM SalesLT.SalesOrderHeader;
+SELECT * FROM SalesLT.Promotion;
 
 
+-- Use defaults and NULLs
+INSERT INTO SalesLT.Promotion
+VALUES
+('Pull your socks up', DEFAULT, 24, 0.25, NULL)
+
+SELECT * FROM SalesLT.Promotion;
 
 
--- RANKING Functions
+-- Explicit columns
+INSERT INTO SalesLT.Promotion (PromotionName, ProductModelID, Discount)
+VALUES
+('Caps Locked', 2, 0.2)
 
--- Ranking
-SELECT TOP(100) ProductID, Name, ListPrice,
-	RANK() OVER(ORDER BY ListPrice DESC) AS RankByPrice
+SELECT * FROM SalesLT.Promotion;
+
+-- Multiple rows
+INSERT INTO SalesLT.Promotion
+VALUES
+('The gloves are off!', DEFAULT, 3, 0.25, NULL),
+('The gloves are off!', DEFAULT, 4, 0.25, NULL)
+
+SELECT * FROM SalesLT.Promotion;
+
+
+-- Insert from query
+INSERT INTO SalesLT.Promotion (PromotionName, ProductModelID, Discount, Notes)
+SELECT DISTINCT 'Get Framed', m.ProductModelID, 0.1, '10% off ' + m.Name
 FROM SalesLT.Product AS p
-ORDER BY RankByPrice;
+JOIN SalesLT.ProductModel AS m
+    ON p.ProductModelID = m.ProductModelID
+WHERE m.Name LIKE '%frame%';
 
--- Partitioning
-SELECT c.Name AS Category, p.Name AS Product, ListPrice,
-	RANK() OVER(PARTITION BY c.Name ORDER BY ListPrice DESC) AS RankByPrice
-FROM SalesLT.Product AS p
-JOIN SalesLT.ProductCategory AS c
-ON p.ProductCategoryID = c.ProductcategoryID
-ORDER BY Category, RankByPrice;
+SELECT * FROM SalesLT.Promotion;
 
 
+-- Retrieve inserted identity value
+INSERT INTO SalesLT.Promotion (PromotionName, ProductModelID, Discount)
+VALUES
+('A short sale',13, 0.3);
+
+SELECT SCOPE_IDENTITY() AS LatestIdentityInDB;
+
+SELECT IDENT_CURRENT('SalesLT.Promotion') AS LatestPromotionID;
+
+SELECT * FROM SalesLT.Promotion;
+
+-- Override Identity
+SET IDENTITY_INSERT SalesLT.Promotion ON;
+
+INSERT INTO SalesLT.Promotion (PromotionID, PromotionName, ProductModelID, Discount)
+VALUES
+(10, 'Another short sale',37, 0.3);
+
+SET IDENTITY_INSERT SalesLT.Promotion OFF;
+
+SELECT * FROM SalesLT.Promotion;
 
 
--- Aggregate functions and GROUP BY
 
--- Aggergate functions
-SELECT COUNT(*) AS ProductCount,
-       MIN(ListPrice) AS MinPrice,
-       MAX(ListPrice) AS MaxPrice,
-       AVG(ListPrice) AS AvgPrice
-FROM SalesLT.Product
+-- UPDATE
+
+-- Update a single field
+UPDATE SalesLT.Promotion
+SET Notes = '25% off socks'
+WHERE PromotionID = 2;
+
+SELECT * FROM SalesLT.Promotion;
 
 
--- Group by
-SELECT c.Name AS Category,
-       COUNT(*) AS ProductCount,
-       MIN(p.ListPrice) AS MinPrice,
-       MAX(p.ListPrice) AS MaxPrice,
-       AVG(p.ListPrice) AS AvgPrice
-FROM SalesLT.ProductCategory AS c
-JOIN SalesLT.Product AS p
-    ON p.ProductCategoryID = c.ProductCategoryID
-GROUP BY c.Name -- (can't use alias because GROUP BY happens before SELECT)
-ORDER BY Category; -- (can use alias because ORDER BY happens after SELECT)
+-- Update multiple fields
+UPDATE SalesLT.Promotion
+SET Discount = 0.2, Notes = REPLACE(Notes, '10%', '20%')
+WHERE PromotionName = 'Get Framed'
 
--- Filter aggregated groups
--- How NOT to do it!
-SELECT c.Name AS Category,
-       COUNT(*) AS ProductCount,
-       MIN(p.ListPrice) AS MinPrice,
-       MAX(p.ListPrice) AS MaxPrice,
-       AVG(p.ListPrice) AS AvgPrice
-FROM SalesLT.ProductCategory AS c
-JOIN SalesLT.Product AS p
-    ON p.ProductCategoryID = c.ProductCategoryID
-WHERE COUNT(*) > 1 -- Attempt to filter on grouped aggregate = error!
-GROUP BY c.Name
-ORDER BY Category;
+SELECT * FROM SalesLT.Promotion;
 
--- How to do it
-SELECT c.Name AS Category,
-       COUNT(*) AS ProductCount,
-       MIN(p.ListPrice) AS MinPrice,
-       MAX(p.ListPrice) AS MaxPrice,
-       AVG(p.ListPrice) AS AvgPrice
-FROM SalesLT.ProductCategory AS c
-JOIN SalesLT.Product AS p
-    ON p.ProductCategoryID = c.ProductCategoryID
-GROUP BY c.Name
-HAVING COUNT(*) > 1 -- Use HAVING to filter after grouping
-ORDER BY Category;
+-- Update from query
+UPDATE SalesLT.Promotion
+SET Notes = FORMAT(Discount, 'P') + ' off ' + m.Name
+FROM SalesLT.ProductModel AS m
+WHERE Notes IS NULL
+    AND SalesLT.Promotion.ProductModelID = m.ProductModelID;
 
+SELECT * FROM SalesLT.Promotion;
+
+
+-- Delete data
+DELETE FROM SalesLT.Promotion
+WHERE StartDate < DATEADD(dd, -7, GETDATE());
+
+SELECT * FROM SalesLT.Promotion;
+
+-- Truncate to remove all rows
+TRUNCATE TABLE SalesLT.Promotion;
+
+SELECT * FROM SalesLT.Promotion;
