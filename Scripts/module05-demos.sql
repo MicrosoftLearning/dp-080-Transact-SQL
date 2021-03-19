@@ -64,6 +64,14 @@ WHERE m.Name LIKE '%frame%';
 SELECT * FROM SalesLT.Promotion;
 
 
+-- SELECT...INTO
+SELECT SalesOrderID, CustomerID, OrderDate, PurchaseOrderNumber, TotalDue
+INTO SalesLT.Invoice
+FROM SalesLT.SalesOrderHeader;
+
+SELECT * FROM SalesLT.Invoice;
+
+
 -- Retrieve inserted identity value
 INSERT INTO SalesLT.Promotion (PromotionName, ProductModelID, Discount)
 VALUES
@@ -85,6 +93,27 @@ VALUES
 SET IDENTITY_INSERT SalesLT.Promotion OFF;
 
 SELECT * FROM SalesLT.Promotion;
+
+
+-- Sequences
+
+-- Create sequence
+CREATE SEQUENCE SalesLT.InvoiceNumbers AS INT
+START WITH 72000 INCREMENT BY 1;
+
+-- Get next value
+SELECT NEXT VALUE FOR SalesLT.InvoiceNumbers;
+
+-- Get next value again (automatically increments on each retrieval)
+SELECT NEXT VALUE FOR SalesLT.InvoiceNumbers;
+
+-- Insert using next sequence value
+INSERT INTO SalesLT.Invoice
+VALUES
+(NEXT VALUE FOR SalesLT.InvoiceNumbers, 2, GETDATE(), 'PO12345', 107.99);
+
+SELECT * FROM SalesLT.Invoice;
+
 
 
 
