@@ -4,7 +4,7 @@ lab:
     module: 'Module 2: Sorting and Filtering Query Results'
 ---
 
-# Filter and Sort Query Results
+# Sort and Filter Query Results
 
 In this lab, you'll use the Transact-SQL **SELECT** statement to query and filter data in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 

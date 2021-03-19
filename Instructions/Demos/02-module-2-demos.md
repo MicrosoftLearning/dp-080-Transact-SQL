@@ -1,7 +1,7 @@
 ---
 demo:
     title: 'Module 2 Demonstrations'
-    module: 'Module 2: Filtering and Sorting Query Results'
+    module: 'Module 2: Sorting and Filtering Query Results'
 ---
 
 # Module 2 Demonstrations
