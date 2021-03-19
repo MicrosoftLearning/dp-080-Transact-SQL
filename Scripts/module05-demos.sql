@@ -144,6 +144,36 @@ WHERE Notes IS NULL
 SELECT * FROM SalesLT.Promotion;
 
 
+-- Merge insert and update
+-- Create a source table with staged changes (don't worry about the details)
+SELECT SalesOrderID, CustomerID, OrderDate, PurchaseOrderNumber, TotalDue * 1.1 AS TotalDue
+INTO #InvoiceStaging
+FROM SalesLT.SalesOrderHeader
+WHERE PurchaseOrderNumber = 'PO29111718'
+UNION
+SELECT 79999, 1, GETDATE(), 'PO54321', 202.99;
+
+-- Here's the staged data
+SELECT * FROM #InvoiceStaging;
+
+-- Now merge the staged changes
+MERGE INTO SalesLT.Invoice as i
+USING #InvoiceStaging as s
+ON i.SalesOrderID = s.SalesOrderID
+WHEN MATCHED THEN
+    UPDATE SET i.CustomerID = s.CustomerID,
+                i.OrderDate = GETDATE(),
+                i.PurchaseOrderNumber = s.PurchaseOrderNumber,
+                i.TotalDue = s.TotalDue
+WHEN NOT MATCHED THEN
+    INSERT (SalesOrderID, CustomerID, OrderDate, PurchaseOrderNumber, TotalDue)
+    VALUES (s.SalesOrderID, s.CustomerID, s.OrderDate, s.PurchaseOrderNumber, s.TotalDue);
+
+-- View the merged table
+SELECT * FROM SalesLT.Invoice
+ORDER BY OrderDate DESC;
+
+
 -- Delete data
 DELETE FROM SalesLT.Promotion
 WHERE StartDate < DATEADD(dd, -7, GETDATE());
