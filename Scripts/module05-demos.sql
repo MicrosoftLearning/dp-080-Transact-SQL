@@ -88,7 +88,7 @@ SET IDENTITY_INSERT SalesLT.Promotion ON;
 
 INSERT INTO SalesLT.Promotion (PromotionID, PromotionName, ProductModelID, Discount)
 VALUES
-(10, 'Another short sale',37, 0.3);
+(20, 'Another short sale',37, 0.3);
 
 SET IDENTITY_INSERT SalesLT.Promotion OFF;
 
