@@ -81,6 +81,45 @@ ORDER BY Category, RankByPrice;
 
 
 
+-- ROWSET Functions
+
+-- Use OPENROWSET to retrieve external data
+-- (Advanced option needs to be enabled to allow this)
+EXEC sp_configure 'show advanced options', 1;
+RECONFIGURE;
+GO
+EXEC sp_configure 'Ad Hoc Distributed Queries', 1; 
+RECONFIGURE;
+GO
+-- Now we can use OPENROWSET to connect to an external data source and return a rowset
+SELECT a.*
+FROM OPENROWSET('SQLNCLI', 'Server=localhost\SQLEXPRESS;Trusted_Connection=yes;',
+     'SELECT Name, ListPrice
+     FROM adventureworks.SalesLT.Product') AS a;
+
+
+
+-- Use OPENXML to read data from an XML document into a rowset     
+-- First prepare an XML document
+DECLARE @idoc INT, @doc VARCHAR(1000);
+SET @doc = '<Reviews>
+             <Review ProductID="1" Reviewer="Paul Henriot">
+               <ReviewText>This is a really great product!</ReviewText>
+             </Review>
+             <Review ProductID="7" Reviewer="Carlos Gonzlez">
+               <ReviewText>Fantasic - I love this product!!</ReviewText>
+             </Review>
+            </Reviews>';
+EXEC sp_xml_preparedocument @idoc OUTPUT, @doc;
+-- Now use OPENXML to read attributes and elements into a rowset
+SELECT ProductID, Reviewer, ReviewText
+FROM OPENXML (@idoc, '/Reviews/Review',3)
+                WITH (ProductID  INT,
+                Reviewer VARCHAR(20),
+                ReviewText VARCHAR(MAX));  
+
+
+
 
 -- Aggregate functions and GROUP BY
 
