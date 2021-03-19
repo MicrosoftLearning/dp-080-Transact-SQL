@@ -120,6 +120,23 @@ FROM OPENXML (@idoc, '/Reviews/Review',3)
 
 
 
+-- Use OPENJSON to read a JSON document
+-- First prepare a JSON document
+DECLARE @jsonCustomer NVARCHAR(max)  = N'{
+                                            "id" : 1,
+                                            "firstName": "John",
+                                            "lastName": "Smith",
+                                            "dateOfBirth": "2015-03-25T12:00:00"
+                                         }';
+-- Now read the JSON values into a rowset             
+SELECT *
+FROM OPENJSON(@jsonCustomer)
+WITH (id INT,
+      firstName NVARCHAR(50),
+      lastName NVARCHAR(50),
+      dateOfBirth DATETIME);
+
+
 
 -- Aggregate functions and GROUP BY
 
