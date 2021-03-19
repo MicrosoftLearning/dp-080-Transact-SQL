@@ -12,7 +12,7 @@ This file contains guidance for demonstrations you can use to help students unde
 
 Throughout the course, students use a hosted environment that includes **Azure Data Studio** and a local instance of SQL Server Express containing a simplified version of the **adventureworks** sample database.
 
-1. Start the hosted lab environment, and log in if necessary.
+1. Start the hosted lab environment (for any lab in this course), and log in if necessary.
 2. Start Azure Data Studio, and in the **Connections** tab, select the **AdventureWorks** connection. This will connect to the SQL Server instance and show the objects in the **adventureworks** database.
 3. Expand the **Tables** folder to see the tables that are defined in the database. Note that there are a few tables in the **dbo** schema, but most of the tables are defined in a schema named **SalesLT**.
 4. Expand the **SalesLT.Product** table and then expand its **Columns** folder to see the columns in this table. Each column has a name, a data type, an indication of whether it can contain *null* values, and in some cases an indication that the columns is used as a primary key (PK) or foreign key (FK).
