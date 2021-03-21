@@ -111,6 +111,17 @@ ORDER BY p.StandardCost DESC;
 -- CORRELATED SUBQUERY
 
 -- Outer query
+SELECT SalesOrderID, CustomerID, OrderDate
+FROM SalesLT.SalesOrderHeader AS o1
+WHERE SalesOrderID =
+    -- Inner query
+    (SELECT MAX(SalesOrderID)
+	 FROM SalesLT.SalesOrderHeader AS o2
+     --References alias in outer query
+	 WHERE o2.CustomerID = o1.CustomerID)
+ORDER BY CustomerID, OrderDate;
+
+-- Outer query
 SELECT od.SalesOrderID, od.OrderQty,
         -- Inner query
         (SELECT Name
@@ -119,3 +130,15 @@ SELECT od.SalesOrderID, od.OrderQty,
          WHERE p.ProductID = od.ProductID) AS ProductName
 FROM SalesLT.SalesOrderDetail AS od
 ORDER BY od.SalesOrderID
+
+-- Using EXISTS
+-- Outer query
+SELECT CustomerID, CompanyName, EmailAddress
+FROM SalesLT.Customer AS c
+WHERE EXISTS
+    -- Inner query
+	(SELECT * 
+ 	 FROM SalesLT.SalesOrderHeader AS o
+      --References alias in outer query
+ 	 WHERE o.CustomerID = c.CustomerID);
+
