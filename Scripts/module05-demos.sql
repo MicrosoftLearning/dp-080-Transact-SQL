@@ -56,9 +56,7 @@ SELECT * FROM SalesLT.Promotion;
 -- Insert from query
 INSERT INTO SalesLT.Promotion (PromotionName, ProductModelID, Discount, Notes)
 SELECT DISTINCT 'Get Framed', m.ProductModelID, 0.1, '10% off ' + m.Name
-FROM SalesLT.Product AS p
-JOIN SalesLT.ProductModel AS m
-    ON p.ProductModelID = m.ProductModelID
+FROM SalesLT.ProductModel AS m
 WHERE m.Name LIKE '%frame%';
 
 SELECT * FROM SalesLT.Promotion;

@@ -5,14 +5,14 @@
 -- Basic scalar functions
 
 -- Dates
-SELECT  AddressID, AddressLine1,
-        YEAR(ModifiedDate) AS ModifiedYear,
-        DATENAME(mm,ModifiedDate) AS ModifiedMonth,
-        DAY(ModifiedDate) AS ModifiedDay,
-        DATENAME(dw, ModifiedDate) AS ModifiedWeekDay,
-        DATEDIFF(yy,ModifiedDate, GETDATE()) AS TimeSinceModification
-FROM SalesLT.Address
-ORDER BY ModifiedDate
+SELECT  SalesOrderID,
+	      OrderDate,
+        YEAR(OrderDate) AS OrderYear,
+        DATENAME(mm,OrderDate) AS OrderMonth,
+        DAY(OrderDate) AS OrderDay,
+        DATENAME(dw, OrderDate) AS OrderWeekDay,
+        DATEDIFF(yy,OrderDate, GETDATE()) AS YearsSinceOrder
+FROM SalesLT.SalesOrderHeader;
 
 
 -- Math
@@ -24,7 +24,7 @@ SELECT TaxAmt,
        SQRT(TaxAmt) AS Root,
        LOG(TaxAmt) AS Log,
        TaxAmt * RAND() AS Randomized
-FROM SalesLT.SalesOrderHeader
+FROM SalesLT.SalesOrderHeader;
 
 
 -- Text
@@ -45,7 +45,7 @@ FROM SalesLT.Customer;
 
 -- IIF
 SELECT AddressType, -- Evaluation       if True    if False    
-       IIF(AddressType = 'Main Office', 'Billing', 'Mailing') AS AddressDescription
+       IIF(AddressType = 'Main Office', 'Billing', 'Mailing') AS UseAddressFor
 FROM SalesLT.CustomerAddress;
 
 
@@ -66,7 +66,7 @@ FROM SalesLT.SalesOrderHeader;
 -- RANKING Functions
 
 -- Ranking
-SELECT TOP(100) ProductID, Name, ListPrice,
+SELECT TOP 100 ProductID, Name, ListPrice,
 	RANK() OVER(ORDER BY ListPrice DESC) AS RankByPrice
 FROM SalesLT.Product AS p
 ORDER BY RankByPrice;
