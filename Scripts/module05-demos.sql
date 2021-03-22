@@ -5,14 +5,14 @@
 -- CREATE A TABLE FOR THE DEMOS
 
 CREATE TABLE SalesLT.Promotion
-    (
-        PromotionID int IDENTITY PRIMARY KEY NOT NULL,
-        PromotionName varchar(20),
-        StartDate datetime NOT NULL DEFAULT GETDATE(),
-        ProductModelID int NOT NULL REFERENCES SalesLT.ProductModel(ProductModelID),
-        Discount decimal(4,2) NOT NULL,
-        Notes nvarchar(max) NULL
-    );
+(
+    PromotionID int IDENTITY PRIMARY KEY,
+    PromotionName varchar(20),
+    StartDate datetime NOT NULL DEFAULT GETDATE(),
+    ProductModelID int NOT NULL REFERENCES SalesLT.ProductModel(ProductModelID),
+    Discount decimal(4,2) NOT NULL,
+    Notes nvarchar(max) NULL
+);
 
 -- Show it's empty
 SELECT * FROM SalesLT.Promotion;
