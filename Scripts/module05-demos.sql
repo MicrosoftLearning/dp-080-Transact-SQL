@@ -128,7 +128,7 @@ SELECT * FROM SalesLT.Promotion;
 -- Update multiple fields
 UPDATE SalesLT.Promotion
 SET Discount = 0.2, Notes = REPLACE(Notes, '10%', '20%')
-WHERE PromotionName = 'Get Framed'
+WHERE PromotionName = 'Get Framed';
 
 SELECT * FROM SalesLT.Promotion;
 
@@ -140,6 +140,21 @@ WHERE Notes IS NULL
     AND SalesLT.Promotion.ProductModelID = m.ProductModelID;
 
 SELECT * FROM SalesLT.Promotion;
+
+
+
+-- Delete data
+DELETE FROM SalesLT.Promotion
+WHERE StartDate < DATEADD(dd, -7, GETDATE());
+
+SELECT * FROM SalesLT.Promotion;
+
+-- Truncate to remove all rows
+TRUNCATE TABLE SalesLT.Promotion;
+
+SELECT * FROM SalesLT.Promotion;
+
+
 
 
 -- Merge insert and update
@@ -170,15 +185,3 @@ WHEN NOT MATCHED THEN
 -- View the merged table
 SELECT * FROM SalesLT.Invoice
 ORDER BY OrderDate DESC;
-
-
--- Delete data
-DELETE FROM SalesLT.Promotion
-WHERE StartDate < DATEADD(dd, -7, GETDATE());
-
-SELECT * FROM SalesLT.Promotion;
-
--- Truncate to remove all rows
-TRUNCATE TABLE SalesLT.Promotion;
-
-SELECT * FROM SalesLT.Promotion;
