@@ -204,7 +204,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
 
 ## Challenges
 
-Now that you've seen some examples of **SELECT** statements taht retrieve data from a table, it's time to try to compose some queries of your own.
+Now that you've seen some examples of **SELECT** statements that retrieve data from a table, it's time to try to compose some queries of your own.
 
 > **Tip**: Try to determine the appropriate queries for yourself. If you get stuck, suggested answers are provided at the end of this lab.
 
