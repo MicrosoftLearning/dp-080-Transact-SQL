@@ -6,13 +6,13 @@ lab:
 
 # Get Started with Transact-SQL
 
-In this lab, you will use some basic SELECT queries to retrieve data from the **adventureworks** database.
+In this lab, you will use some basic SELECT queries to retrieve data from the **AdventureWorks** database.
 
-## Explore the *adventureworks* database
+## Explore the *AdventureWorks* database
 
-We'll use the **adventureworks** database in this lab, so let's start by exploring it in Azure Data Studio.
+We'll use the **AdventureWorks** database in this lab, so let's start by exploring it in Azure Data Studio.
 
-1. Start Azure Data Studio, and in the **Connections** tab, select the **AdventureWorks** connection. This will connect to the SQL Server instance and show the objects in the **adventureworks** database.
+1. Start Azure Data Studio, and in the **Connections** tab, select the **AdventureWorks** connection by clicking on the arrow just to the left of the name. This will connect to the SQL Server instance and show the objects in the **AdventureWorks** database.
 2. Expand the **Tables** folder to see the tables that are defined in the database. Note that there are a few tables in the **dbo** schema, but most of the tables are defined in a schema named **SalesLT**.
 3. Expand the **SalesLT.Product** table and then expand its **Columns** folder to see the columns in this table. Each column has a name, a data type, an indication of whether it can contain *null* values, and in some cases an indication that the columns is used as a primary key (PK) or foreign key (FK).
 4. Right-click the **SalesLT.Product** table and use the **Select Top 1000** option to create and run a new query script that retrieves the first 1000 rows from the table.
@@ -20,23 +20,23 @@ We'll use the **adventureworks** database in this lab, so let's start by explori
 6. Close the **SQLQuery_1** pane that contains the query and its results.
 7. Explore the other tables in the database, which contain information about product details, customers, and sales orders. The tables are related through primary and foreign keys, as shown here (you may need to resize the pane to see them clearly):
 
-    ![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
+    ![An entity relationship diagram of the AdventureWorks database](./images/adventureworks-erd.png)
 
 > **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
 
 ## Use SELECT queries to retrieve data
 
-Now that you've had a chance to explore the **adventureworks** database, it's time to dig a little deeper into the product data it contains by querying the **Product** table.
+Now that you've had a chance to explore the **AdventureWorks** database, it's time to dig a little deeper into the product data it contains by querying the **Product** table.
 
 1. In Azure Data Studio, create a new query (you can do this from the **File** menu or on the *welcome* page).
-2. In the new **SQLQuery_...** pane, ensure that the **adventureworks** database is selected at the top of the query pane. If not, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
+2. In the new **SQLQuery_...** pane, ensure that the **AdventureWorks** database is selected at the top of the query pane. If not, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
 3. In the query editor, enter the following code:
 
     ```
     SELECT * FROM SalesLT.Product;
     ```
 
-4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes all fields for all products.
+4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes all columns for all products.
 5. In the query editor, modify the query as follows:
 
     ```
@@ -44,7 +44,7 @@ Now that you've had a chance to explore the **adventureworks** database, it's ti
     FROM SalesLT.Product;
     ```
 
-6. Use the **&#x23f5;Run** button to re-run the query, and and after a few seconds, review the results, which this time include only the **Name**, **StandardCost**, and **ListPrice** fields for all products.
+6. Use the **&#x23f5;Run** button to re-run the query, and and after a few seconds, review the results, which this time include only the **Name**, **StandardCost**, and **ListPrice** columns for all products.
 7. Modify the query as shown below to include an expression that results in a calculated column, and then re-run the query:
 
     ```
@@ -52,7 +52,7 @@ Now that you've had a chance to explore the **adventureworks** database, it's ti
     FROM SalesLT.Product;
     ```
 
-8. Note that the results this time include the **Name** field and an unnamed column containing the result of subtracting the **StandardCost** from the **ListPrice**.
+8. Note that the results this time include the **Name** column and an unnamed column containing the result of subtracting the **StandardCost** from the **ListPrice**.
 9. Modify the query as shown below to assign names to the columns in the results, and then re-run the query.
 
     ```
@@ -68,11 +68,11 @@ Now that you've had a chance to explore the **adventureworks** database, it's ti
     FROM SalesLT.Product;
     ```
 
-12. Run the query, and note that the **+** operator in the calculated **ProductDetails** column is used to *concatenate* the **Color** and **Size** field values (with a literal comma between them). The behavior of this operator is determined by the data types of the fields - had they been numeric fields, the **+** operator would have *added* them. Note also that some results are *NULL* - we'll explore NULL values later in this lab.
+12. Run the query, and note that the **+** operator in the calculated **ProductDetails** column is used to *concatenate* the **Color** and **Size** column values (with a literal comma between them). The behavior of this operator is determined by the data types of the columns - had they been numeric values, the **+** operator would have *added* them. Note also that some results are *NULL* - we'll explore NULL values later in this lab.
 
 ## Work with data types
 
-As you just saw, fields in a table are defined as specific data types, which affects the operations you can perform on them.
+As you just saw, columns in a table are defined as specific data types, which affects the operations you can perform on them.
 
 1. Replace the existing query with the following code, and run it:
 
@@ -81,7 +81,7 @@ As you just saw, fields in a table are defined as specific data types, which aff
     FROM SalesLT.Product; 
     ```
 
-2. Note that this query returns an error. The **+** operator can be used to *concatenate* text-based values, or *add* numeric values; but in this case there's one numeric field (**ProductID**) and one text-based field (**Name**), so it's unclear how the operator should be applied.
+2. Note that this query returns an error. The **+** operator can be used to *concatenate* text-based values, or *add* numeric values; but in this case there's one numeric value (**ProductID**) and one text-based value (**Name**), so it's unclear how the operator should be applied.
 3. Modify the query as follows, and re-run it:
 
     ```
@@ -89,7 +89,7 @@ As you just saw, fields in a table are defined as specific data types, which aff
     FROM SalesLT.Product; 
     ```
 
-4. Note that the effect of the **CAST** function is to change the numeric **ProductID** field into a **varchar** (variable-length character data) value that can be concatenated with other text-based values.
+4. Note that the effect of the **CAST** function is to change the numeric **ProductID** column into a **varchar** (variable-length character data) value that can be concatenated with other text-based values.
 
 5. Modify the query to replace the **CAST** function with a **CONVERT** function as shown below, and then re-run it:
 
@@ -158,7 +158,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
     FROM SalesLT.Product;
     ```
 
-    In some scenarios, you might want to compare multiple fields and find the first one that isn't *NULL*. For example, suppose you want to track the status of a product's availability based on the dates recorded when it was first offered for sale or removed from sale. A product that is currently available will have a **SellStartDate**, but the **SellEndDate** value will be *NULL*. When a product is no longer sold, a date is entered in its **SellEndDate** field. To find the first non-*NULL* field, you can use the **COALESCE** function.
+    In some scenarios, you might want to compare multiple columns and find the first one that isn't *NULL*. For example, suppose you want to track the status of a product's availability based on the dates recorded when it was first offered for sale or removed from sale. A product that is currently available will have a **SellStartDate**, but the **SellEndDate** value will be *NULL*. When a product is no longer sold, a date is entered in its **SellEndDate** column. To find the first non-*NULL* column, you can use the **COALESCE** function.
 
 5. Use the following query to find the first non-*NULL* date for product selling status.
 
@@ -167,9 +167,9 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
     FROM SalesLT.Product;
     ```
 
-    The previous query reveals the last date on which the product selling status was updated, but doesn't actually tell us the sales status itself. To determine that, we'll need to check the dates to see if the **SellEndDate** is *NULL*. To do this, you can use a **CASE** expression in the **SELECT** clause to check for *NULL* **SellEndDate** values. The **CASE** expression has two variants: a *simple* **CASE** what evaluates a specific column or value, or a *searched* **CASE** that evaluates one or more expressions.
+    The previous query returns the last date on which the product selling status was updated, but doesn't actually tell us the sales status itself. To determine that, we'll need to check the dates to see if the **SellEndDate** is *NULL*. To do this, you can use a **CASE** expression in the **SELECT** clause to check for *NULL* **SellEndDate** values. The **CASE** expression has two variants: a *simple* **CASE** what evaluates a specific column or value, or a *searched* **CASE** that evaluates one or more expressions.
 
-    In this example, or **CASE** experssion must determine if the **SellEndDate** field is *NULL*. Typically, when you are trying to check the value of a field you can use the **=** operator; for example the predicate **SellEndDate = '01/01/2005'** returns **True** if the **SellEndDate** value is *01/01/2005*, and **False** otherwise. However, when dealing with *NULL* values, the default behavior may not be what you expect. Remember that *NULL* actually means *unknown*, so using the **=** operator to compare two unknown values always results in a value of *NULL* - semantically, it's impossible to know if one unknown value is the same as another. To check to see if a value is *NULL*, you must is the **IS NULL** predicate; and conversely to check that a value is not *NULL* you can use the **IS NOT NULL** predicate.
+    In this example, or **CASE** experssion must determine if the **SellEndDate** column is *NULL*. Typically, when you are trying to check the value of a column you can use the **=** operator; for example the predicate **SellEndDate = '01/01/2005'** returns **True** if the **SellEndDate** value is *01/01/2005*, and **False** otherwise. However, when dealing with *NULL* values, the default behavior may not be what you expect. Remember that *NULL* actually means *unknown*, so using the **=** operator to compare two unknown values always results in a value of *NULL* - semantically, it's impossible to know if one unknown value is the same as another. To check to see if a value is *NULL*, you must use the **IS NULL** predicate; and conversely to check that a value is not *NULL* you can use the **IS NOT NULL** predicate.
 
 6. Run the following query, which includes *searched* **CASE** that uses an **IS NULL** expression to check for *NULL* **SellEndDate** values.
 
@@ -182,11 +182,11 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
     FROM SalesLT.Product;
     ```
 
-    The previous query used a *searched* **CASE** expression, which begins with a **CASE** keyword, and includes one or more **WHEN...THEN** expressions with the values and predicates to be checked. AN **ELSE** expression provides a result to use if none of the **WHEN** conditions are matched, and the **END** keyword denotes the end of the **CASE** expression, which is aliased to a column name for the result using an **AS** expression.
+    The previous query used a *searched* **CASE** expression, which begins with a **CASE** keyword, and includes one or more **WHEN...THEN** expressions with the values and predicates to be checked. An **ELSE** expression provides a value to use if none of the **WHEN** conditions are matched, and the **END** keyword denotes the end of the **CASE** expression, which is aliased to a column name for the result using an **AS** expression.
     
     In some queries, it's more appropriate to use a *simple* **CASE** expression that applies multiple **WHERE...THEN** predictes to the same value.
 
-7. Run the following query to see an example of a *simple* **CASE** expression that produced different results depending on the **Size** field value.
+7. Run the following query to see an example of a *simple* **CASE** expression that produced different results depending on the **Size** column value.
 
     ```
     SELECT Name,
@@ -235,12 +235,12 @@ As you continue to work with the Adventure Works customer data, you must create 
 
 ### Challenge 3: Retrieve customer contact details
 
-Some records in the database include missing or unknown values that are returned as NULL. You must create some queries that handle these NULL fields appropriately.
+Some records in the database include missing or unknown values that are returned as NULL. You must create some queries that handle these NULL values appropriately.
 
 1. Retrieve customer contact names with middle names if known
-    - You have been asked to write a query that returns a list of customer names. The list must consist of a single field in the format *first last* (for example *Keith Harris*) if the middle name is unknown, or *first middle last* (for example *Jane M. Gates*) if a middle name is known.
+    - You have been asked to write a query that returns a list of customer names. The list must consist of a single column in the format *first last* (for example *Keith Harris*) if the middle name is unknown, or *first middle last* (for example *Jane M. Gates*) if a middle name is known.
 2. Retrieve primary contact details
-    - Customers may provide adventure Works with an email address, a phone number, or both. If an email address is available, then it should be used as the primary contact method; if not, then the phone number should be used. You must write a query that returns a list of customer IDs in one column, and a second column named **PrimaryContact** that contains the email address if known, and otherwise the phone number.
+    - Customers may provide Adventure Works with an email address, a phone number, or both. If an email address is available, then it should be used as the primary contact method; if not, then the phone number should be used. You must write a query that returns a list of customer IDs in one column, and a second column named **PrimaryContact** that contains the email address if known, and otherwise the phone number.
     
         **IMPORTANT**: In the sample data provided, there are no customer records without an email address. Therefore, to verify that your query works as expected, run the following **UPDATE** statement to remove some existing email addresses before creating your query:
     
