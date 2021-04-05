@@ -29,7 +29,7 @@ The required software for the labs can also be installed on Linux and Apple Mac 
 
 The labs use a lightweight version of the AdventureWorks sample database. Note that this is <u>not</u> the same as the official sample database, so use the following instructions to create it.
 
-1. Download the **[adventureworkslt.sql](../Scripts/adventureworkslt.sql)** script, and save it on your local computer.
+1. Download the **[adventureworkslt.sql](../../Scripts/adventureworkslt.sql)** script, and save it on your local computer.
 2. Start Azure Data Studio, and open the **adventureworkslt.sql** script file you downloaded.
 3. In the script pane, connect to your SQL Server Express server server using the following information:
     - **Connection type**: SQL Server
