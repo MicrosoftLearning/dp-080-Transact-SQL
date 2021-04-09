@@ -114,7 +114,7 @@ User interfaces and reports often present large volumes of data as pages, you ma
     ORDER BY Name OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;
     ```
 
-## Use the ALL and DISTINCT arguments
+## Use the ALL and DISTINCT options
 
 Often, multiple rows in a table may contain the same values for a given subset of fields. For example, a table of products might contain a **Color** field that identifies the color of a given product. It's not unreasonable to assume that there may be multiple products of the same color. Similarly, the table might contain a **Size** field; and again it's not unreasonable to assume that there may be multiple products of the same size; or even multiple products with the same combination of size and color.
 
