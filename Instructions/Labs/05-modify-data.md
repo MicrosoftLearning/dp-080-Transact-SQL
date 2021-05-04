@@ -133,7 +133,7 @@ To modify existing rows in a table, use the **UPDATE** statement.
     ```
 
 2. Run the **UPDATE** statement and review the message, which should indicate the number of rows affected.
-3. Switch to the **SQLQuery_...** pane containing the **SELECT** query and run it. Note that the rows that previously had *NULL* values for the **Notes** field now contain the text **No notes*.
+3. Switch to the **SQLQuery_...** pane containing the **SELECT** query and run it. Note that the rows that previously had *NULL* values for the **Notes** field now contain the text *No notes*.
 4. Switch back to the **SQLQuery_...** pane containing the **UPDATE** statement, and replace it with the following code, which updates multiple columns.
 
     ```
