@@ -118,7 +118,7 @@ An outer join is used to retrieve all rows from one table, and any corresponding
     ORDER BY p.ProductID;
     ```
 
-8. Run the query and note that the results include all products, with order numbers for any that have been purchased. This required a sequencve of joins from **Product** to **SalesOrderDetail** to **SalesOrderHeader**. Note that when you join multiple tables like this, after an outer join has been specified in the join sequence, all subsequent outer joins must be of the same direction  (**LEFT** or **RIGHT**).
+8. Run the query and note that the results include all products, with order numbers for any that have been purchased. This required a sequence of joins from **Product** to **SalesOrderDetail** to **SalesOrderHeader**. Note that when you join multiple tables like this, after an outer join has been specified in the join sequence, all subsequent outer joins must be of the same direction  (**LEFT** or **RIGHT**).
 9. Modify the query as shown below to add an inner join to return category information. When mixing inner and outer joins, it can be helpful to be explicit about the join types by using the **INNER** and **OUTER** keywords.
 
     ```
