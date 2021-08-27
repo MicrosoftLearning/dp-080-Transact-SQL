@@ -91,8 +91,8 @@ Amend the T-SQL code containing the UNION operator, to return ALL company names,
 
 Amend the T-SQL code containing the INTERSECT operator to return names from t1 that do not appear in t2. 
 
-## Challenge Soluctions
-
+## Challenge Solutions
+This section contains suggested solutions for the challenge queries.
 ### Challenge 1
 ```sql
 SELECT CompanyName FROM SalesLt.Customer
