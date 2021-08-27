@@ -1,9 +1,9 @@
 ---
 lab:
-    title: 'Write ranking, aggregate and offset window functions'
+    title: 'Use window functions'
     module: 'Module 3: Write queries that use window functions'
 ---
-# Write ranking, aggregate and offset window functions
+# Use window functions
 
 In this lab, you'll run window functions on the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 ![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
