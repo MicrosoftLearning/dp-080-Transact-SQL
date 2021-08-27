@@ -14,9 +14,9 @@ In this lab, you'll run window functions on the **adventureworks** database. For
 In this exercise you will create a query that uses a window function tp return a ranking value. The query uses a CTE (common table expression) called **sales**. You then use the **sales** CTE to add the RANK window function.
 
 1. Start Azure Data Studio, and in the Connections tab, select the **AdventureWorks** connection by clicking on the arrow just to the left of the name. This will connect to the SQL Server instance and show the objects in the **AdventureWorks** database. 
-2. Create a new query (you can do this from the File menu or on the welcome page). 
+2. Create a new query (you can do this from the **File** menu or on the *welcome* page). 
 3. In the new SQLQuery_… pane, ensure that the **AdventureWorks** database is selected at the top of the query pane. If not, use the **Connect** button to connect the query to the AdventureWorks saved connection. 
-4. Copy the following T-SQL code into the query window, highlight it and select **Run**.
+4. Copy the following T-SQL code into the query window, highlight it and select **&#x23f5;Run**.
 
 	```sql
 	WITH sales AS
@@ -34,12 +34,12 @@ In this exercise you will create a query that uses a window function tp return a
 		FROM sales
 		ORDER BY Category;
 	```
-The product categories now have a rank number according to the SalesValue for each category. Notice that the RANK function required the rows to the ordered by SalesValue, but the final result set was ordered by Category.
+The product categories now have a rank number according to the **SalesValue** for each category. Notice that the RANK function required the rows to the ordered by **SalesValue**, but the final result set was ordered by **Category**.
 
 
 ## Offset function
 
-In this exercise you will create a new table called Budget populated with budget values for five years. You will then use the LAG window function to return each year's budget, together with the previous year's budget value.  
+In this exercise you will create a new table called **Budget** populated with budget values for five years. You will then use the LAG window function to return each year's budget, together with the previous year's budget value.  
 
 1.	In the query editor, under the existing code enter the following code: 
 	```sql
@@ -61,11 +61,11 @@ In this exercise you will create a new table called Budget populated with budget
 		FROM dbo.Budget
 		ORDER BY [Year]; 
 	```
-4. Highlight the code and click **Run** .
+4. Highlight the code and select **&#x23f5;Run**.
 
 ## Aggregation function
 
-In this exercise you will create a query that uses PARTITION BY to cound the number of subcategories in each category.
+In this exercise you will create a query that uses PARTITION BY to count the number of subcategories in each category.
 
 1. In the query editor, under the existing code enter the following code to return a count of products in each category:
 	```sql
@@ -80,7 +80,7 @@ In this exercise you will create a query that uses PARTITION BY to cound the num
 			GROUP BY C.Name, SC.Name
 			ORDER BY C.Name, SC.Name;
 	```
-4. Highlight the code and click **Run** .
+4. Highlight the code and select **&#x23f5;Run**.
 
 
 ## Challenges

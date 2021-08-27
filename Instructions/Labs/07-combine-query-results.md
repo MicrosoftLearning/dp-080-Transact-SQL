@@ -11,7 +11,7 @@ In this lab, you will use set operators to retrieve results from the **adventure
 
 ## Write a query that uses the UNION operator
 
-1. Start Azure Data Studio and create a new query (you can do this from the File menu or on the welcome page).
+1. Start Azure Data Studio and create a new query (you can do this from the **File** menu or on the *welcome* page).
 2. In the new SQLQuery_... pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
 3. In the query editor, enter the following code:
 	```sql
@@ -21,7 +21,7 @@ In this lab, you will use set operators to retrieve results from the **adventure
 	SELECT CompanyName FROM SalesLt.Customer
 	WHERE CustomerID BETWEEN 20000 and 40000;
 	```
-4. Highlight the T-SQL code and click **Run**. The result set contains CompanyNames from both result sets.
+4. Highlight the T-SQL code and select **&#x23f5;Run**. The result set contains **CompanyNames** from both result sets.
 
 ## Write a query that uses the INTERSECT operator
 
@@ -52,13 +52,13 @@ In this lab, you will use set operators to retrieve results from the **adventure
 		FROM @t2
 		ORDER BY [Name];
 	```
-4. Highlight the code and click **Run** to execute it. Only values in both **t1** and **t2** are returned.
+4. Highlight the code and select **&#x23f5;Run** to execute it. Only values in both **t1** and **t2** are returned.
 
 ## Write a query that uses the CROSS APPLY operator
 
 In this exercise you will write a table-valued function to return the product category and quantity ordered by specific customers. You will pass the CustomerID fom the select statement to the table-valued function in a CROSS APPLY statement.
 
-1. Start Azure Data Studio and create a new query (you can do this from the File menu or on the welcome page).
+1. Start Azure Data Studio and create a new query (you can do this from the **File** menu or on the *welcome* page).
 2. In the new SQLQuery_... pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
 3. In the query editor, enter the following code:
 	```sql
@@ -81,7 +81,7 @@ In this exercise you will write a table-valued function to return the product ca
 		FROM SalesLT.Customer AS C
 			CROSS APPLY dbo.ProductSales(C.CustomerID) AS P;
 	```
-4. Highlight the code and click **Run** to execute it. 
+4. Highlight the code and select **&#x23f5;Run** to execute it. 
 
 ## Challenges
 
