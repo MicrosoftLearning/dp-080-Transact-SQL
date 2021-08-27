@@ -17,7 +17,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Right click on the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
 1. Type the following T-SQL code:
 
-```sql 
+```
 CREATE PROCEDURE SalesLT.TopProducts AS
 SELECT TOP(10) name, listprice
     		FROM SalesLT.Product
@@ -28,14 +28,14 @@ SELECT TOP(10) name, listprice
 1. Click **Run**. You've created a stored procedure named SalesLT.TopProducts.
 1. In the query pane, type the following T-SQL code after the previous code:
 
-```sql
+```
 EXECUTE SalesLT.TopProducts;
 ```
 
 1. Highlight the written T-SQL code and click **Run**. You've now executed the stored procedure.
 1. Now modify the stored procedure so that it returns only products from a specific product category by adding an input parameter. In the query pane, type the following T-SQL code:
 
-```sql
+```
 ALTER PROCEDURE SalesLT.TopProducts @ProductCategoryID int
 AS
 SELECT TOP(10) name, listprice
@@ -47,7 +47,7 @@ SELECT TOP(10) name, listprice
 
 1. In the query pane, type the following T-SQL code:
 
-```sql
+```
 EXECUTE SalesLT.TopProducts @ProductCategoryID = 18;
 ```
 
@@ -59,7 +59,7 @@ EXECUTE SalesLT.TopProducts @ProductCategoryID = 18;
 
 ### Challenge answer
 
-```sql 
+``` 
 EXECUTE SalesLT.TopProducts 41;
 ``` 
  
@@ -67,7 +67,7 @@ EXECUTE SalesLT.TopProducts 41;
 
 1. In the query pane, type the following T-SQL code:
 
-```sql
+```
 CREATE FUNCTION SalesLT.GetFreightbyCustomer
 (@orderyear AS INT) RETURNS TABLE
 AS
@@ -86,6 +86,6 @@ GROUP BY customerid;
 
 ### Challenge answer
 
-```sql
+```
 SELECT * FROM SalesLT.GetFreightbyCustomer(2008)
 ```

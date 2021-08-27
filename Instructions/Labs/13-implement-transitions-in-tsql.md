@@ -20,7 +20,7 @@ In this exercise you will use a transaction to ensure that when a row is inserte
 1. Right click on the **AdventureWorks** database and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
 1. Copy the following T-SQL code into the query window:
 
-```SQL
+```
 CREATE TABLE dbo.OrderHeader
 (OrderID int NOT NULL PRIMARY KEY,
 	OrderDate date NOT NULL,
@@ -61,7 +61,7 @@ Highlight the T-SQL code and click **Run**. When you run the code do you expect 
 
 View the following code for where to place the TRY / CATCH statements. Note how the PRINT statements allow you to view whether your statements are in the right place.
 
-```SQL
+```
 BEGIN TRY
 BEGIN TRANSACTION;
 	INSERT INTO dbo.OrderHeader (OrderID, OrderDate, CustomerName)

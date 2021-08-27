@@ -21,7 +21,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. The previous step will open a query screen that is connected to the Adventureworks database.
 1. In the query pane, type the following T-SQL code:
 
-   ```sql
+   ```
     DECLARE @num int = 5;
     
     SELECT @num AS mynumber;
@@ -38,7 +38,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. In the query pane, type the following T-SQL code after the previous one:
 
-    ```sql
+    ```
     DECLARE 
     @num1 int,
     @num2 int;
@@ -67,7 +67,7 @@ Now, we'll look at how to declare variables in batches.
 1. Right click on the TSQL connection and select **New Query**
 1. In the query pane, type the following T-SQL code:
 
-    ```sql
+    ```
     DECLARE 
     @empname nvarchar(30),
     @empid int;
@@ -98,13 +98,13 @@ Now, we'll look at how to declare variables in batches.
 
 1. Now, in the code you just copied, add the batch delimiter GO before this statement:
 
-   ```sql
+   ```
    SELECT @empname AS employee;
    ```
 
 1. Make sure your T-SQL code looks like this:
 
-   ```sql
+   ```
     DECLARE 
     @empname nvarchar(30),
     @empid int;
@@ -132,7 +132,7 @@ Variables are local to the batch in which they're defined. If you try to refer t
 1. Right click on the TSQL connection and select **New Query**
 1. In the query pane, type the following T-SQL code:
 
-    ```sql
+    ```
     DECLARE 
     @i int = 8,
     @result nvarchar(20);
@@ -160,7 +160,7 @@ Variables are local to the batch in which they're defined. If you try to refer t
 
 1. In the query pane, type the following T-SQL code after the previous code:
 
-    ```sql
+    ```
     DECLARE 
     @i int = 8,
     @result nvarchar(20);
@@ -196,7 +196,7 @@ This code uses a CASE expression and only one SET expression to get the same res
 1. Right click on the TSQL connection and select **New Query**
 1. In the query pane, type the following T-SQL code:
 
-    ```sql
+    ```
     DECLARE @i int = 1;
     
     WHILE @i <= 10
@@ -264,7 +264,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Create your variables
 
-    ```sql
+    ```
     DECLARE 
     @salesOrderNUmber nvarchar(30),
     @customerID int;
@@ -272,7 +272,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Assign a value to the integer variable.
 
-    ```sql
+    ```
     DECLARE 
     @salesOrderNUmber nvarchar(30),
     @customerID int;
@@ -282,7 +282,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Assign a value from the database and display the result
 
-    ```sql
+    ```
     DECLARE 
     @salesOrderNUmber nvarchar(30),
     @customerID int;
@@ -300,7 +300,7 @@ The sales manager would like a list of the first 10 customers that registered an
 
 1. Declare the variables:
 
-    ```sql
+    ```
     DECLARE @customerID AS INT = 1;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);
@@ -308,7 +308,7 @@ The sales manager would like a list of the first 10 customers that registered an
 
 1. Construct a terminating loop:
 
-    ```sql
+    ```
     DECLARE @customerID AS INT = 1;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);
@@ -321,7 +321,7 @@ The sales manager would like a list of the first 10 customers that registered an
 
 1. Select the customer first name and last name and display:
 
-    ```sql
+    ```
     DECLARE @customerID AS INT = 1;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);

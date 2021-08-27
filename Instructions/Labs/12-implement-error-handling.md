@@ -22,7 +22,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. In the query pane, type the following T-SQL code:
 
-    ```sql
+    ```
     SELECT CAST(N'Some text' AS int);
     ```
 
@@ -36,7 +36,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Write a TRY/CATCH construct. Your T-SQL code should look like this:
 
-    ```sql
+    ```
     BEGIN TRY
         SELECT CAST(N'Some text' AS int);
     END TRY
@@ -57,7 +57,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Right click on the TSQL connection and select New Query
 1. Highlight the following T-SQL code:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = '0';
     
     BEGIN TRY
@@ -71,7 +71,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Select **Run**. Notice that you didn't get an error because you used the TRY/CATCH construct.
 1. Modify the T-SQL code by adding two PRINT statements. The T-SQL code should look like this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = '0';
     
     BEGIN TRY
@@ -93,7 +93,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Now change the value of the @num variable to look like this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = 'A';
     ```
 
@@ -106,7 +106,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Change the value of the @num variable to look like this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = ' 1000000000';
     ```
 
@@ -121,7 +121,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Modify the T-SQL code you used previously so it looks like this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = 'A';
     
     BEGIN TRY
@@ -152,7 +152,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Change the value of the @num variable to look like this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = '0';
     ```
 
@@ -169,7 +169,7 @@ Error Message: Divide by zero error encountered.
 1. Right click on the TSQL connection and select New Query
 1. Highlight the following T-SQL code:
 
-    ```sql
+    ```
     CREATE PROCEDURE dbo.GetErrorInfo AS
     PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
     PRINT 'Error Message: ' + ERROR_MESSAGE();
@@ -182,7 +182,7 @@ Error Message: Divide by zero error encountered.
 1. Select **Run**. You've created a stored procedure named dbo.GetErrorInfo.
 1. Modify the T-SQL code under TRY/CATCH to look like this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = '0';
     
     BEGIN TRY
@@ -208,7 +208,7 @@ Error Message: Divide by zero error encountered.
 
 1. If you still have the T-SQL from the first exercise, then modify it to look like this, otherwise type this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = '0';
     
     BEGIN TRY
@@ -237,7 +237,7 @@ Error Message: Divide by zero error encountered.
 
 1. If you still have the T-SQL from the second exercise, then modify it to look like this, otherwise type this:
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = 'A';
     
     BEGIN TRY
@@ -288,7 +288,7 @@ Now it's time to try using what you've learnt.
 
 The marketing manager is using a T-SQL query, but he is getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
 
-```sql
+```
     DECLARE @customerID AS INT = 30110;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);
@@ -315,7 +315,7 @@ The marketing manager is using a T-SQL query, but he is getting unexpected resul
 
 Error messages and error handling are essential for good code. Your manager has asked you to develop a common error display procedure.  Use this sample code as your base.
 
-```sql
+```
     DECLARE @num varchar(20) = 'Challenge 2';
     
     PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
@@ -336,7 +336,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Catch the error
 
-    ```sql
+    ```
     DECLARE @customerID AS INT = 30110;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);
@@ -361,7 +361,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Warn the user that an error has occurred
 
-    ```sql
+    ```
     DECLARE @customerID AS INT = 30110;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);
@@ -386,7 +386,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Only display valid customer records
 
-    ```sql
+    ```
     DECLARE @customerID AS INT = 30110;
     DECLARE @fname AS NVARCHAR(20);
     DECLARE @lname AS NVARCHAR(30);
@@ -416,7 +416,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Catch the error
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = 'Challenge 2';
     
     BEGIN TRY
@@ -429,7 +429,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Create a stored procedure
 
-    ```sql
+    ```
     CREATE PROCEDURE dbo.DisplayErrorDetails AS
     PRINT 'ERROR INFORMATION';
     PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
@@ -439,7 +439,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Display the error information
 
-    ```sql
+    ```
     DECLARE @num varchar(20) = 'Challenge 2';
     
     BEGIN TRY
