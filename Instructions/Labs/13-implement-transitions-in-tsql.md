@@ -1,28 +1,15 @@
 ---
 lab:
-    title: 'Transactions'
+    title: 'Implement transactions with Transact SQL'
     module: 'Module 4: Implement transactions with Transact SQL'
 ---
-# Modify Data
 
-In this lab, you'll insert, update, and delete data in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this lab, you'll use T-SQL statements to test various error handling techniques in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+
 ![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
+
 > **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
 
-Use the free resources provided in the lab to complete the exercises in this unit. You will not be charged.
-
-**LINK TO LABS ON DEMAND HERE**
-
-> [!NOTE]
-
-> A virtual machine containing the client tools you need is provided, along with the exercise instructions. Use the button above to launch the virtual machine. A limited number of concurrent sessions are available - if the hosted environment is unavailable, try again later. Alternatively, you can use these setup instructions to create your own lab environment, and follow these exercise instructions.
-
-When you finish the exercise, end the lab to close the VM. Don't forget to come back and complete the knowledge check to earn points for completing this module!
-
-> [!TIP]
-> As you follow the instructions in this pane, whenever you see a **icon**, you can use it to copy text from the instruction pane into the virtual machine interface.
-
-If you are prompted to sign in, log into the Student account with the password Pa55w.rd. If prompted to allow your PC to be discoverable, select **No**.
 
 ## Control transactions with BEGIN TRANSACTION and COMMIT TRANSACTION
 
