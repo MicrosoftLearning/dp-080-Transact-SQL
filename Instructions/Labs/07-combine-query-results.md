@@ -56,11 +56,9 @@ In this lab, you will use set operators to retrieve results from the **adventure
 
 ## Write a query that uses the CROSS APPLY operator
 
-In this exercise you will write a table-valued function to return the product category and quantity ordered by specific customers. You will pass the CustomerID fom the select statement to the table-valued function in a CROSS APPLY statement.
+Now you will write a table-valued function to return the product category and quantity ordered by specific customers. You will pass the CustomerID fom the select statement to the table-valued function in a CROSS APPLY statement.
 
-1. Start Azure Data Studio and create a new query (you can do this from the **File** menu or on the *welcome* page).
-2. In the new SQLQuery_... pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-3. In the query editor, enter the following code:
+1. In the query editor, enter the following code:
 	```sql
 	CREATE OR ALTER FUNCTION dbo.ProductSales
 	(@CustomerID int)
@@ -81,7 +79,7 @@ In this exercise you will write a table-valued function to return the product ca
 		FROM SalesLT.Customer AS C
 			CROSS APPLY dbo.ProductSales(C.CustomerID) AS P;
 	```
-4. Highlight the code and select **&#x23f5;Run** to execute it. 
+2. Highlight the code and select **&#x23f5;Run** to execute it. 
 
 ## Challenges
 
