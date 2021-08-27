@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Combine query results with set operators'
-    module: 'Module 5: Combine query results with set operators'
+    module: 'Module 2: Combine query results with set operators'
 ---
 # Combine query results with set operators
 
