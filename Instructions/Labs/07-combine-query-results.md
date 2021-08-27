@@ -82,14 +82,16 @@ Now you will write a table-valued function to return the product category and qu
 2. Highlight the code and select **&#x23f5;Run** to execute it. 
 
 ## Challenges
-
+Now it's your turn to use set operators.
+> **Tip**: Try to determine the appropriate code for yourself. If you get stuck, suggested answers are provided at the end of this lab.
+> 
 ### Challenge 1:
 
 Amend the T-SQL code containing the UNION operator, to return ALL company names, including duplicates.
 
 ### Challenge 2:
 
-Amend the T-SQL code containing the INTERSECT operator to return names from t1 that do not appear in t2. 
+Amend the T-SQL code containing the INTERSECT operator to return names from **t1** that do not appear in **t2**. 
 
 ## Challenge Solutions
 This section contains suggested solutions for the challenge queries.
