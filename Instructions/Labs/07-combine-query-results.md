@@ -71,8 +71,7 @@ Now you will write a table-valued function to return the product category and qu
 1. In the query editor, enter the following code:
 
     ```
-    CREATE OR ALTER FUNCTION dbo.ProductSales
-    (@CustomerID int)
+    CREATE OR ALTER FUNCTION dbo.ProductSales (@CustomerID int)
     RETURNS TABLE
     RETURN
         SELECT C.[Name] AS 'Category', SUM(D.OrderQty) AS 'Quantity'
