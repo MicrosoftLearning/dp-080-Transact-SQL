@@ -59,7 +59,7 @@ In this lab, you'll use T-SQL statements to create and understand stored procedu
 
 ### Challenge answer
 
-    ``` 
+    ```
     EXECUTE SalesLT.TopProducts 41;
     ``` 
 
