@@ -270,11 +270,6 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
    | Msg 8114, Level 16, State 5, Line 5|
    | Error converting data type varchar to numeric.|
 
-## Return to Microsoft Learn
-
-When you've finished the exercise, complete the knowledge check-in Microsoft Learn.
-When the link above opens in another browser tab, return to this one to end the lab environment.
-
 ## Challenges
 
 Now it's time to try using what you've learnt.
