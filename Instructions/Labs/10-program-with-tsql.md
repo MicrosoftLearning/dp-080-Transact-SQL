@@ -186,24 +186,26 @@ This code uses a CASE expression and only one SET expression to get the same res
     
     WHILE @i <= 10
     BEGIN
-    PRINT @i;
-    SET @i = @i + 1;
+        PRINT @i;
+        SET @i = @i + 1;
     END;
     ```
 
 1. Highlight the written T-SQL code and select **Run**.
 1. This will result in:
 
-    10
-    9
-    8
-    7
-    6
-    5
-    4
-    3
-    2
-    1
+    | Started executing query at Line 1 |
+    | ------------- |
+    | 10 <br> 
+    9 <br>
+    8 <br>
+    7 <br>
+    6 <br>
+    5 <br>
+    4 <br>
+    3 <br>
+    2 <br>
+    1 |
 
 ## Return to Microsoft Learn
 
