@@ -30,9 +30,9 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Highlight the above T-SQL code and select **Run**.
 1. This will give the result:
 
-   mynumber
-   --------
-   5
+   | mynumber |
+   | -------- |
+   | 5 |
 
 1. In the query pane, type the following T-SQL code after the previous one:
 
@@ -50,9 +50,9 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Highlight the written T-SQL code and select **Run**.
 1. This will give the result:
 
-   totalnum
-   --------
-   10
+   | totalnum |
+   | -------- |
+   | 10 |
 
    You've now seen how to declare variables and how to retrieve values. 
 
