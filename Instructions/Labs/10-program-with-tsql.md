@@ -4,7 +4,7 @@ lab:
     module: 'Module 1: Introduction to programming with T-SQL'
 ---
 
-In this lab, you'll use T-SQL statements to test various error handling techniques in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this lab, you'll use get an introduction to programming using T-SQL techniques using the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 
 ![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
 
@@ -44,7 +44,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     SELECT @num1 + @num2 AS totalnum;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. This will give the result:
 
    | totalnum |
@@ -72,7 +72,7 @@ Now, we'll look at how to declare variables in batches.
     SELECT @empname AS employee;
     ```
 
-1. Highlight the written T-SQL code and Select **Run**.
+1. Highlight the written T-SQL code and Select **&#x23f5;Run**.
 1. This will give you this result:
 
    | employee |
@@ -106,7 +106,7 @@ Now, we'll look at how to declare variables in batches.
     SELECT @empname AS employee;
     ```
 
-1. Highlight the written T-SQL code and select **Run****.
+1. Highlight the written T-SQL code and select **&#x23f5;Run****.
 1. Observe the error:
 
     Must declare the scalar variable "@empname".
@@ -135,7 +135,7 @@ Variables are local to the batch in which they're defined. If you try to refer t
     SELECT @result AS result;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. Which should result in:
 
    | result |
@@ -166,7 +166,7 @@ Variables are local to the batch in which they're defined. If you try to refer t
 
 This code uses a CASE expression and only one SET expression to get the same result as the previous T-SQL code. Remember to use a CASE expression when it's a matter of returning an expression. However, if you need to execute multiple statements, you can't replace IF with CASE.
 
-1. Highlight the written T-SQL code and select **Run**.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. Which should result in the same answer that we had before:
 
    | result |
@@ -188,7 +188,7 @@ This code uses a CASE expression and only one SET expression to get the same res
     END;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. This will result in:
 
     | Started executing query at Line 1 |
@@ -220,9 +220,9 @@ You are developing a new T-SQL application that needs to temporarily store value
 
 1. Create your variables.
     - Write a T-SQL statement to declare two variables. The first is an nvarchar with length 30 called salesOrderNumber, and the other is an integer called customerID.
-2. Assign a value to the integer variable.
+1. Assign a value to the integer variable.
     - Extend your TSQL code to assign the value 29847 to the customerID.
-3. Assign a value from the database and display the result.
+1. Assign a value from the database and display the result.
     - Extend your TSQL to set the value of the variable salesOrderNumber using the column **salesOrderNUmber** from the SalesOrderHeader table, filter using the **customerID** column and the customerID variable.  Display the result to the user as OrderNumber.
 
 ### Challenge 2: Aggregate product sales

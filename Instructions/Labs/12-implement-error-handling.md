@@ -15,9 +15,6 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Start Azure Data Studio
 1. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
 1. Right click on the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-
-   :::image type="content" source="../media/select-new-query.png" alt-text="Screenshot showing the selection of the new query option":::
-
 1. The previous step will open a query screen that is connected to the TSQL database.
 
 1. In the query pane, type the following T-SQL code:
@@ -26,7 +23,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     SELECT CAST(N'Some text' AS int);
     ```
 
-1. Select **Run**.
+1. Select **&#x23f5;Run**.
 1. Notice the conversion error:
 
    ```text
@@ -45,7 +42,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     END CATCH;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. Now, we get this response:
 
    ```text
@@ -68,7 +65,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     END CATCH;
     ```
 
-1. Select **Run**. Notice that you didn't get an error because you used the TRY/CATCH construct.
+1. Select **&#x23f5;Run**. Notice that you didn't get an error because you used the TRY/CATCH construct.
 1. Modify the T-SQL code by adding two PRINT statements. The T-SQL code should look like this:
 
     ```
@@ -83,7 +80,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     END CATCH;
     ```
 
-1. Highlight the T-SQL code and select **Run**.
+1. Highlight the T-SQL code and select **&#x23f5;Run**.
 1. Notice that an error is now produced, but it's one that you defined.
 
    ```text
@@ -97,7 +94,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     DECLARE @num varchar(20) = 'A';
     ```
 
-1. Highlight the T-SQL code and select **Run**. Notice that you get a different error number and message.
+1. Highlight the T-SQL code and select **&#x23f5;Run**. Notice that you get a different error number and message.
 
     ```text
     Error Message: Error converting data type varchar to numeric.
@@ -110,7 +107,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     DECLARE @num varchar(20) = ' 1000000000';
     ```
 
-1. Highlight the T-SQL code and select **Run**. Notice that you get a different error number and message.
+1. Highlight the T-SQL code and select **&#x23f5;Run**. Notice that you get a different error number and message.
 
    ```text
    Error Number: 8115
@@ -142,7 +139,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     END CATCH;
     ```
 
-1. Highlight the written query and select **Run**.  You'll see that message returned now contains more information:
+1. Highlight the written query and select **&#x23f5;Run**.  You'll see that message returned now contains more information:
 
    ```text
    Handling conversion error...
@@ -156,7 +153,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     DECLARE @num varchar(20) = '0';
     ```
 
-1. Highlight the T-SQL code and select **Run**. This produces a different type of error message:
+1. Highlight the T-SQL code and select **&#x23f5;Run**. This produces a different type of error message:
 
 ```text
 Handling non-conversion error...
@@ -179,7 +176,7 @@ Error Message: Divide by zero error encountered.
     PRINT 'Error Proc: ' + COALESCE(ERROR_PROCEDURE(), 'Not within procedure');
     ```
 
-1. Select **Run**. You've created a stored procedure named dbo.GetErrorInfo.
+1. Select **&#x23f5;Run**. You've created a stored procedure named dbo.GetErrorInfo.
 1. Modify the T-SQL code under TRY/CATCH to look like this:
 
     ```
@@ -193,7 +190,7 @@ Error Message: Divide by zero error encountered.
     END CATCH;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.  This will trigger the stored procedure and display:
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.  This will trigger the stored procedure and display:
 
    ```text
     Error Number: 8134
@@ -220,7 +217,7 @@ Error Message: Divide by zero error encountered.
     END CATCH;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.  Here you'll see that it executes the stored procedure, and then throws the error message again.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.  Here you'll see that it executes the stored procedure, and then throws the error message again.
 
    ```text
     Error Number: 8134
@@ -259,7 +256,7 @@ Error Message: Divide by zero error encountered.
     END CATCH;
     ```
 
-1. Highlight the written T-SQL code and select **Run**.  As you'll see, it executes the stored procedure to display the error, Identifies that it isn't error number 8134, and throws the error again.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.  As you'll see, it executes the stored procedure to display the error, Identifies that it isn't error number 8134, and throws the error again.
 
     ```txt
     Error Number: 8114
