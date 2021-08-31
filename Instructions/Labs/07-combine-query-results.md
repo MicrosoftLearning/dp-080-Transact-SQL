@@ -66,7 +66,7 @@ Now let's try a query using the INTERSECT operator.
 
 ## Write a query that uses the CROSS APPLY operator
 
-Now you will write a table-valued function to return the product category and quantity ordered by specific customers. You will pass the CustomerID fom the select statement to the table-valued function in a CROSS APPLY statement.
+Now you will write a table-valued function to return the product category and quantity ordered by specific customers. You will pass the **CustomerID** fom the select statement to the table-valued function in a CROSS APPLY statement.
 
 1. In the query editor, enter the following code:
 

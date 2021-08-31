@@ -13,9 +13,8 @@ In this lab, you'll run window functions on the **adventureworks** database. For
 
 In this exercise you will create a query that uses a window function to return a ranking value. The query uses a CTE (common table expression) called **sales**. You then use the **sales** CTE to add the RANK window function.
 
-1. Start Azure Data Studio, and in the Connections tab, select the **AdventureWorks** connection by clicking on the arrow just to the left of the name. This will connect to the SQL Server instance and show the objects in the **AdventureWorks** database.
-1. Create a new query (you can do this from the **File** menu or on the *welcome* page).
-1. In the new SQLQuery_… pane, ensure that the **AdventureWorks** database is selected at the top of the query pane. If not, use the **Connect** button to connect the query to the AdventureWorks saved connection.
+1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
+1. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
 1. Copy the following T-SQL code into the query window, highlight it and select **&#x23f5;Run**.
 
     ```
