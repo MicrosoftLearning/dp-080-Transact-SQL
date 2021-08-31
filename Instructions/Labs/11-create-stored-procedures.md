@@ -59,9 +59,9 @@ In this lab, you'll use T-SQL statements to create and understand stored procedu
 
 ### Challenge answer
 
-    ```
-    EXECUTE SalesLT.TopProducts 41;
-    ``` 
+```
+EXECUTE SalesLT.TopProducts 41;
+```
 
 ## Create an inline table valued function
 
@@ -87,6 +87,6 @@ In this lab, you'll use T-SQL statements to create and understand stored procedu
 
 ### Challenge answer
 
-    ```
-    SELECT * FROM SalesLT.GetFreightbyCustomer(2008)
-    ```
+```
+SELECT * FROM SalesLT.GetFreightbyCustomer(2008)
+```
