@@ -22,7 +22,7 @@ You use the CREATE VIEW statement to create a view.
 
 1. After you've connected to your database, you can query it.  Let's fetch some data. Enter the following query to retrieve all products that are classified as road bikes (*ProductCategoryID=6*) from the **SalesLT.Products** table:
 
-    ```sql
+    ```
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductCategoryID = 6;
@@ -32,7 +32,7 @@ You use the CREATE VIEW statement to create a view.
 
 1. The query returned all products that are categorized as road bikes. But what if you wanted to use a view for this data to ensure applications don't need to access the underlying table to fetch it? Replace your previous code with the code shown below:
 
-    ```sql
+    ```
     CREATE VIEW SalesLT.vProductsRoadBikes AS
     SELECT
     ProductID, Name, ListPrice
@@ -48,7 +48,7 @@ You've created your view. Now you can use it. For example, you can use your view
 
 1. In the query editor, replace the code you entered previously with the following code:
 
-    ```sql
+    ```
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.vProductsRoadBikes
     WHERE ListPrice < 1000;
@@ -64,7 +64,7 @@ Sometimes you might end up having to rely on complex queries. You can use derive
 
 1. In the query editor, replace the code you entered previously with the following code:
 
-    ```sql
+    ```
     SELECT ProductID, Name, ListPrice,
            CASE WHEN ListPrice > 1000 THEN N'High' ELSE N'Normal' END AS PriceType
     FROM SalesLT.Product;
@@ -74,7 +74,7 @@ Sometimes you might end up having to rely on complex queries. You can use derive
 
 1. The query calculates whether the price of a product is considered high or normal. But you'd like to be able to further build on this query based on additional criteria, without further adding to its complexity. In order to do this, you can create a derived table for it. Replace the previous code with the code below:
 
-    ```sql
+    ```
     SELECT DerivedTable.ProductID, DerivedTable.Name, DerivedTable.ListPrice
     FROM
         (
@@ -96,7 +96,7 @@ Now it's your turn to use table expressions.
 
 > **Tip**: Try to determine the appropriate code for yourself. If you get stuck, suggested answers are provided at the end of this lab.
 
-### Challenge 1
+### Challenge 1: Create a view
 
 Adventure Works is forming a new sales team located in Canada. The team wants to create a map of all of the customer addresses in Canada. This team will need access to address details on Canadian customers only. Your manager has asked you to make sure that the team can get the data they require, but ensure that they don't access the underlying source data when getting their information.
 
@@ -111,19 +111,19 @@ To carry out the task do the following:
    - In your query, use the **CountryRegion** column to filter for addresses located in *Canada* only.
 
 1. Query your new view.
-   - Fetch the rows in your newly created view to ensure it was created successfully. Notice that it only shows address in Canada. 
+   - Fetch the rows in your newly created view to ensure it was created successfully. Notice that it only shows address in Canada.
 
-## Challenge 2
+### Challenge 2: Use a derived table
 
 The transportation team at Adventure Works wants to optimize its processes. Products that weigh more than 1000 are considered to be heavy products, and will also need to use a new transportation method if their list price is over 2000. You've been asked to classify products according to their weight, and then provide a list of products that meet both these weight and list price criteria.
 
 To help, you'll:
 
 1. Write a query that classifies products as heavy and normal based on their weight.
-   - Use the **Weight** column to decide whether a product is heavy or normal. 
+   - Use the **Weight** column to decide whether a product is heavy or normal.
 
 1. Create a derived table based on your query
-   - Use your derived table to find any heavy products with a list price over 2000. 
+   - Use your derived table to find any heavy products with a list price over 2000.
    - Make sure to select the following columns: **ProductID, Name, Weight, ListPrice**.
 
 ## Challenge Solutions
@@ -134,7 +134,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Write a Transact-SQL query to create a view for customer addresses in Canada.
 
-    ```sql
+    ```
     CREATE VIEW SalesLT.vAddressCA AS
     SELECT AddressLine1, City, StateProvince, CountryRegion
     FROM SalesLT.Address
@@ -143,15 +143,15 @@ This section contains suggested solutions for the challenge queries.
 
 1. Query your new view.
 
-    ```sql
+    ```
     SELECT * FROM SalesLT.vAddressCA;
     ```
 
 ### Challenge 2
 
 1. Write a query that classifies products as heavy and normal based on their weight.
-    
-    ```sql
+
+    ```
     SELECT ProductID, Name, Weight, ListPrice,
            CASE WHEN Weight > 1000 THEN N'Heavy' ELSE N'Normal' END AS WeightType
     FROM SalesLT.Product;
@@ -159,7 +159,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Create a derived table based on your query.
 
-    ```sql
+    ```
     SELECT DerivedTable.ProductID, DerivedTable.Name, DerivedTable.Weight, DerivedTable.ListPrice
     FROM
         (
