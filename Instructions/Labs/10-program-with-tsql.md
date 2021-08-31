@@ -15,10 +15,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Start Azure Data Studio
 1. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
 1. Right click on the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-
-   :::image type="content" source="../media/select-new-query.png" alt-text="Screenshot showing the selection of the new query option":::
-
-1. The previous step will open a query screen that is connected to the Adventureworks database.
+1. The previous step will open a query screen that is connected to the adventureworks database.
 1. In the query pane, type the following T-SQL code:
 
     ```
@@ -27,7 +24,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
     SELECT @num AS mynumber;
     ```
 
-1. Highlight the above T-SQL code and select **Run**.
+1. Highlight the above T-SQL code and select **&#x23f5;Run**.
 1. This will give the result:
 
    | mynumber |
@@ -54,7 +51,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
    | -------- |
    | 10 |
 
-   You've now seen how to declare variables and how to retrieve values. 
+   You've now seen how to declare variables and how to retrieve values.
 
 ## Use variables with batches
 
