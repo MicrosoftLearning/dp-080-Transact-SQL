@@ -34,8 +34,7 @@ You use the CREATE VIEW statement to create a view.
 
     ```
     CREATE VIEW SalesLT.vProductsRoadBikes AS
-    SELECT
-    ProductID, Name, ListPrice
+    SELECT ProductID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductCategoryID = 6;
     ```
