@@ -26,10 +26,9 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Select **&#x23f5;Run**.
 1. Notice the conversion error:
 
-   ```text
-    Msg 245, Level 16, State 1, Line 1
-    Conversion failed when converting the nvarchar value 'Some text' to data type int.
-   ```
+   | Result|
+   |-------|
+   | Conversion failed when converting the nvarchar value 'Some text' to data type int. |
 
 1. Write a TRY/CATCH construct. Your T-SQL code should look like this:
 
@@ -45,9 +44,9 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. Now, we get this response:
 
-   ```text
-   Error
-   ```
+   | Result |
+   | ------ |
+   | Error |
 
 ## Display an error number and an error message
 
@@ -83,10 +82,10 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 1. Highlight the T-SQL code and select **&#x23f5;Run**.
 1. Notice that an error is now produced, but it's one that you defined.
 
-   ```text
-   Error Number: 8134
-   Error Message: Divide by zero error encountered.
-   ```
+   | Result |
+   | ------ |
+   | Error Number: 8134 |
+   | Error Message: Divide by zero error encountered. |
 
 1. Now change the value of the @num variable to look like this:
 
@@ -96,10 +95,10 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Highlight the T-SQL code and select **&#x23f5;Run**. Notice that you get a different error number and message.
 
-    ```text
-    Error Message: Error converting data type varchar to numeric.
-    Error Number: 8114
-    ```
+   | Result |
+   | ------ |
+   | Error Message: Error converting data type varchar to numeric.|
+   | Error Number: 8114 |
 
 1. Change the value of the @num variable to look like this:
 
@@ -109,10 +108,11 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Highlight the T-SQL code and select **&#x23f5;Run**. Notice that you get a different error number and message.
 
-   ```text
-   Error Number: 8115
-   Error Message: Arithmetic overflow error converting varchar to data type numeric.
-   ```
+   | Result |
+   | ------ |
+   | Error Number: 8115 |
+   | Error Message: Arithmetic overflow error converting varchar to data type numeric. |
+
 
 ## Add conditional logic to a CATCH block
 
@@ -141,11 +141,11 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Highlight the written query and select **&#x23f5;Run**.  You'll see that message returned now contains more information:
 
-   ```text
-   Handling conversion error...
-   Error Number: 8114
-   Error Message: Error converting data type varchar to numeric.
-   ```
+   | Result |
+   | ------ |
+   | Handling conversion error...|
+   | Error Number: 8114 |
+   | Error Message: Error converting data type varchar to numeric.|
 
 1. Change the value of the @num variable to look like this:
 
@@ -155,11 +155,11 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Highlight the T-SQL code and select **&#x23f5;Run**. This produces a different type of error message:
 
-```text
-Handling non-conversion error...
-Error Number: 8134
-Error Message: Divide by zero error encountered.
-```
+   | Result |
+   | ------ |
+   | Handling non-conversion error...|
+   | Error Number: 8134 |
+   | Error Message: Divide by zero error encountered. |
 
 ## Use THROW to pass an error message back to the client
 
@@ -192,14 +192,14 @@ Error Message: Divide by zero error encountered.
 
 1. Highlight the written T-SQL code and select **&#x23f5;Run**.  This will trigger the stored procedure and display:
 
-   ```text
-    Error Number: 8134
-    Error Message: Divide by zero error encountered.
-    Error Severity: 16
-    Error State: 1
-    Error Line: 4
-    Error Proc: Not within procedure
-   ```
+   | Result |
+   | ------ |
+   | Error Number: 8134|
+   | Error Message: Divide by zero error encountered.|
+   | Error Severity: 16|
+   | Error State: 1|
+   | Error Line: 4|
+   | Error Proc: Not within procedure|
 
 ## Rethrow the Existing Error Back to a Client
 
@@ -219,16 +219,16 @@ Error Message: Divide by zero error encountered.
 
 1. Highlight the written T-SQL code and select **&#x23f5;Run**.  Here you'll see that it executes the stored procedure, and then throws the error message again.
 
-   ```text
-    Error Number: 8134
-    Error Message: Divide by zero error encountered.
-    Error Severity: 16
-    Error State: 1
-    Error Line: 4
-    Error Proc: Not within procedure
-    Msg 8134, Level 16, State 1, Line 4
-    Divide by zero error encountered.
-   ```
+   | Result |
+   | ------ |
+   | Error Number: 8134|
+   | Error Message: Divide by zero error encountered.|
+   | Error Severity: 16|
+   | Error State: 1|
+   | Error Line: 4|
+   | Error Proc: Not within procedure|
+   | Msg 8134, Level 16, State 1, Line 4|
+   | Divide by zero error encountered.|
 
 ## Add an Error Handling Routine
 
@@ -258,17 +258,17 @@ Error Message: Divide by zero error encountered.
 
 1. Highlight the written T-SQL code and select **&#x23f5;Run**.  As you'll see, it executes the stored procedure to display the error, Identifies that it isn't error number 8134, and throws the error again.
 
-    ```txt
-    Error Number: 8114
-    Error Message: Error converting data type varchar to numeric.
-    Error Severity: 16
-    Error State: 5
-    Error Line: 5
-    Error Proc: Not within procedure
-    Throwing original error
-    Msg 8114, Level 16, State 5, Line 5
-    Error converting data type varchar to numeric.
-    ```
+   | Result |
+   | ------ |
+   | Error Number: 8114|
+   | Error Message: Error converting data type varchar to numeric.|
+   | Error Severity: 16|
+   | Error State: 5|
+   | Error Line: 5|
+   | Error Proc: Not within procedure|
+   | Throwing original error|
+   | Msg 8114, Level 16, State 5, Line 5|
+   | Error converting data type varchar to numeric.|
 
 ## Return to Microsoft Learn
 
