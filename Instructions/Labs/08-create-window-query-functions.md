@@ -34,7 +34,7 @@ In this exercise you will create a query that uses a window function to return a
         ORDER BY Category;
     ```
 
-The product categories now have a rank number according to the **SalesValue** for each category. Notice that the RANK function required the rows to the ordered by **SalesValue**, but the final result set was ordered by **Category**.
+The product categories now have a rank number according to the **SalesValue** for each category. Notice that the RANK function required the rows to be ordered by **SalesValue**, but the final result set was ordered by **Category**.
 
 ## Offset function
 
