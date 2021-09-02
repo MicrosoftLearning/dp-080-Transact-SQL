@@ -278,7 +278,7 @@ Now it's time to try using what you've learnt.
 
 ### Challenge 1: Catch errors and display only valid records
 
-The marketing manager is using a T-SQL query, but he is getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
+The marketing manager is using a T-SQL query, but they are getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
 
 ```
     DECLARE @customerID AS INT = 30110;
