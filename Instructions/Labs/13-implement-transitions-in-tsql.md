@@ -79,8 +79,3 @@ END CATCH
 ### Challenge 2
 
 When you run the code for a second time an error will occur due to the primary keys. The message "Transaction rolled back" will appear.
-
-## Return to Microsoft Learn
-
-1. When you've finished the exercise, complete the knowledge check in Microsoft Learn.
-1. When the link above opens in another browser tab, return to this one to end the lab environment.
