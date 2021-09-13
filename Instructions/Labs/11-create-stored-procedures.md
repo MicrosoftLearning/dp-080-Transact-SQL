@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Create stored procedures in T-SQL'
-    module: 'Module 2: Create Stored Procedures in T-SQL'
+    module: 'Additional exercises'
 ---
 
 In this lab, you'll use T-SQL statements to create and understand stored procedure techniques in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).

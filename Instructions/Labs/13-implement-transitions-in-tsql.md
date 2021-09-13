@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Implement transactions with Transact SQL'
-    module: 'Module 4: Implement transactions with Transact SQL'
+    module: 'Additional exercises'
 ---
 
 In this lab, you'll use T-SQL statements to implement transitions in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
