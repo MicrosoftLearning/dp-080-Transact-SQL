@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Create queries with table expressions'
-    module: 'Module 1: Create tables, views, and temporary objects'
+    module: 'Additional exercises'
 ---
 
 # Create queries with table expressions
