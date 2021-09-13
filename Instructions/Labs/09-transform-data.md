@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Use pivoting and grouping sets'
-    module: 'Module 4: Transform data by implementing pivot, unpivot, rollup, and cube'
+    module: 'Additional exercises'
 ---
 
 # Use pivoting and grouping sets

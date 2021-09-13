@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Use window functions'
-    module: 'Module 3: Write queries that use window functions'
+    module: 'Additional exercises'
 ---
 # Use window functions
 
