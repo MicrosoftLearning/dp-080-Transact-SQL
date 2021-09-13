@@ -266,7 +266,7 @@ This section contains suggested solutions for the challenge queries.
     SELECT pcat.Name AS ParentCategory, cat.Name AS SubCategory, prd.Name AS ProductName
     FROM SalesLT.ProductCategory pcat
     JOIN SalesLT.ProductCategory as cat
-        ON pcat.ProductCategoryID = cat.ProductCategoryID
+        ON pcat.ProductCategoryID = cat.ParentProductCategoryID
     JOIN SalesLT.Product as prd
         ON prd.ProductCategoryID = cat.ProductCategoryID
     ORDER BY ParentCategory, SubCategory, ProductName;
