@@ -121,26 +121,26 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 1. Modify the T-SQL code you used previously so it looks like this:
 
-    ```
-    DECLARE @num varchar(20) = 'A';
-    
-    BEGIN TRY
-        PRINT 5. / CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-        IF ERROR_NUMBER() IN (245, 8114)
-        BEGIN
-            PRINT 'Handling conversion error...'
-        END
-        ELSE
-        BEGIN 
-            PRINT 'Handling non-conversion error...';
-        END;
-    
-        PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
-    END CATCH;
-    ```
+```
+DECLARE @num varchar(20) = 'A';
+
+BEGIN TRY
+    PRINT 5. / CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+    IF ERROR_NUMBER() IN (245, 8114)
+    BEGIN
+        PRINT 'Handling conversion error...'
+    END
+    ELSE
+    BEGIN 
+        PRINT 'Handling non-conversion error...';
+    END;
+
+    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+    PRINT 'Error Message: ' + ERROR_MESSAGE();
+END CATCH;
+```
 
 1. Highlight the written query and select **Run**.  You'll see that message returned now contains more information:
 
@@ -237,27 +237,27 @@ Error Message: Divide by zero error encountered.
 
 1. If you still have the T-SQL from the second exercise, then modify it to look like this, otherwise type this:
 
-    ```
-    DECLARE @num varchar(20) = 'A';
+```
+DECLARE @num varchar(20) = 'A';
+
+BEGIN TRY
+    PRINT 5. / CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+    EXECUTE dbo.GetErrorInfo;
     
-    BEGIN TRY
-        PRINT 5. / CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-        EXECUTE dbo.GetErrorInfo;
-        
-        IF ERROR_NUMBER() = 8134
-        BEGIN
-            PRINT 'Handling devision by zero...';
-        END
-        ELSE 
-        BEGIN
-            PRINT 'Throwing original error';
-            THROW;
-        END;
-        
-    END CATCH;
-    ```
+    IF ERROR_NUMBER() = 8134
+    BEGIN
+        PRINT 'Handling devision by zero...';
+    END
+    ELSE 
+    BEGIN
+        PRINT 'Throwing original error';
+        THROW;
+    END;
+    
+END CATCH;
+```
 
 1. Highlight the written T-SQL code and select **Run**.  As you'll see, it executes the stored procedure to display the error, Identifies that it isn't error number 8134, and throws the error again.
 
@@ -336,116 +336,116 @@ This section contains suggested solutions for the challenge queries.
 
 1. Catch the error
 
-    ```
-    DECLARE @customerID AS INT = 30110;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    DECLARE @maxReturns AS INT = 1;
-    
-    WHILE @maxReturns <= 10
-    BEGIN
-        BEGIN TRY
-            SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-                WHERE CustomerID = @CustomerID;
+```
+DECLARE @customerID AS INT = 30110;
+DECLARE @fname AS NVARCHAR(20);
+DECLARE @lname AS NVARCHAR(30);
+DECLARE @maxReturns AS INT = 1;
 
-            PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
-        END TRY
-        BEGIN CATCH
+WHILE @maxReturns <= 10
+BEGIN
+    BEGIN TRY
+        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
+            WHERE CustomerID = @CustomerID;
 
-        END CATCH;
-  
-        SET @maxReturns += 1;
-        SET @CustomerID += 1;
-    END;
-    ```
+        PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
+    END TRY
+    BEGIN CATCH
+
+    END CATCH;
+
+    SET @maxReturns += 1;
+    SET @CustomerID += 1;
+END;
+```
 
 1. Warn the user that an error has occurred
 
-    ```
-    DECLARE @customerID AS INT = 30110;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    DECLARE @maxReturns AS INT = 1;
-    
-    WHILE @maxReturns <= 10
-    BEGIN
-        BEGIN TRY
-            SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-                WHERE CustomerID = @CustomerID;
+```
+DECLARE @customerID AS INT = 30110;
+DECLARE @fname AS NVARCHAR(20);
+DECLARE @lname AS NVARCHAR(30);
+DECLARE @maxReturns AS INT = 1;
 
-             PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
-        END TRY
-        BEGIN CATCH
-            PRINT 'Unable to run query'
-        END CATCH;
+WHILE @maxReturns <= 10
+BEGIN
+    BEGIN TRY
+        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
+            WHERE CustomerID = @CustomerID;
 
-        SET @maxReturns += 1;
-        SET @CustomerID += 1;
-    END;
+            PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
+    END TRY
+    BEGIN CATCH
+        PRINT 'Unable to run query'
+    END CATCH;
+
+    SET @maxReturns += 1;
+    SET @CustomerID += 1;
+END;
     ```
 
 1. Only display valid customer records
 
-    ```
-    DECLARE @customerID AS INT = 30110;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    DECLARE @maxReturns AS INT = 1;
-    
-    WHILE @maxReturns <= 10
-    BEGIN
-        BEGIN TRY
-            SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-                WHERE CustomerID = @CustomerID;
+```
+DECLARE @customerID AS INT = 30110;
+DECLARE @fname AS NVARCHAR(20);
+DECLARE @lname AS NVARCHAR(30);
+DECLARE @maxReturns AS INT = 1;
 
-            IF @@ROWCOUNT > 0 
-            BEGIN
-                PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
-            END
-        END TRY
-        BEGIN CATCH
-            PRINT 'Unable to run query'
-        END CATCH
+WHILE @maxReturns <= 10
+BEGIN
+    BEGIN TRY
+        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
+            WHERE CustomerID = @CustomerID;
 
-        SET @maxReturns += 1;
-        SET @CustomerID += 1;
-    END;
-    ```
+        IF @@ROWCOUNT > 0 
+        BEGIN
+            PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
+        END
+    END TRY
+    BEGIN CATCH
+        PRINT 'Unable to run query'
+    END CATCH
+
+    SET @maxReturns += 1;
+    SET @CustomerID += 1;
+END;
+```
 
 ### Challenge 2
 
 1. Catch the error
 
-    ```
-    DECLARE @num varchar(20) = 'Challenge 2';
-    
-    BEGIN TRY
-        PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
+```
+DECLARE @num varchar(20) = 'Challenge 2';
 
-    END CATCH;
-    ```
+BEGIN TRY
+    PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+
+END CATCH;
+```
 
 1. Create a stored procedure
 
-    ```
-    CREATE PROCEDURE dbo.DisplayErrorDetails AS
-    PRINT 'ERROR INFORMATION';
-    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-    PRINT 'Error Message: ' + ERROR_MESSAGE();
-    PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
-    ```
+```
+CREATE PROCEDURE dbo.DisplayErrorDetails AS
+PRINT 'ERROR INFORMATION';
+PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+PRINT 'Error Message: ' + ERROR_MESSAGE();
+PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
+```
 
 1. Display the error information
 
-    ```
-    DECLARE @num varchar(20) = 'Challenge 2';
-    
-    BEGIN TRY
-        PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-        EXECUTE dbo.DisplayErrorDetails;
-    END CATCH;
-    ```
+```
+DECLARE @num varchar(20) = 'Challenge 2';
+
+BEGIN TRY
+    PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+    EXECUTE dbo.DisplayErrorDetails;
+END CATCH;
+```
