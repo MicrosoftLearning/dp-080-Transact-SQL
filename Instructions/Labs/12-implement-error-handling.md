@@ -119,7 +119,7 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 ## Add conditional logic to a CATCH block
 
-1. Modify the T-SQL code you used previously so it looks like this:
+1. Modify the T-SQL code you used previously so it looks like the following:
 
 ```
 DECLARE @num varchar(20) = 'A';
