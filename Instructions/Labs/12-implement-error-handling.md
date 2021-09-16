@@ -40,11 +40,7 @@ BEGIN CATCH
 END CATCH;
 ```
 
-9. Run the modified code, and review the response, which should look like this:
-
-   | Result |
-   | ------ |
-   | Error |
+9. Run the modified code, and review the response. The results should include no rows, and the **Messages** tab should include the text **Error**.
 
 ## Display an error number and an error message
 
@@ -79,7 +75,7 @@ END CATCH;
 
 5. Run the modified code, and notice that an error is produced, but it's one that you defined.
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Error Number: 8134 |
    | Error Message: Divide by zero error encountered. |
@@ -92,7 +88,7 @@ DECLARE @num varchar(20) = 'A';
 
 7. Run the modified code. Notice that you get a different error number and message.
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Error Message: Error converting data type varchar to numeric.|
    | Error Number: 8114 |
@@ -105,7 +101,7 @@ DECLARE @num varchar(20) = ' 1000000000';
 
 9. Run the modified code. Notice that you get a different error number and message.
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Error Number: 8115 |
    | Error Message: Arithmetic overflow error converting varchar to data type numeric. |
@@ -137,7 +133,7 @@ END CATCH;
 
 2. Run the modified code.  You'll see that message returned now contains more information:
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Handling conversion error...|
    | Error Number: 8114 |
@@ -151,7 +147,7 @@ DECLARE @num varchar(20) = '0';
 
 4. Run the modified code. This produces a different type of error message:
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Handling non-conversion error...|
    | Error Number: 8134 |
@@ -188,7 +184,7 @@ END CATCH;
 
 5. Run the code.  This will trigger the stored procedure and display:
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Error Number: 8134|
    | Error Message: Divide by zero error encountered.|
@@ -215,7 +211,7 @@ END CATCH;
 
 2. Run the modified code.  Here you'll see that it executes the stored procedure, and then throws the error message again (so a client application can catch and process it).
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Error Number: 8134|
    | Error Message: Divide by zero error encountered.|
@@ -254,7 +250,7 @@ END CATCH;
 
 2. Run the modified code  As you'll see, it executes the stored procedure to display the error, identifies that it isn't error number 8134, and throws the error again.
 
-   | Result |
+   | Started executing query at line 1 |
    | ------ |
    | Error Number: 8114|
    | Error Message: Error converting data type varchar to numeric.|
