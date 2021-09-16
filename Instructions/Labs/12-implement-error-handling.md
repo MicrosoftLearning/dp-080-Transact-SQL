@@ -281,19 +281,19 @@ Now it's time to try using what you've learnt.
 The marketing manager is using a T-SQL query, but they are getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
 
 ```
-    DECLARE @customerID AS INT = 30110;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    DECLARE @maxReturns AS INT = 1; 
-    
-    WHILE @maxReturns <= 10
-    BEGIN
-        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-            WHERE CustomerID = @CustomerID;
-        PRINT @fname + N' ' + @lname;
-        SET @maxReturns += 1;
-        SET @CustomerID += 1;
-    END;
+DECLARE @customerID AS INT = 30110;
+DECLARE @fname AS NVARCHAR(20);
+DECLARE @lname AS NVARCHAR(30);
+DECLARE @maxReturns AS INT = 1; 
+
+WHILE @maxReturns <= 10
+BEGIN
+    SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
+        WHERE CustomerID = @CustomerID;
+    PRINT @fname + N' ' + @lname;
+    SET @maxReturns += 1;
+    SET @CustomerID += 1;
+END;
 ```
 
 1. Catch the error
@@ -308,9 +308,9 @@ The marketing manager is using a T-SQL query, but they are getting unexpected re
 Error messages and error handling are essential for good code. Your manager has asked you to develop a common error display procedure.  Use this sample code as your base.
 
 ```
-    DECLARE @num varchar(20) = 'Challenge 2';
-    
-    PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
+DECLARE @num varchar(20) = 'Challenge 2';
+
+PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
 ```
 
 1. Catch the error
@@ -374,7 +374,7 @@ BEGIN
     SET @maxReturns += 1;
     SET @CustomerID += 1;
 END;
-    ```
+```
 
 1. Only display valid customer records
 
