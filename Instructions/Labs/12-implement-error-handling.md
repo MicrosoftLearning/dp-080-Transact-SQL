@@ -13,36 +13,34 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 ## Write a basic TRY/CATCH construct
 
 1. Start Azure Data Studio
-1. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
-1. Right click on the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-1. The previous step will open a query screen that is connected to the TSQL database.
+2. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
+3. Right click the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+4. The previous step will open a query screen that is connected to the TSQL database.
+5. In the query pane, type the following T-SQL code:
 
-1. In the query pane, type the following T-SQL code:
+```
+SELECT CAST(N'Some text' AS int);
+```
 
-    ```
-    SELECT CAST(N'Some text' AS int);
-    ```
-
-1. Select **&#x23f5;Run**.
-1. Notice the conversion error:
+6. Select **&#x23f5;Run** to run the code.
+7. Notice the conversion error:
 
    | Result|
    |-------|
    | Conversion failed when converting the nvarchar value 'Some text' to data type int. |
 
-1. Write a TRY/CATCH construct. Your T-SQL code should look like this:
+8. Write a TRY/CATCH construct. Your T-SQL code should look like this:
 
-    ```
-    BEGIN TRY
-        SELECT CAST(N'Some text' AS int);
-    END TRY
-    BEGIN CATCH
-        PRINT 'Error';
-    END CATCH;
-    ```
+```
+BEGIN TRY
+    SELECT CAST(N'Some text' AS int);
+END TRY
+BEGIN CATCH
+    PRINT 'Error';
+END CATCH;
+```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.
-1. Now, we get this response:
+9. Run the modified code, and review the response, which should look like this:
 
    | Result |
    | ------ |
@@ -50,69 +48,67 @@ In this lab, you'll use T-SQL statements to test various error handling techniqu
 
 ## Display an error number and an error message
 
-1. Right click on the TSQL connection and select New Query
-1. Highlight the following T-SQL code:
+1. Right click the AdventureWorks connection and select New Query
+2. Enter the following T-SQL code:
 
-    ```
-    DECLARE @num varchar(20) = '0';
-    
-    BEGIN TRY
-        PRINT 5. / CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-    
-    END CATCH;
-    ```
+```
+DECLARE @num varchar(20) = '0';
 
-1. Select **&#x23f5;Run**. Notice that you didn't get an error because you used the TRY/CATCH construct.
-1. Modify the T-SQL code by adding two PRINT statements. The T-SQL code should look like this:
+BEGIN TRY
+    PRINT 5. / CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
 
-    ```
-    DECLARE @num varchar(20) = '0';
-    
-    BEGIN TRY
-        PRINT 5. / CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-        PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-        PRINT 'Error Message: ' + ERROR_MESSAGE();
-    END CATCH;
-    ```
+END CATCH;
+```
 
-1. Highlight the T-SQL code and select **&#x23f5;Run**.
-1. Notice that an error is now produced, but it's one that you defined.
+3. Select **&#x23f5;Run**. Notice that you didn't get an error because you used the TRY/CATCH construct.
+4. Modify the T-SQL code by adding two PRINT statements. The T-SQL code should look like this:
+
+```
+DECLARE @num varchar(20) = '0';
+
+BEGIN TRY
+    PRINT 5. / CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+    PRINT 'Error Message: ' + ERROR_MESSAGE();
+END CATCH;
+```
+
+5. Run the modified code, and notice that an error is produced, but it's one that you defined.
 
    | Result |
    | ------ |
    | Error Number: 8134 |
    | Error Message: Divide by zero error encountered. |
 
-1. Now change the value of the @num variable to look like this:
+6. Now change the value of the @num variable to look like this:
 
-    ```
-    DECLARE @num varchar(20) = 'A';
-    ```
+```
+DECLARE @num varchar(20) = 'A';
+```
 
-1. Highlight the T-SQL code and select **&#x23f5;Run**. Notice that you get a different error number and message.
+7. Run the modified code. Notice that you get a different error number and message.
 
    | Result |
    | ------ |
    | Error Message: Error converting data type varchar to numeric.|
    | Error Number: 8114 |
 
-1. Change the value of the @num variable to look like this:
+8. Change the value of the @num variable to look like this:
 
-    ```
-    DECLARE @num varchar(20) = ' 1000000000';
-    ```
+```
+DECLARE @num varchar(20) = ' 1000000000';
+```
 
-1. Highlight the T-SQL code and select **&#x23f5;Run**. Notice that you get a different error number and message.
+9. Run the modified code. Notice that you get a different error number and message.
 
    | Result |
    | ------ |
    | Error Number: 8115 |
    | Error Message: Arithmetic overflow error converting varchar to data type numeric. |
-
 
 ## Add conditional logic to a CATCH block
 
@@ -139,7 +135,7 @@ BEGIN CATCH
 END CATCH;
 ```
 
-1. Highlight the written query and select **&#x23f5;Run**.  You'll see that message returned now contains more information:
+2. Run the modified code.  You'll see that message returned now contains more information:
 
    | Result |
    | ------ |
@@ -147,13 +143,13 @@ END CATCH;
    | Error Number: 8114 |
    | Error Message: Error converting data type varchar to numeric.|
 
-1. Change the value of the @num variable to look like this:
+3. Change the value of the @num variable to look like this:
 
-    ```
-    DECLARE @num varchar(20) = '0';
-    ```
+```
+DECLARE @num varchar(20) = '0';
+```
 
-1. Highlight the T-SQL code and select **&#x23f5;Run**. This produces a different type of error message:
+4. Run the modified code. This produces a different type of error message:
 
    | Result |
    | ------ |
@@ -161,36 +157,36 @@ END CATCH;
    | Error Number: 8134 |
    | Error Message: Divide by zero error encountered. |
 
-## Use THROW to pass an error message back to the client
+## Create a stored procedure to display an error message
 
-1. Right click on the TSQL connection and select New Query
-1. Highlight the following T-SQL code:
+1. Right click the AdventureWorks connection and select New Query
+2. Enter the following T-SQL code:
 
-    ```
-    CREATE PROCEDURE dbo.GetErrorInfo AS
-    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-    PRINT 'Error Message: ' + ERROR_MESSAGE();
-    PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
-    PRINT 'Error State: ' + CAST(ERROR_STATE() AS varchar(10));
-    PRINT 'Error Line: ' + CAST(ERROR_LINE() AS varchar(10));
-    PRINT 'Error Proc: ' + COALESCE(ERROR_PROCEDURE(), 'Not within procedure');
-    ```
+```
+CREATE PROCEDURE dbo.GetErrorInfo AS
+PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+PRINT 'Error Message: ' + ERROR_MESSAGE();
+PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
+PRINT 'Error State: ' + CAST(ERROR_STATE() AS varchar(10));
+PRINT 'Error Line: ' + CAST(ERROR_LINE() AS varchar(10));
+PRINT 'Error Proc: ' + COALESCE(ERROR_PROCEDURE(), 'Not within procedure');
+```
 
-1. Select **&#x23f5;Run**. You've created a stored procedure named dbo.GetErrorInfo.
-1. Modify the T-SQL code under TRY/CATCH to look like this:
+3. Select **&#x23f5;Run**. to run the code, which creates a stored procedure named **dbo.GetErrorInfo**.
+4. Return to the query that previously resulted in a "Divide by zero" error, and modify it as follows:
 
-    ```
-    DECLARE @num varchar(20) = '0';
-    
-    BEGIN TRY
-        PRINT 5. / CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-        EXECUTE dbo.GetErrorInfo;
-    END CATCH;
-    ```
+```
+DECLARE @num varchar(20) = '0';
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.  This will trigger the stored procedure and display:
+BEGIN TRY
+    PRINT 5. / CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+    EXECUTE dbo.GetErrorInfo;
+END CATCH;
+```
+
+5. Run the code.  This will trigger the stored procedure and display:
 
    | Result |
    | ------ |
@@ -203,21 +199,21 @@ END CATCH;
 
 ## Rethrow the Existing Error Back to a Client
 
-1. If you still have the T-SQL from the first exercise, then modify it to look like this, otherwise type this:
+1. Modify the CATCH block of your code to include a THROW command, so that your code looks like this:
 
-    ```
-    DECLARE @num varchar(20) = '0';
-    
-    BEGIN TRY
-        PRINT 5. / CAST(@num AS numeric(10,4));
-    END TRY
-    BEGIN CATCH
-        EXECUTE dbo.GetErrorInfo; 
-        THROW;
-    END CATCH;
-    ```
+```
+DECLARE @num varchar(20) = '0';
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.  Here you'll see that it executes the stored procedure, and then throws the error message again.
+BEGIN TRY
+    PRINT 5. / CAST(@num AS numeric(10,4));
+END TRY
+BEGIN CATCH
+    EXECUTE dbo.GetErrorInfo; 
+    THROW;
+END CATCH;
+```
+
+2. Run the modified code.  Here you'll see that it executes the stored procedure, and then throws the error message again (so a client application can catch and process it).
 
    | Result |
    | ------ |
@@ -232,7 +228,7 @@ END CATCH;
 
 ## Add an Error Handling Routine
 
-1. If you still have the T-SQL from the second exercise, then modify it to look like this, otherwise type this:
+1. Modify your code to look like this:
 
 ```
 DECLARE @num varchar(20) = 'A';
@@ -256,7 +252,7 @@ BEGIN CATCH
 END CATCH;
 ```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.  As you'll see, it executes the stored procedure to display the error, Identifies that it isn't error number 8134, and throws the error again.
+2. Run the modified code  As you'll see, it executes the stored procedure to display the error, identifies that it isn't error number 8134, and throws the error again.
 
    | Result |
    | ------ |
@@ -272,13 +268,13 @@ END CATCH;
 
 ## Challenges
 
-Now it's time to try using what you've learnt.
+Now it's time to try using what you've learned.
 
 > **Tip**: Try to determine the appropriate solutions for yourself. If you get stuck, suggested answers are provided at the end of this lab.
 
 ### Challenge 1: Catch errors and display only valid records
 
-The marketing manager is using a T-SQL query, but they are getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
+The marketing manager is using the following T-SQL query, but they are getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
 
 ```
 DECLARE @customerID AS INT = 30110;
@@ -315,9 +311,9 @@ PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
 
 1. Catch the error
    - Add a TRY...CATCH around the PRINT statement.
-1. Create a stored procedure
+2. Create a stored procedure
    - Create a stored procedure called dbo.DisplayErrorDetails.  It should display a title and the value for **ERROR_NUMBER**, **ERROR_MESSAGE** and **ERROR_SEVERITY**.
-1. Display the error information
+3. Display the error information
    - Use the stored procedure to display the error information when an error occurs.
 
 ## Challenge Solutions
@@ -351,7 +347,7 @@ BEGIN
 END;
 ```
 
-1. Warn the user that an error has occurred
+2. Warn the user that an error has occurred
 
 ```
 DECLARE @customerID AS INT = 30110;
@@ -376,7 +372,7 @@ BEGIN
 END;
 ```
 
-1. Only display valid customer records
+3. Only display valid customer records
 
 ```
 DECLARE @customerID AS INT = 30110;
@@ -419,7 +415,7 @@ BEGIN CATCH
 END CATCH;
 ```
 
-1. Create a stored procedure
+2. Create a stored procedure
 
 ```
 CREATE PROCEDURE dbo.DisplayErrorDetails AS
@@ -429,7 +425,7 @@ PRINT 'Error Message: ' + ERROR_MESSAGE();
 PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
 ```
 
-1. Display the error information
+3. Display the error information
 
 ```
 DECLARE @num varchar(20) = 'Challenge 2';
