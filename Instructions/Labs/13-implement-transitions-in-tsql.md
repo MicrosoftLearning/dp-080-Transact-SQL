@@ -4,9 +4,9 @@ lab:
     module: 'Additional exercises'
 ---
 
-In this lab, you'll use T-SQL statements to see the impact of using transactions in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this lab, you'll use T-SQL statements to see the impact of using transactions in the **AdventureWorks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 
-!An entity relationship diagram of the adventureworks database(./images/adventureworks-erd.png)
+![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
 
 > **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
 
@@ -33,7 +33,6 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 ```
 
 1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key.
-
 1. Note the results messages:
 
 ```
@@ -42,7 +41,7 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 Msg 2627, Level 14, State 1, Line 48Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
 ```
 
-1. Two rows are added, one to the Customer table and one to the Address table. However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now corrupted as there's no link between the new customer and their address.
+    Two rows are added, one to the Customer table and one to the Address table. However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now corrupted as there's no link between the new customer and their address.
 
 ## Insert data as using a transaction
 
@@ -140,14 +139,12 @@ Now it's time to try using what you've learned.
 
 ### Challenge 1: Use transaction and error handling
 
-Looking at the database diagram can you see any other table relationships that have the same issue as the **Customer** and **CustomerAddress** tables? Write insert statements inside a transaction and rollback if there are any errors.
+Looking at the database diagram can you see any other table relationships that have the same issue as the **Customer** and **CustomerAddress** tables? Write `INSERT` statements inside a transaction and rollback if there are any errors.
 
 1. Identify the tables to use in the statement.
-    - Tables with parent child relationships are good candidates.
-
-1. Write the `TRY` and `CATCH` block.
-
-1. Write the inserts for the tables.
+    - Tables with parent/child relationships are good candidates.
+1. Write the `TRY` and `CATCH` blocks.
+1. Write the `INSERT` statements for the tables.
     - You'll need to find a way to cause an error in one of the statements, if the table has a `rowguid` you could re-use one from an existing row in the same table.
 
 ### Challenge 2: Only rollback when there are errors and uncommittable transactions
@@ -155,56 +152,56 @@ Looking at the database diagram can you see any other table relationships that h
 The example T-SQL so far doesn't give any indication that an error has happened. Enhance the T-SQL statements you wrote in challenge 1 to display the error details in the results. Also use the `XACT_STATE` to check the state of the transactions before you roll them back.
 
 1. Where should that statement be added?
-    - You only need to run it if there's been an error
-1. You can use the `ERROR_NUMBER()` functions `ERROR_MESSAGE()` to get details of the last error.
+    - You only need to run it if there's been an error.
+1. You can use the `ERROR_NUMBER()` and `ERROR_MESSAGE()` functions to get details of the last error.
 1. Add a condition to check the value of `XACT_STATE` before rolling back.
 
 ## Challenge solutions
 
 ### Challenge 1
 
-Good candidates where a similar issue could happen are the **SalesOrderHeader** and **SalesOrderDetail** tables.
+Good candidates, where a similar issue could happen, are the **SalesOrderHeader** and **SalesOrderDetail** tables.
 
-1. Open a new query window from the file menu.
-1. Wite the transaction T-SQL statements to insert rows into the **SalesOrderHeader** and **SalesOrderDetail** tables.
+1. Open a new query window from the **File** menu.
+1. Write the transaction T-SQL statements to insert rows into the **SalesOrderHeader** and **SalesOrderDetail** tables.
 
-    ```
-    BEGIN TRY
-    BEGIN TRANSACTION;
-        INSERT INTO SalesLT.SalesOrderHeader (RevisionNumber,OrderDate,DueDate,Status,OnlineOrderFlag,CustomerID,SubTotal,ShipMethod,TaxAmt,Freight,rowguid,ModifiedDate) 
-        VALUES (2,GETDATE(),GETDATE(),5,0,29485, 3182.8264, 'CARGO TRANSPORT',994.6333,994.6333,NEWID(),GETDATE());
+```
+BEGIN TRY
+BEGIN TRANSACTION;
+    INSERT INTO SalesLT.SalesOrderHeader (RevisionNumber,OrderDate,DueDate,Status,OnlineOrderFlag,CustomerID,SubTotal,ShipMethod,TaxAmt,Freight,rowguid,ModifiedDate) 
+    VALUES (2,GETDATE(),GETDATE(),5,0,29485, 3182.8264, 'CARGO TRANSPORT',994.6333,994.6333,NEWID(),GETDATE());
 
-        INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID,OrderQty,ProductID,UnitPrice,UnitPriceDiscount,rowguid,ModifiedDate) VALUES (1,1,712,9.99,0,(SELECT TOP 1 rowguid FROM SalesLT.SalesOrderDetail),GETDATE());
-      COMMIT TRANSACTION;
-      PRINT 'Transaction committed.';
-    END TRY
-    BEGIN CATCH
-      ROLLBACK TRANSACTION;
-      PRINT 'Transaction rolled back.';
-    END CATCH
-    ```
+    INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID,OrderQty,ProductID,UnitPrice,UnitPriceDiscount,rowguid,ModifiedDate) VALUES (1,1,712,9.99,0,(SELECT TOP 1 rowguid FROM SalesLT.SalesOrderDetail),GETDATE());
+  COMMIT TRANSACTION;
+  PRINT 'Transaction committed.';
+END TRY
+BEGIN CATCH
+  ROLLBACK TRANSACTION;
+  PRINT 'Transaction rolled back.';
+END CATCH
+```
 
 ### Challenge 2
 
 1. Change the T-SQL you created in the first challenge to print out the error details and check the `XACT_STATE`.
 
-    ```
-    BEGIN TRY
-    BEGIN TRANSACTION;
-        INSERT INTO SalesLT.SalesOrderHeader (RevisionNumber,OrderDate,DueDate,Status,OnlineOrderFlag,CustomerID,SubTotal,ShipMethod,TaxAmt,Freight,rowguid,ModifiedDate) 
-        VALUES (2,GETDATE(),GETDATE(),5,0,29485, 3182.8264, 'CARGO TRANSPORT',994.6333,994.6333,NEWID(),GETDATE());
+```
+BEGIN TRY
+BEGIN TRANSACTION;
+    INSERT INTO SalesLT.SalesOrderHeader (RevisionNumber,OrderDate,DueDate,Status,OnlineOrderFlag,CustomerID,SubTotal,ShipMethod,TaxAmt,Freight,rowguid,ModifiedDate) 
+    VALUES (2,GETDATE(),GETDATE(),5,0,29485, 3182.8264, 'CARGO TRANSPORT',994.6333,994.6333,NEWID(),GETDATE());
 
-        INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID,OrderQty,ProductID,UnitPrice,UnitPriceDiscount,rowguid,ModifiedDate) VALUES (1,1,712,9.99,0,(SELECT TOP 1 rowguid FROM SalesLT.SalesOrderDetail),GETDATE());
-      COMMIT TRANSACTION;
-      PRINT 'Transaction committed.';
-    END TRY
-    BEGIN CATCH
-      PRINT CONCAT('Error ', ERROR_NUMBER(), ': ', ERROR_MESSAGE());
-      IF (XACT_STATE()) = 1
-      BEGIN
-          ROLLBACK TRANSACTION;
-          PRINT 'Transaction rolled back.';
-      END;
-    END CATCH
-    ```
+    INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID,OrderQty,ProductID,UnitPrice,UnitPriceDiscount,rowguid,ModifiedDate) VALUES (1,1,712,9.99,0,(SELECT TOP 1 rowguid FROM SalesLT.SalesOrderDetail),GETDATE());
+  COMMIT TRANSACTION;
+  PRINT 'Transaction committed.';
+END TRY
+BEGIN CATCH
+  PRINT CONCAT('Error ', ERROR_NUMBER(), ': ', ERROR_MESSAGE());
+  IF (XACT_STATE()) = 1
+  BEGIN
+      ROLLBACK TRANSACTION;
+      PRINT 'Transaction rolled back.';
+  END;
+END CATCH
+```
 
