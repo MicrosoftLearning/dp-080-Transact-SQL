@@ -17,13 +17,13 @@ Consider a website that needs to store customer information. As part of the cust
 In this exercise you will use a transaction to ensure that when a row is inserted into the **Customer** and **Address** tables, a row is also added to the **CustomerAddress** table. If one insert fails, then all will fail.
 
 1. Start Azure Data Studio.
-1. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
-1. Right click on the **AdventureWorks** database and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-1. Copy the following T-SQL code into the query window:
+1. From the Servers pane, double-click the **AdventureWorks** connection. A green dot will appear when the connection is successful.
+1. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+1. Enter the following T-SQL code into the query window:
 
 ```
 INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
-VALUES (0,  'Caroline','Vicknair','caroline0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
 
 INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
 VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
@@ -32,47 +32,69 @@ INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid
 VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
 ```
 
-1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key.
-1. Note the results messages:
+1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key to run the code.
+2. Note the results messages:
+
+> (1 row affected)
+>
+> (1 row affected)
+>
+> Msg 2627, Level 14, State 1, Line 48Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
+
+Two rows are added, one to the Customer table and one to the Address table. However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now inconsistent as there's no link between the new customer and their address.
+
+To fix this, you'll need to delete the two rows that were inserted.
+
+3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+4. Enter the following T-SQL code into the new query window: and run it to delete the inconsistent data:
 
 ```
-(1 row affected)
-(1 row affected)
-Msg 2627, Level 14, State 1, Line 48Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
+DELETE SalesLT.Customer
+WHERE CustomerID = IDENT_CURRENT('SalesLT.Customer');
+
+DELETE SalesLT.Address
+WHERE AddressID = IDENT_CURRENT('SalesLT.Address');
 ```
 
-    Two rows are added, one to the Customer table and one to the Address table. However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now corrupted as there's no link between the new customer and their address.
+> **Note**: This code only works because you are the only user working in the database. In a real scenario, you would need to ascertain the IDs of the records that were inserted and specify them explicitly in case new customer and address records had been inserted since you ran your original code.
 
 ## Insert data as using a transaction
 
 All of these statements need to run as a single atomic transaction. If any one of them fails, then all statements should fail. Let's group them together in a transaction.
 
-1. In the query window add a `BEGIN TRANSACTION` statement before all the other T-SQL. Then at the end of all the transactions add a `COMMIT TRANSACTION`.
+1. Switch back to the original query window, and modify the code to enclose the original INSERT statements in a transaction, like this:
 
 ```
 BEGIN TRANSACTION;
 
-... SQL statements
+INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+
+INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
+VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
+
+INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
+VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
 
 COMMIT TRANSACTION;
 ```
 
-1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key.
+2. Run the code, and note that exactly the same thing happens. Two new rows are inserted and an error occurs for the third record.
 
-    Note that exactly the same thing happens. Two new rows are inserted and an error happens.
+3. Switch back to the query window containing the DELETE statements, and run it to delete the inconsistent data.
 
 ## Handle errors in a transaction
 
-Using transactions on their own without handling errors won't solve the problem. Nowhere in the code are we using a `ROLLBACK` statement. We need to combine batch error handling and transactions to resolve our issue.
+Using transactions on their own without handling errors won't solve the problem. Nowhere in the code are we using a ROLLBACK statement. We need to combine batch error handling and transactions to resolve our issue.
 
-1. Replace the contents of the query window with this T-SQL.
+1. Switch back to the original query window, and modify the code to enclose the transaction in a TRY/CATCH block, and use the ROLLBACK TRANSACTION statement if an error occurs.
 
 ```
 BEGIN TRY
 BEGIN TRANSACTION;
 
-    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
-    VALUES (0,  'Caroline','Vicknair','caroline0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+	INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+	VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
 
     INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
     VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
@@ -82,6 +104,7 @@ BEGIN TRANSACTION;
 
 COMMIT TRANSACTION;
 PRINT 'Transaction committed.';
+
 END TRY
 BEGIN CATCH
     ROLLBACK TRANSACTION;
@@ -89,119 +112,226 @@ BEGIN CATCH
 END CATCH;    
 ```
 
-1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key.
+1. Run the code and review the results:
 
-```
-Started executing query at Line 1
-(1 row affected)
-(1 row affected)
-(0 rows affected)
-```
+> Started executing query at Line 1
+>
+> (1 row affected)
+>
+> (1 row affected)
+>
+> (0 rows affected)
+
 
 Now there isn't any error message so it looks like two rows were affected.
 
-1. Open a new query window from the file menu.
-1. Check the contents of the **Customer** table with this query.
+2. Open a new query window, and run the following query to view the most recently modified record in the **Customer** table.
 
 ```
-SELECT TOP (20) * 
-FROM SalesLT.Customer 
-ORDER BY CustomerID DESC;    
+SELECT TOP (1) * FROM SalesLT.Customer
+ORDER BY ModifiedDate DESC;   
 ```
 
-Note that there's several duplicate rows for **Caroline Vicknair**. See how many there are.
-
-1. Select the query window with the insert statements and select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key.
-
-1. Re-run the select query. See that there's no new row added.
+Note that the most recently modified customer record is <u>not</u> for *Norman Newcustomer* - the INSERT statement that succeeded has been rolled back to ensure the database remains consistent.
 
 ## Check the transaction state before rolling back
 
-You can improve the error handling by checking the state of the transactions with `XACT_STATE()`.
+The CATCH block will handle errors that occur anywhere in the TRY block, so if an error were to occur outside of the BEGIN TRANSACTION...COMMIT TRANSACTION block, there would be no active transaction to roll back. To avoid this issue, you can check the current transaction state with XACT_STATE(), which returns one of the following values:
 
-1. In the query window, surround the `ROLLBACK` statements with an `IF` statement checking the value.
+- **-1**: There is an active transaction in process that cannot be committed.
+- **0**: There are no transactions in process.
+- **1**: There is an active transaction in process that can be committed or rolled back.
+
+1. Back in the original query window, surround the ROLLBACK statements with an IF statement checking the value, so your code looks like this.
 
 ```
+BEGIN TRY
+BEGIN TRANSACTION;
+
+	INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate) 
+	VALUES (0, 'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,  ModifiedDate) 
+    VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
+    VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
+
+COMMIT TRANSACTION;
+PRINT 'Transaction committed.';
+
+END TRY
 BEGIN CATCH
-  IF (XACT_STATE()) = 1
+  PRINT 'An error occurred.'
+  IF (XACT_STATE()) <> 0
   BEGIN
+      PRINT 'Transaction in process.'
       ROLLBACK TRANSACTION;
       PRINT 'Transaction rolled back.';
   END;
 END CATCH
 ```
+
+2. Run the modified code, and review the output - noting that an in-process transaction was detected and rolled back.
+
+3. Modify the code as follows to avoid specifying an explicit **rowid** (which was caused the duplicate key error)
+
+```
+BEGIN TRY
+BEGIN TRANSACTION;
+
+	INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate) 
+	VALUES (0, 'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,  ModifiedDate) 
+    VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, ModifiedDate)
+    VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', GETDATE());
+
+COMMIT TRANSACTION;
+PRINT 'Transaction committed.';
+END TRY
+BEGIN CATCH
+  PRINT 'An error occurred.'
+  IF (XACT_STATE()) <> 0
+  BEGIN
+      PRINT 'Transaction in process.'
+      ROLLBACK TRANSACTION;
+      PRINT 'Transaction rolled back.';
+  END;
+END CATCH
+```
+
+4. Run the code, and note that this time, all three INSERT statement succeed.
+
+5. Switch to the query window that contains code to select the most recently modified customer and run it to verify that a record for *Norman Newcustomer* has been inserted.
+
+6. Back in the original query window, modify the code to insert another customer - this time throwing an error within the TRY block after the transaction has been committed:
+
+```
+BEGIN TRY
+BEGIN TRANSACTION;
+
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate)     VALUES (0, 'Ann','Othercustomr','ann0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());;
+
+    INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,  ModifiedDate) 
+    VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, ModifiedDate)
+    VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', GETDATE());
+
+COMMIT TRANSACTION;
+PRINT 'Transaction committed.';
+
+THROW 51000, 'Some kind of error', 1;
+
+END TRY
+BEGIN CATCH
+  PRINT 'An error occurred.'
+  IF (XACT_STATE()) <> 0
+  BEGIN
+      PRINT 'Transaction in process.'
+      ROLLBACK TRANSACTION;
+      PRINT 'Transaction rolled back.';
+  END;
+END CATCH
+```
+
+7. Run the code and review the output. All three INSERT statements should succeed, but an error is caught by the CATCH block.
+
+8. Switch to the query window that contains code to select the most recently modified customer and run it to verify that a record for *Ann Othercustomer* has been inserted. The transaction succeeded and was not rolled back, even though an error subsequently occurred.
 
 ## Challenge
 
 Now it's time to try using what you've learned.
 
-> **Tip**: Try to determine the appropriate solutions for yourself. If you get stuck, suggested answers are provided at the end of this lab.
+> **Tip**: Try to determine the appropriate solution for yourself. If you get stuck, sa suggested solution is provided at the end of this lab.
 
-### Challenge 1: Use transaction and error handling
+### Use a transaction to insert data into multiple tables
 
-Looking at the database diagram can you see any other table relationships that have the same issue as the **Customer** and **CustomerAddress** tables? Write `INSERT` statements inside a transaction and rollback if there are any errors.
+When a sales order header is inserted, it must have at least one corresponding sales order detail record. Currently, you use the following code to accomplish this
 
-1. Identify the tables to use in the statement.
-    - Tables with parent/child relationships are good candidates.
-1. Write the `TRY` and `CATCH` blocks.
-1. Write the `INSERT` statements for the tables.
-    - You'll need to find a way to cause an error in one of the statements, if the table has a `rowguid` you could re-use one from an existing row in the same table.
+```
+-- Get the highest order ID and add 1
+DECLARE @OrderID INT;
+SELECT @OrderID = MAX(SalesOrderID) + 1 FROM SalesLT.SalesOrderHeader;
 
-### Challenge 2: Only rollback when there are errors and uncommittable transactions
+-- Insert the order header
+INSERT INTO SalesLT.SalesOrderHeader (SalesOrderID, OrderDate, DueDate, CustomerID, ShipMethod)
+VALUES (@OrderID, GETDATE() ,DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
 
-The example T-SQL so far doesn't give any indication that an error has happened. Enhance the T-SQL statements you wrote in challenge 1 to display the error details in the results. Also use the `XACT_STATE` to check the state of the transactions before you roll them back.
+-- Insert one or more order details
+INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPrice)
+VALUES (@OrderID, 1, 712, 8.99);
+```
 
-1. Where should that statement be added?
-    - You only need to run it if there's been an error.
-1. You can use the `ERROR_NUMBER()` and `ERROR_MESSAGE()` functions to get details of the last error.
-1. Add a condition to check the value of `XACT_STATE` before rolling back.
+You need to encapsulate this code in a transaction so that all inserts succeed or fail as an atomic unit or work.
 
-## Challenge solutions
+## Challenge solution
 
-### Challenge 1
+### Use a transaction to insert data into multiple tables
 
-Good candidates, where a similar issue could happen, are the **SalesOrderHeader** and **SalesOrderDetail** tables.
-
-1. Open a new query window from the **File** menu.
-1. Write the transaction T-SQL statements to insert rows into the **SalesOrderHeader** and **SalesOrderDetail** tables.
+The following code encloses the logic to insert a new order and order detail in a transaction, rolling back the transaction if an error occurs.
 
 ```
 BEGIN TRY
 BEGIN TRANSACTION;
-    INSERT INTO SalesLT.SalesOrderHeader (RevisionNumber,OrderDate,DueDate,Status,OnlineOrderFlag,CustomerID,SubTotal,ShipMethod,TaxAmt,Freight,rowguid,ModifiedDate) 
-    VALUES (2,GETDATE(),GETDATE(),5,0,29485, 3182.8264, 'CARGO TRANSPORT',994.6333,994.6333,NEWID(),GETDATE());
+    -- Get the highest order ID and add 1
+	DECLARE @OrderID INT;
+	SELECT @OrderID = MAX(SalesOrderID) + 1 FROM SalesLT.SalesOrderHeader;
 
-    INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID,OrderQty,ProductID,UnitPrice,UnitPriceDiscount,rowguid,ModifiedDate) VALUES (1,1,712,9.99,0,(SELECT TOP 1 rowguid FROM SalesLT.SalesOrderDetail),GETDATE());
-  COMMIT TRANSACTION;
-  PRINT 'Transaction committed.';
+	-- Insert the order header
+	INSERT INTO SalesLT.SalesOrderHeader (SalesOrderID, OrderDate, DueDate, CustomerID, ShipMethod)
+	VALUES (@OrderID, GETDATE() ,DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
+	
+	-- Insert one or more order details
+	INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPrice)
+	VALUES (@OrderID, 1, 712, 8.99);
+
+COMMIT TRANSACTION;
+PRINT 'Transaction committed.';
+
 END TRY
 BEGIN CATCH
-  ROLLBACK TRANSACTION;
-  PRINT 'Transaction rolled back.';
+	PRINT 'An error occurred.'
+	IF (XACT_STATE()) <> 0
+	BEGIN
+	    PRINT 'Transaction in process.'
+		ROLLBACK TRANSACTION;
+		PRINT 'Transaction rolled back.'; 
+	END;
 END CATCH
 ```
 
-### Challenge 2
-
-1. Change the T-SQL you created in the first challenge to print out the error details and check the `XACT_STATE`.
+To test the transaction, you can try to insert an order detail with an invalid product ID, like this:
 
 ```
 BEGIN TRY
 BEGIN TRANSACTION;
-    INSERT INTO SalesLT.SalesOrderHeader (RevisionNumber,OrderDate,DueDate,Status,OnlineOrderFlag,CustomerID,SubTotal,ShipMethod,TaxAmt,Freight,rowguid,ModifiedDate) 
-    VALUES (2,GETDATE(),GETDATE(),5,0,29485, 3182.8264, 'CARGO TRANSPORT',994.6333,994.6333,NEWID(),GETDATE());
+    -- Get the highest order ID and add 1
+	DECLARE @OrderID INT;
+	SELECT @OrderID = MAX(SalesOrderID) + 1 FROM SalesLT.SalesOrderHeader;
 
-    INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID,OrderQty,ProductID,UnitPrice,UnitPriceDiscount,rowguid,ModifiedDate) VALUES (1,1,712,9.99,0,(SELECT TOP 1 rowguid FROM SalesLT.SalesOrderDetail),GETDATE());
-  COMMIT TRANSACTION;
-  PRINT 'Transaction committed.';
+	-- Insert the order header
+	INSERT INTO SalesLT.SalesOrderHeader (SalesOrderID, OrderDate, DueDate, CustomerID, ShipMethod)
+	VALUES (@OrderID, GETDATE() ,DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
+	
+	-- Insert one or more order details
+	INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPrice)
+	VALUES (@OrderID, 1, 'Invalid product', 8.99);
+
+COMMIT TRANSACTION;
+PRINT 'Transaction committed.';
+
 END TRY
 BEGIN CATCH
-  PRINT CONCAT('Error ', ERROR_NUMBER(), ': ', ERROR_MESSAGE());
-  IF (XACT_STATE()) = 1
-  BEGIN
-      ROLLBACK TRANSACTION;
-      PRINT 'Transaction rolled back.';
-  END;
+	PRINT 'An error occurred.'
+	IF (XACT_STATE()) <> 0
+	BEGIN
+	    PRINT 'Transaction in process.'
+		ROLLBACK TRANSACTION;
+		PRINT 'Transaction rolled back.'; 
+	END;
 END CATCH
 ```
-
