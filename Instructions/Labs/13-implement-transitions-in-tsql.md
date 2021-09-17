@@ -245,7 +245,7 @@ END CATCH
 
 Now it's time to try using what you've learned.
 
-> **Tip**: Try to determine the appropriate solution for yourself. If you get stuck, sa suggested solution is provided at the end of this lab.
+> **Tip**: Try to determine the appropriate solution for yourself. If you get stuck, a suggested solution is provided at the end of this lab.
 
 ### Use a transaction to insert data into multiple tables
 
