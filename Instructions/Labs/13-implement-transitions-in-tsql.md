@@ -112,7 +112,7 @@ BEGIN CATCH
 END CATCH;    
 ```
 
-1. Run the code and review the results:
+2. Run the code and review the results:
 
 > Started executing query at Line 1
 >
@@ -122,10 +122,9 @@ END CATCH;
 >
 > (0 rows affected)
 
-
 Now there isn't any error message so it looks like two rows were affected.
 
-2. Open a new query window, and run the following query to view the most recently modified record in the **Customer** table.
+3. Open a new query window, and run the following query to view the most recently modified record in the **Customer** table.
 
 ```
 SELECT TOP (1) * FROM SalesLT.Customer
