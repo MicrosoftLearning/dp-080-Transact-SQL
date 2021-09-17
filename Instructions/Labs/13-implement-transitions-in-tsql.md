@@ -33,7 +33,7 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 ```
 
 1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key to run the code.
-2. Note the results messages:
+2. Note the output messages, which should look like this:
 
 > (1 row affected)
 >
