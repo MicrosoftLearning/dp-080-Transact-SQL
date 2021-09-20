@@ -295,7 +295,7 @@ GO
 6. Highlight the `COMMIT TRANSACTION` statement and run it.
 7. Re-run the SQL query and note that the total customers has increased by 1.
 
-Be careful when selecting what isolation levels to use in a database. In some scenarios returning the current state of data before a transaction has been committed is worse that being blocked and waiting for all the data to be in the correct state.
+Be careful when selecting what isolation levels to use in a database. In some scenarios returning the current state of data before a transaction has been committed is worse than a query being blocked and waiting for all the data to be in the correct state.
 
 ## Challenge
 
