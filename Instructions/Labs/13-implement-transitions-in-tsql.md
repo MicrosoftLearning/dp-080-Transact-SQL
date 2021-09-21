@@ -4,7 +4,7 @@ lab:
     module: 'Additional exercises'
 ---
 
-In this lab, you'll use T-SQL statements to see the impact of using transactions in the **AdventureWorks** database. For your reference, the following diagram shows the tables in the database (resize the pane if it can't be see clearly).
+In this lab, you'll use T-SQL statements to see the impact of using transactions in the **AdventureWorks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 
 ![An entity relationship diagram of the AdventureWorks database](./images/adventureworks-erd.png)
 
@@ -29,7 +29,7 @@ INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, P
 VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
 
 INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
-VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
+VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', NEWID(), '12-1-20212'); 
 ```
 
 1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key to run the code.
@@ -39,14 +39,14 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 >
 > (1 row affected)
 >
-> Msg 2627, Level 14, State 1, Line 48Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
+> Conversion failed when converting date and/or time from character string.
 
 Two rows are added, one to the Customer table and one to the Address table. However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now inconsistent as there's no link between the new customer and their address.
 
 To fix this, you'll need to delete the two rows that were inserted.
 
 3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-4. Enter the following T-SQL code into the new query window: and run it to delete the inconsistent data:
+4. Enter the following T-SQL code into the new query window and run it to delete the inconsistent data:
 
 ```
 DELETE SalesLT.Customer
@@ -56,7 +56,7 @@ DELETE SalesLT.Address
 WHERE AddressID = IDENT_CURRENT('SalesLT.Address');
 ```
 
-> **Note**: This code only works because there is only one user working in the database. In a real scenario, with many users, a query to ascertain the IDs of the records that were inserted is required to specify them explicitly in case new customer and address records had been inserted since the original code was run.
+> **Note**: This code only works because you are the only user working in the database. In a real scenario, you would need to ascertain the IDs of the records that were inserted and specify them explicitly in case new customer and address records had been inserted since you ran your original code.
 
 ## Insert data as using a transaction
 
@@ -68,26 +68,74 @@ All of these statements need to run as a single atomic transaction. If any one o
 BEGIN TRANSACTION;
 
 INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
-VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
 
 INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
-VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
+VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6', NEWID(), GETDATE());
+
+INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
+VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', NEWID(), '12-1-20212');
+
+COMMIT TRANSACTION;
+```
+
+2. Run the code, and note that it looks like exactly the same thing happens. The output message being:
+
+
+> (1 row affected)
+>
+> (1 row affected)
+>
+> Msg 241, Level 16, State 1, Line 9
+> Conversion failed when converting date and/or time from character string.
+
+Check to see if the customer row was inserted with this query.
+
+3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+4. Enter the following T-SQL code into the new query window:
+
+```
+SELECT * FROM SalesLT.Customer WHERE FirstName = 'Norman' AND LastName = 'Newcustomer';
+```
+
+Using a transaction with these statements has triggered an automatic rollback. The level 16 conversion error is high enough to cause all statements to be rolled back. However, lower level errors need you to explicitly handle errors and the rollback.
+
+3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+4. Enter the following T-SQL code into the new query window and run it to try and insert the new customer:
+
+```
+BEGIN TRANSACTION;
+
+INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
+
+INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
+VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6', NEWID(), GETDATE());
 
 INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
 VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
 
 COMMIT TRANSACTION;
-```
+``` 
 
-2. Run the code, and note that exactly the same thing happens. Two new rows are inserted and an error occurs for the third record.
+The output message this time is:
 
-3. Switch back to the query window containing the DELETE statements, and run it to delete the inconsistent data.
+> (1 row affected)
+>
+> (1 row affected)
+>
+> Msg 2627, Level 14, State 1, Line 9
+> Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
+
+5. Switch back to the query window containing the SELECT customer statements and run the query to see if the row was added.
+
+6. Switch back to the query window containing the DELETE statements, and run it to delete the new inconsistent data.
 
 ## Handle errors in a transaction
 
-Using transactions on their own without handling errors won't solve the problem. Nowhere in the code are we using a ROLLBACK statement. We need to combine batch error handling and transactions to resolve our issue.
+Using transactions on their own without handling lower level errors won't solve the problem. You need to catch these errors and explicitly use a `ROLLBACK` statement. We need to combine batch error handling and transactions to resolve our data consistency issue.
 
-1. Switch back to the original query window, and modify the code to enclose the transaction in a TRY/CATCH block, and use the ROLLBACK TRANSACTION statement if an error occurs.
+1. Switch back to the original query window, and modify the code to enclose the transaction in a `TRY/CATCH` block, and use the `ROLLBACK TRANSACTION` statement if an error occurs.
 
 ```
 BEGIN TRY
@@ -135,7 +183,7 @@ Note that the most recently modified customer record is <u>not</u> for *Norman N
 
 ## Check the transaction state before rolling back
 
-The CATCH block will handle errors that occur anywhere in the TRY block, so if an error were to occur outside of the BEGIN TRANSACTION...COMMIT TRANSACTION block, there would be no active transaction to roll back. To avoid this issue, check the current transaction state with XACT_STATE(), it'll return one of the following values:
+The CATCH block will handle errors that occur anywhere in the TRY block, so if an error were to occur outside of the BEGIN TRANSACTION...COMMIT TRANSACTION block, there would be no active transaction to roll back. To avoid this issue, you can check the current transaction state with XACT_STATE(), which returns one of the following values:
 
 - **-1**: There is an active transaction in process that cannot be committed.
 - **0**: There are no transactions in process.
@@ -250,30 +298,28 @@ On-premises SQL Server has a default isolation level of **READ_COMMITTED_SNAPSHO
 
 ![A screenshot showing two instances of Azure Data Studio side by side.](./images/side-by-side.png)
 
-3. Highlight the `BEGIN TRANSACTION` and first `INSERT` statements in the first window.
+3. Highlight the `BEGIN TRANSACTION` and first `INSERT` statements in the first window but do **not** execute them.
+
 4. In the second window enter this query.
 
 ```
 SELECT COUNT(*) FROM SalesLT.Customer
 ```
 
-5. In the query window select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key to run the query.
+5. Run the `SELECT COUNT(*)` query and note the number of counted rows. Notice the query returns results quickly.
 
-6. Note the number of counted rows. Also note how long the query took to complete. 
-7. In the first window with the selected statements select **&#x23f5;Run**. The message is:
+6. Run the selected `BEGIN TRANSACTION` statements you selected in the first window. The message is:
 
 ```
 (1 row affected)
 Total execution time: 00:00:01.921
 ```
 
-As this is in a transaction that hasn't been committed, running the SQL query in the other window will be blocked.
+As this is in a transaction that hasn't been committed, running the `SELECT COUNT(*)` query in the other window will be blocked.
 
-8. In the other query window select **&#x23f5;Run**.
+8. Run the `SELECT COUNT(*)` query and note that the query doesn't finish.
 
-Note that the query continues to run without returning any results.
-
-9. To prove this is being blocked by the transaction, highlight and run the `COMMIT TRANSACTION` statement in the other window.
+9. To prove the query is blocked by the transaction, highlight and run the `COMMIT TRANSACTION` statement in the other window.
 
 10. The `SELECT COUNT(*)` query will complete as soon as the transaction is committed. With the correct number of customers.
 
@@ -305,7 +351,7 @@ Now it's time to try using what you've learned.
 
 ### Use a transaction to insert data into multiple tables
 
-When a sales order header is inserted, it must have at least one corresponding sales order detail record. The following code is currently being used to accomplish this.
+When a sales order header is inserted, it must have at least one corresponding sales order detail record. Currently, you use the following code to accomplish this:
 
 ```
 -- Get the highest order ID and add 1
@@ -321,7 +367,7 @@ INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPri
 VALUES (@OrderID, 1, 712, 8.99);
 ```
 
-Encapsulate this code in a transaction so that all inserts succeed or fail as an atomic unit or work.
+You need to encapsulate this code in a transaction so that all inserts succeed or fail as an atomic unit or work.
 
 ## Challenge solution
 
