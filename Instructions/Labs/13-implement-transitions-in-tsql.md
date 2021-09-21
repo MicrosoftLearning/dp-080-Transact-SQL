@@ -310,10 +310,9 @@ SELECT COUNT(*) FROM SalesLT.Customer
 
 6. Run the selected `BEGIN TRANSACTION` statements you selected in the first window. The message is:
 
-```
-(1 row affected)
-Total execution time: 00:00:01.921
-```
+> (1 row affected)
+>
+> Total execution time: 00:00:01.921
 
 As this is in a transaction that hasn't been committed, running the `SELECT COUNT(*)` query in the other window will be blocked.
 
