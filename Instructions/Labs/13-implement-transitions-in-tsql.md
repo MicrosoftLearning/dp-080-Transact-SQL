@@ -338,7 +338,7 @@ SELECT COUNT(*) FROM SalesLT.Customer
 
 9. To prove the query is blocked by the transaction, highlight and run the COMMIT TRANSACTION; statement in the other window.
 
-10. Switch back to the SELECT COUNT(*)`query, and verify that it completesand returns the correct number of customers.
+10. Switch back to the SELECT COUNT(*)`query, and verify that it completes and returns the correct number of customers.
 
 ## Change how concurrency is handled on a database
 
