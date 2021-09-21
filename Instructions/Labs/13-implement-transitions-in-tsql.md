@@ -78,14 +78,14 @@ All of these statements need to run as a single atomic transaction. If any one o
 ```
 BEGIN TRANSACTION;
 
-INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
-VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+    VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
 
-INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
-VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6', NEWID(), GETDATE());
+    INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
+    VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6', NEWID(), GETDATE());
 
-INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
-VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', NEWID(), '12-1-20212');
+    INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
+    VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', NEWID(), '12-1-20212');
 
 COMMIT TRANSACTION;
 ```
@@ -113,14 +113,14 @@ Lower level errors can require that you explicitly handle the error and rollback
 ```
 BEGIN TRANSACTION;
 
-INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
-VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+    VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
 
-INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
-VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6', NEWID(), GETDATE());
+    INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
+    VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6', NEWID(), GETDATE());
 
-INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
-VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
+    INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
+    VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
 
 COMMIT TRANSACTION;
 ``` 
@@ -148,8 +148,8 @@ COMMIT TRANSACTION;
 BEGIN TRY
 BEGIN TRANSACTION;
 
-  INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
-  VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+    VALUES (0,  'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
 
     INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
     VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
@@ -197,8 +197,8 @@ The CATCH block will handle errors that occur anywhere in the TRY block, so if a
 BEGIN TRY
 BEGIN TRANSACTION;
 
-  INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate) 
-  VALUES (0, 'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate) 
+    VALUES (0, 'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
 
     INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,  ModifiedDate) 
     VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
@@ -229,8 +229,8 @@ END CATCH
 BEGIN TRY
 BEGIN TRANSACTION;
 
-  INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate) 
-  VALUES (0, 'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate) 
+    VALUES (0, 'Norman','Newcustomer','norman0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());
 
     INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,  ModifiedDate) 
     VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
@@ -293,54 +293,68 @@ END CATCH
 
 ## Explore transaction concurrency
 
-On-premises SQL Server has a default isolation level of **READ_COMMITTED_SNAPSHOT_OFF**. This level of isolation will hold locks on rows while a transaction is acting on it. For example, inserting a customer into the customer table. If the update takes a long time to run, any queries on that table will be blocked from running until the transaction is committed or rolled back.
+Isolation levels determine the visibility of data modifications made in transactions across multiple sessions with the database. On-premises SQL Server has a default isolation level of **READ_COMMITTED_SNAPSHOT_OFF**. This level of isolation will hold locks on rows while a transaction is acting on it. For example, inserting a customer into the customer table. If the update takes a long time to run, any queries on that table from other sessions will be blocked from running until the transaction is committed or rolled back.
 
-1. Start a new instance of Azure Data Studio by right-clicking in the task bar on Azure Data Studio  and then select **Azure Data Studio**.
-2. There should be two instances running, rearrange the Azure Data Studio windows so that both windows can be seen on the same screen.
+1. In Azure Data Studio, close all open query panes.
+2. In the **Connections** pane, ensure that the **AdventureWorks** server has a green icon indicating an active connection. Then, in the header for the **Servers** section, use the **new Connection** icon to create a new connection with the following properties:
+    - **Connection type**: Microsoft SQL Server
+    - **Server**: (local)\sqlexpress
+    - **Authentication type**: Windows Authentication
+    - **Database**: adventureworks
+3. After the new connection has been made, verify that the **Connections** pane now includes two connections (which represent two different connections to the same database):
+    - **AdventureWorks**
+    - **(local)\sqlexpress**
 
-![A screenshot showing two instances of Azure Data Studio side by side.](./images/side-by-side.png)
+4. Right-click the **AdventureWorks** and create a new query. Then enter the following code (but do <u>not</u> run it yet):
 
-3. Highlight the BEGIN TRANSACTION and first INSERT statements in the first window but do **not** execute them.
+```
+BEGIN TRANSACTION;
 
-4. In the second window enter this query.
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
+    VALUES (0,  'Yeta','Nothercustomer','yeta0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=', NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,    ModifiedDate) 
+    VALUES ('2067 Park Lane', 'Redmond','Washington','United States','98007', NEWID(), GETDATE());
+
+    INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid, ModifiedDate)
+    VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', NEWID(), GETDATE());
+
+COMMIT TRANSACTION;
+```
+
+5. Right-click the **(loval)\sqlexpress** connection and create a new query. Then enter the following code:
 
 ```
 SELECT COUNT(*) FROM SalesLT.Customer
 ```
 
-5. Run the `SELECT COUNT(*)` query and note the number of counted rows. Notice the query returns results quickly.
+6. Run the SELECT COUNT(*) query and note the number of counted rows. Notice the query returns results quickly.
 
-6. Run the selected `BEGIN TRANSACTION` statements you selected in the first window. The message is:
+7. Return the transaction query for the **AdventureWorks** connection and highlight BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement) Then use the **&#x23f5;Run** to run only thr highlighted code.
 
-> (1 row affected)
->
-> Total execution time: 00:00:01.921
+    As this is in a transaction that hasn't been committed, running the SELECT COUNT(*) query in the other window will be blocked.
 
-As this is in a transaction that hasn't been committed, running the `SELECT COUNT(*)` query in the other window will be blocked.
+8. In the other query pane, run the SELECT COUNT(*) query and note that the query doesn't finish.
 
-7. Run the `SELECT COUNT(*)` query and note that the query doesn't finish.
+9. To prove the query is blocked by the transaction, highlight and run the COMMIT TRANSACTION; statement in the other window.
 
-8. To prove the query is blocked by the transaction, highlight and run the `COMMIT TRANSACTION` statement in the other window.
-
-9. The `SELECT COUNT(*)` query will complete as soon as the transaction is committed. With the correct number of customers.
+10. Switch back to the SELECT COUNT(*)`query, and verify that it completesand returns the correct number of customers.
 
 ## Change how concurrency is handled on a database
 
-Concurrency can be changed to allow database queries on tables while there are transactions inserting or updating them. To change this enable `READ_COMMITTED_SNAPSHOT_ON`.
+Concurrency can be changed to allow database queries on tables while there are transactions inserting or updating them. To change this enable READ_COMMITTED_SNAPSHOT_ON.
 
-1. In the window with the transaction statements, add this T-SQL statement to the bottom of the query window.
+1. Create a new query from the **AdventureWorks** connection, and run this Transact-SQL code in it.
 
 ```
 ALTER DATABASE AdventureWorks SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK IMMEDIATE
 GO
 ```
 
-2. Run this command to change the **AdventureWorks** database concurrency model.
-3. Re-run the above steps from **step 3**, highlight the `BEGIN TRANSACTION` and `INSERT` statements.
-4. The step running the SQL query in the second window will return a result instantly, however the count will be the same as the last time the query was run.
-5. The query is working against the current state of the database as the `INSERT` statement hasn't been committed yet.
-6. Highlight the `COMMIT TRANSACTION` statement and run it.
-7. Re-run the SQL query and note that the total customers has increased by 1.
+2. Switch to the trsnaction query pane that's connected to the **AdventureWorks** connection, and once again highlight the BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement).
+3. Switch to the query pane with the SELECT COUNT(*) query (connected to the **(local)\sqlexpress** connection) and run it. The query results reflect the current state of the database as the INSERT statement hasn't been committed yet.
+4. In the trnasactopn query pane, highlight the COMMIT TRANSACTION; statement and run it.
+5. Re-run the SELECT COUNT(*) query and note that the total customers has increased by 1.
 
 Be careful when selecting what isolation levels to use in a database. In some scenarios returning the current state of data before a transaction has been committed is worse than a query being blocked and waiting for all the data to be in the correct state.
 
