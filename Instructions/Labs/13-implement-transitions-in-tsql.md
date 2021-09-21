@@ -17,9 +17,9 @@ Consider a website that needs to store customer information. As part of the cust
 In this exercise you'll use a transaction to ensure that when a row is inserted into the **Customer** and **Address** tables, a row is also added to the **CustomerAddress** table. If one insert fails, then all will fail.
 
 1. Start Azure Data Studio.
-1. From the Servers pane, double-click the **AdventureWorks** connection. A green dot will appear when the connection is successful.
-1. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-1. Enter the following T-SQL code into the query window:
+2. From the Servers pane, double-click the **AdventureWorks** connection. A green dot will appear when the connection is successful.
+3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+4. Enter the following T-SQL code into the query window:
 
 ```
 INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt,    rowguid, ModifiedDate) 
@@ -32,8 +32,8 @@ INSERT INTO SalesLT.CustomerAddress (CustomerID, AddressID, AddressType, rowguid
 VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', NEWID(), '12-1-20212'); 
 ```
 
-1. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key to run the code.
-2. Note the output messages, which should look like this:
+5. Select **&#x23f5;Run** at the top of the query window, or press the <kbd>F5</kbd> key to run the code.
+6. Note the output messages, which should look like this:
 
 > (1 row affected)
 >
@@ -45,8 +45,8 @@ Two rows are added, one to the Customer table and one to the Address table. Howe
 
 To fix this, you'll need to delete the two rows that were inserted.
 
-3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-4. Enter the following T-SQL code into the new query window and run it to delete the inconsistent data:
+7. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+8. Enter the following T-SQL code into the new query window and run it to delete the inconsistent data:
 
 ```
 DELETE SalesLT.Customer
@@ -100,8 +100,8 @@ SELECT * FROM SalesLT.Customer WHERE FirstName = 'Norman' AND LastName = 'Newcus
 
 Using a transaction with these statements has triggered an automatic rollback. The level 16 conversion error is high enough to cause all statements to be rolled back. However, lower level errors need you to explicitly handle errors and the rollback.
 
-3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-4. Enter the following T-SQL code into the new query window and run it to try and insert the new customer:
+5. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+6. Enter the following T-SQL code into the new query window and run it to try and insert the new customer:
 
 ```
 BEGIN TRANSACTION;
@@ -127,9 +127,9 @@ The output message this time is:
 > Msg 2627, Level 14, State 1, Line 9
 > Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
 
-5. Switch back to the query window containing the SELECT customer statements and run the query to see if the row was added.
+7. Switch back to the query window containing the SELECT customer statements and run the query to see if the row was added.
 
-6. Switch back to the query window containing the DELETE statements, and run it to delete the new inconsistent data.
+8. Switch back to the query window containing the DELETE statements, and run it to delete the new inconsistent data.
 
 ## Handle errors in a transaction
 
@@ -316,11 +316,11 @@ SELECT COUNT(*) FROM SalesLT.Customer
 
 As this is in a transaction that hasn't been committed, running the `SELECT COUNT(*)` query in the other window will be blocked.
 
-8. Run the `SELECT COUNT(*)` query and note that the query doesn't finish.
+7. Run the `SELECT COUNT(*)` query and note that the query doesn't finish.
 
-9. To prove the query is blocked by the transaction, highlight and run the `COMMIT TRANSACTION` statement in the other window.
+8. To prove the query is blocked by the transaction, highlight and run the `COMMIT TRANSACTION` statement in the other window.
 
-10. The `SELECT COUNT(*)` query will complete as soon as the transaction is committed. With the correct number of customers.
+9. The `SELECT COUNT(*)` query will complete as soon as the transaction is committed. With the correct number of customers.
 
 ## Change how concurrency is handled on a database
 
@@ -359,7 +359,7 @@ SELECT @OrderID = MAX(SalesOrderID) + 1 FROM SalesLT.SalesOrderHeader;
 
 -- Insert the order header
 INSERT INTO SalesLT.SalesOrderHeader (SalesOrderID, OrderDate, DueDate, CustomerID, ShipMethod)
-VALUES (@OrderID, GETDATE() ,DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
+VALUES (@OrderID, GETDATE(), DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
 
 -- Insert one or more order details
 INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPrice)
@@ -383,7 +383,7 @@ BEGIN TRANSACTION;
 
   -- Insert the order header
   INSERT INTO SalesLT.SalesOrderHeader (SalesOrderID, OrderDate, DueDate, CustomerID, ShipMethod)
-  VALUES (@OrderID, GETDATE() ,DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
+  VALUES (@OrderID, GETDATE(), DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
   
   -- Insert one or more order details
   INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPrice)
@@ -415,7 +415,7 @@ BEGIN TRANSACTION;
 
   -- Insert the order header
   INSERT INTO SalesLT.SalesOrderHeader (SalesOrderID, OrderDate, DueDate, CustomerID, ShipMethod)
-  VALUES (@OrderID, GETDATE() ,DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
+  VALUES (@OrderID, GETDATE(), DATEADD(month, 1, GETDATE()), 1, 'CARGO TRANSPORT');
   
   -- Insert one or more order details
   INSERT INTO SalesLT.SalesOrderDetail (SalesOrderID, OrderQty, ProductID, UnitPrice)
