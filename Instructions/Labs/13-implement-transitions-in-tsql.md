@@ -4,6 +4,8 @@ lab:
     module: 'Additional exercises'
 ---
 
+# Implement transactions with Transact SQL
+
 In this lab, you'll use T-SQL statements to see the impact of using transactions in the **AdventureWorks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 
 ![An entity relationship diagram of the AdventureWorks database](./images/adventureworks-erd.png)
@@ -17,8 +19,8 @@ Consider a website that needs to store customer information. As part of the cust
 In this exercise you'll use a transaction to ensure that when a row is inserted into the **Customer** and **Address** tables, a row is also added to the **CustomerAddress** table. If one insert fails, then all will fail.
 
 1. Start Azure Data Studio.
-2. From the Servers pane, double-click the **AdventureWorks** connection. A green dot will appear when the connection is successful.
-3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+2. In the **Connections** pane, double-click the **AdventureWorks** server. A green dot will appear when the connection is successful.
+3. Right click the **AdventureWorks** server and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
 4. Enter the following T-SQL code into the query window:
 
 ```
@@ -41,12 +43,21 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 >
 > Conversion failed when converting date and/or time from character string.
 
-Two rows are added, one to the Customer table and one to the Address table. However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now inconsistent as there's no link between the new customer and their address.
+Two of the statements appear to have succeeded, but the third failed.
+
+7. Right click the **AdventureWorks** server and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+8. Enter the following T-SQL code into the new query window:
+
+```
+SELECT * FROM SalesLT.Customer ORDER BY ModifiedDate DESC;
+```
+
+A row for *Norman Newcustomer* was inserted into the Customer table (and anotherw as in serted into the Address table). However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now inconsistent as there's no link between the new customer and their address.
 
 To fix this, you'll need to delete the two rows that were inserted.
 
-7. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-8. Enter the following T-SQL code into the new query window and run it to delete the inconsistent data:
+9. Right click the **AdventureWorks** server and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
+10. Enter the following T-SQL code into the new query window and run it to delete the inconsistent data:
 
 ```
 DELETE SalesLT.Customer
@@ -62,7 +73,7 @@ WHERE AddressID = IDENT_CURRENT('SalesLT.Address');
 
 All of these statements need to run as a single atomic transaction. If any one of them fails, then all statements should fail. Let's group them together in a transaction.
 
-1. Switch back to the original query window, and modify the code to enclose the original INSERT statements in a transaction, like this:
+1. Switch back to the original query window with the INSERT statements, and modify the code to enclose the original INSERT statements in a transaction, like this:
 
 ```
 BEGIN TRANSACTION;
@@ -79,7 +90,7 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 COMMIT TRANSACTION;
 ```
 
-2. Run the code, and note that it looks like exactly the same thing happens. The output message being:
+2. Run the code, and review the output message:
 
 
 > (1 row affected)
@@ -89,19 +100,15 @@ COMMIT TRANSACTION;
 > Msg 241, Level 16, State 1, Line 9
 > Conversion failed when converting date and/or time from character string.
 
-Check to see if the customer row was inserted with this query.
+Again, it looks like the first two statements succeeded and the third one failed.
 
-3. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-4. Enter the following T-SQL code into the new query window:
+3. Switch to the query containing the SELECT statement to check for a new customer record, and run it. This time, there should be no record for *Norman Newcustomer*. Using a transaction with these statements has triggered an automatic rollback. The level 16 conversion error is high enough to cause all statements to be rolled back.
 
-```
-SELECT * FROM SalesLT.Customer WHERE FirstName = 'Norman' AND LastName = 'Newcustomer';
-```
+## Handle errors and explicitly rollback transactions
 
-Using a transaction with these statements has triggered an automatic rollback. The level 16 conversion error is high enough to cause all statements to be rolled back. However, lower level errors need you to explicitly handle errors and the rollback.
+Lower level errors can require that you explicitly handle the error and rollback any active transactions.
 
-5. Right click the **AdventureWorks** connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-6. Enter the following T-SQL code into the new query window and run it to try and insert the new customer:
+1. Switch back to the original INSERT query script, and modify the transaction as follows:
 
 ```
 BEGIN TRANSACTION;
@@ -118,7 +125,7 @@ VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Ho
 COMMIT TRANSACTION;
 ``` 
 
-The output message this time is:
+2. Run the modified code. The output message this time is:
 
 > (1 row affected)
 >
@@ -127,15 +134,15 @@ The output message this time is:
 > Msg 2627, Level 14, State 1, Line 9
 > Violation of UNIQUE KEY constraint 'AK_CustomerAddress_rowguid'. Cannot insert duplicate key in object 'SalesLT.CustomerAddress'. The duplicate key value is (16765338-dbe4-4421-b5e9-3836b9278e63).
 
-7. Switch back to the query window containing the SELECT customer statements and run the query to see if the row was added.
+3. Switch back to the query window containing the SELECT customer statement and run the query to see if the *Norman Newcustomer* row was added.
 
-8. Switch back to the query window containing the DELETE statements, and run it to delete the new inconsistent data.
+    Even though an error occurred in the transaction, a new record has been added and the database is once again inconsistent.
 
-## Handle errors in a transaction
+4. Switch back to the query window containing the DELETE statements, and run it to delete the new inconsistent data.
 
-Using transactions on their own without handling lower level errors won't solve the problem. You need to catch these errors and explicitly use a `ROLLBACK` statement. We need to combine batch error handling and transactions to resolve our data consistency issue.
+    Enclosing the statements in a transaction isn't enough to deal with lower priority errors. You need to catch these errors and explicitly use a ROLLBACK statement. We need to combine batch error handling and transactions to resolve our data consistency issue.
 
-1. Switch back to the original query window, and modify the code to enclose the transaction in a `TRY/CATCH` block, and use the `ROLLBACK TRANSACTION` statement if an error occurs.
+5. Switch back to the original query window, and modify the code to enclose the transaction in a TRY/CATCH block, and use the ROLLBACK TRANSACTION statement if an error occurs.
 
 ```
 BEGIN TRY
@@ -160,7 +167,7 @@ BEGIN CATCH
 END CATCH;    
 ```
 
-2. Run the code and review the results:
+6. Run the code and review the results:
 
 > Started executing query at Line 1
 >
@@ -172,14 +179,9 @@ END CATCH;
 
 Now there isn't any error message so it looks like two rows were affected.
 
-3. Open a new query window, and run the following query to view the most recently modified record in the **Customer** table.
+7. Switch back to the query window containing the SELECT customer statement and run the query to see if the *Norman Newcustomer* row was added.
 
-```
-SELECT TOP (1) * FROM SalesLT.Customer
-ORDER BY ModifiedDate DESC;   
-```
-
-Note that the most recently modified customer record is <u>not</u> for *Norman Newcustomer* - the INSERT statement that succeeded has been rolled back to ensure the database remains consistent.
+    Note that the most recently modified customer record is <u>not</u> for *Norman Newcustomer* - the INSERT statement that succeeded has been rolled back to ensure the database remains consistent.
 
 ## Check the transaction state before rolling back
 
@@ -252,7 +254,7 @@ END CATCH
 
 4. Run the code, and note that this time, all three INSERT statement succeed.
 
-5. Switch to the query window that contains code to select the most recently modified customer and run it to verify that a record for *Norman Newcustomer* has been inserted.
+5. Switch back to the query window containing the SELECT customer statement and run the query to verify that the *Norman Newcustomer* row was added.
 
 6. Back in the original query window, modify the code to insert another customer - this time throwing an error within the TRY block after the transaction has been committed:
 
@@ -287,7 +289,7 @@ END CATCH
 
 7. Run the code and review the output. All three INSERT statements should succeed, but an error is caught by the CATCH block.
 
-8. Switch to the query window that contains code to select the most recently modified customer and run it to verify that a record for *Ann Othercustomer* has been inserted. The transaction succeeded and was not rolled back, even though an error subsequently occurred.
+8. Switch back to the query window containing the SELECT customer statement and run the query to verify that a record for *Ann Othercustomer* has been inserted. The transaction succeeded and was not rolled back, even though an error subsequently occurred.
 
 ## Explore transaction concurrency
 
@@ -298,7 +300,7 @@ On-premises SQL Server has a default isolation level of **READ_COMMITTED_SNAPSHO
 
 ![A screenshot showing two instances of Azure Data Studio side by side.](./images/side-by-side.png)
 
-3. Highlight the `BEGIN TRANSACTION` and first `INSERT` statements in the first window but do **not** execute them.
+3. Highlight the BEGIN TRANSACTION and first INSERT statements in the first window but do **not** execute them.
 
 4. In the second window enter this query.
 

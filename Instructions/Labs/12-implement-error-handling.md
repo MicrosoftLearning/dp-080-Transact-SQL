@@ -4,6 +4,8 @@ lab:
     module: 'Additional exercises'
 ---
 
+# Implement error handling with T-SQL
+
 In this lab, you'll use T-SQL statements to test various error handling techniques in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 
 ![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
