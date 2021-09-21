@@ -351,9 +351,9 @@ ALTER DATABASE AdventureWorks SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK IMMED
 GO
 ```
 
-2. Switch to the transaction query pane that's connected to the **AdventureWorks** connection, and once again highlight the BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement).
+2. Switch to the transaction query pane that's connected to the **AdventureWorks** connection, and once again highlight the BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement) and run the ighlighted code.
 3. Switch to the query pane with the SELECT COUNT(*) query (connected to the **(local)\sqlexpress** connection) and run it. The query results reflect the current state of the database as the INSERT statement hasn't been committed yet.
-4. In the trnasactopn query pane, highlight the COMMIT TRANSACTION; statement and run it.
+4. In the transaction query pane, highlight the COMMIT TRANSACTION; statement and run it.
 5. Re-run the SELECT COUNT(*) query and note that the total customers has increased by 1.
 
 Be careful when selecting what isolation levels to use in a database. In some scenarios returning the current state of data before a transaction has been committed is worse than a query being blocked and waiting for all the data to be in the correct state.
