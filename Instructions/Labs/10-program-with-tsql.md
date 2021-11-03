@@ -4,7 +4,7 @@ lab:
     module: 'Additional exercises'
 ---
 
-# Introduction to programming with T-SQ
+# Introduction to programming with T-SQL
 
 In this lab, you'll use get an introduction to programming using T-SQL techniques using the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
 
