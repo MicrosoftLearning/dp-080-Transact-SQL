@@ -23,17 +23,17 @@ ORDER BY CountryRegion DESC, City ASC;
 -- TOP
 
 -- Top records
-SELECT TOP 10 AddressLine1, ModifiedDate
+SELECT TOP (10) AddressLine1, ModifiedDate
 FROM SalesLT.Address
 ORDER BY ModifiedDate DESC;
 
 -- Top with ties
-SELECT TOP 10 WITH TIES AddressLine1, ModifiedDate
+SELECT TOP (10) WITH TIES AddressLine1, ModifiedDate
 FROM SalesLT.Address
 ORDER BY ModifiedDate DESC;
 
 -- Top percent
-SELECT TOP 10 PERCENT AddressLine1, ModifiedDate
+SELECT TOP (10) PERCENT AddressLine1, ModifiedDate
 FROM SalesLT.Address
 ORDER BY ModifiedDate DESC;
 

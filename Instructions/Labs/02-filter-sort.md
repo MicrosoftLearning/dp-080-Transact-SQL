@@ -68,7 +68,7 @@ Sometimes you only want to return a specific number of rows. For example, you mi
 1. Modify the existing query to return the **Name** and **ListPrice** of all products:
 
     ```
-    SELECT TOP 20 Name, ListPrice
+    SELECT TOP (20) Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
     ```
@@ -77,7 +77,7 @@ Sometimes you only want to return a specific number of rows. For example, you mi
 3. Modify the query to add the **WITH TIES** parameter as shown here, and re-run it.
 
     ```
-    SELECT TOP 20 WITH TIES Name, ListPrice
+    SELECT TOP (20) WITH TIES Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
     ```
@@ -86,7 +86,7 @@ Sometimes you only want to return a specific number of rows. For example, you mi
 5. Modify the query to add the **PERCENT** parameter as shown here, and re-run it.
 
     ```
-    SELECT TOP 20 PERCENT WITH TIES Name, ListPrice
+    SELECT TOP (20) PERCENT WITH TIES Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
     ```
@@ -302,7 +302,7 @@ This section contains suggested solutions for the challenge queries.
 2. Retrieve the heaviest products:
 
     ```
-    SELECT TOP 10 PERCENT WITH TIES Name
+    SELECT TOP (10) PERCENT WITH TIES Name
     FROM SalesLT.Product
     ORDER BY Weight DESC;
     ```

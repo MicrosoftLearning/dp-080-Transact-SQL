@@ -66,7 +66,7 @@ FROM SalesLT.SalesOrderHeader;
 -- RANKING Functions
 
 -- Ranking
-SELECT TOP 100 ProductID, Name, ListPrice,
+SELECT TOP (100) ProductID, Name, ListPrice,
 	RANK() OVER(ORDER BY ListPrice DESC) AS RankByPrice
 FROM SalesLT.Product AS p
 ORDER BY RankByPrice;
