@@ -4,11 +4,15 @@ permalink: index.html
 layout: home
 ---
 
-# Content Directory
+# Transact-SQL Exercises and Demonstrations
 
-Hyperlinks to each of the lab exercises and demos are listed below.
+These exercises and demos support Microsoft course [DP-080: Querying with Transact-SQL](https://docs.microsoft.com/training/courses/dp-080t00) and the associated Microsoft Learn training content in the following learning paths:
 
-## Labs
+- [Get started querying with Transact-SQL](https://docs.microsoft.com/training/paths/get-started-querying-with-transact-sql/)
+- [Write advanced Transact-SQl queries](https://docs.microsoft.com/training/paths/write-advanced-transact-sql-queries/)
+- [Program with Transact-SQL](https://docs.microsoft.com/training/paths/program-transact-sql/)
+
+Links to each of the lab exercises and demos are listed below.
 
 {% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
 | Module | Lab |
