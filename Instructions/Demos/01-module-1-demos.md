@@ -16,7 +16,7 @@ Throughout the course, students use a hosted environment that includes **Azure D
 2. Start Azure Data Studio, and in the **Connections** tab, select the **AdventureWorks** connection. This will connect to the SQL Server instance and show the objects in the **adventureworks** database.
 3. Expand the **Tables** folder to see the tables that are defined in the database. Note that there are a few tables in the **dbo** schema, but most of the tables are defined in a schema named **SalesLT**.
 4. Expand the **SalesLT.Product** table and then expand its **Columns** folder to see the columns in this table. Each column has a name, a data type, an indication of whether it can contain *null* values, and in some cases an indication that the columns is used as a primary key (PK) or foreign key (FK).
-5. Right-click the **SalesLT.Product** table and use the **Select Top 1000** option to create and run a new query script that retrieves the first 1000 rows from the table.
+5. Right-click the **SalesLT.Product** table and use the **SELECT TOP (1000)** option to create and run a new query script that retrieves the first 1000 rows from the table.
 6. Review the query results, which consist of 1000 rows - each row representing a product that is sold by the fictitious *Adventure Works Cycles* company.
 7. Close the **SQLQuery_1** pane that contains the query and its results.
 8. Explore the other tables in the database, which contain information about product details, customers, and sales orders.
