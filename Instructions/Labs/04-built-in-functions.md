@@ -16,7 +16,7 @@ In this lab, you'll use built-in functions to retrieve and aggregate data in the
 
 Transact-SQL provides a large number of functions that you can use to extract additional information from your data. Most of these functions are *scalar* functions that return a single value based on one or more input parameters, often a data field.
 
-**Tip**: We don't have enough time in this exercise to explore every function available in Transact-SQL. To learn more about the functions covered int his exercise, and more, view the [Transact-SQL documentation](https://docs.microsoft.com/sql/t-sql/functions/functions).
+**Tip**: We don't have enough time in this exercise to explore every function available in Transact-SQL. To learn more about the functions covered in this exercise, and more, view the [Transact-SQL documentation](https://docs.microsoft.com/sql/t-sql/functions/functions).
 
 1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
 2. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
