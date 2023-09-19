@@ -32,14 +32,14 @@ Now that you've had a chance to explore the **AdventureWorks** database, it's ti
 2. In the new **SQLQuery_...** pane, ensure that the **AdventureWorks** database is selected at the top of the query pane. If not, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
 3. In the query editor, enter the following code:
 
-    ```
+    ```sql
     SELECT * FROM SalesLT.Product;
     ```
 
 4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes all columns for all products.
 5. In the query editor, modify the query as follows:
 
-    ```
+    ```sql
     SELECT Name, StandardCost, ListPrice
     FROM SalesLT.Product;
     ```
@@ -47,7 +47,7 @@ Now that you've had a chance to explore the **AdventureWorks** database, it's ti
 6. Use the **&#x23f5;Run** button to re-run the query, and and after a few seconds, review the results, which this time include only the **Name**, **StandardCost**, and **ListPrice** columns for all products.
 7. Modify the query as shown below to include an expression that results in a calculated column, and then re-run the query:
 
-    ```
+    ```sql
     SELECT Name, ListPrice - StandardCost
     FROM SalesLT.Product;
     ```
@@ -55,7 +55,7 @@ Now that you've had a chance to explore the **AdventureWorks** database, it's ti
 8. Note that the results this time include the **Name** column and an unnamed column containing the result of subtracting the **StandardCost** from the **ListPrice**.
 9. Modify the query as shown below to assign names to the columns in the results, and then re-run the query.
 
-    ```
+    ```sql
     SELECT Name AS ProductName, ListPrice - StandardCost AS Markup
     FROM SalesLT.Product;
     ```
@@ -63,7 +63,7 @@ Now that you've had a chance to explore the **AdventureWorks** database, it's ti
 10. Note that the results now include columns named **ProductName** and **Markup**. The **AS** keyword has been used to assign an *alias* for each column in the results.
 11. Replace the existing query with the following code, which also includes an expression that produces a calculated column in the results:
 
-    ```
+    ```sql
     SELECT ProductNumber, Color, Size, Color + ', ' + Size AS ProductDetails
     FROM SalesLT.Product;
     ```
@@ -76,7 +76,7 @@ As you just saw, columns in a table are defined as specific data types, which af
 
 1. Replace the existing query with the following code, and run it:
 
-    ```
+    ```sql
     SELECT ProductID + ': ' + Name AS ProductName
     FROM SalesLT.Product; 
     ```
@@ -84,7 +84,7 @@ As you just saw, columns in a table are defined as specific data types, which af
 2. Note that this query returns an error. The **+** operator can be used to *concatenate* text-based values, or *add* numeric values; but in this case there's one numeric value (**ProductID**) and one text-based value (**Name**), so it's unclear how the operator should be applied.
 3. Modify the query as follows, and re-run it:
 
-    ```
+    ```sql
     SELECT CAST(ProductID AS varchar(5)) + ': ' + Name AS ProductName
     FROM SalesLT.Product; 
     ```
@@ -93,7 +93,7 @@ As you just saw, columns in a table are defined as specific data types, which af
 
 5. Modify the query to replace the **CAST** function with a **CONVERT** function as shown below, and then re-run it:
 
-    ```
+    ```sql
     SELECT CONVERT(varchar(5), ProductID) + ': ' + Name AS ProductName
     FROM SalesLT.Product; 
     ```
@@ -102,16 +102,16 @@ As you just saw, columns in a table are defined as specific data types, which af
 
 7. Another key difference between the two functions is that **CONVERT** includes an additional parameter that can be useful for formatting date and time values when converting them to text-based data. For example, replace the existing query with the following code and run it.
 
-    ```
+    ```sql
     SELECT SellStartDate,
        CONVERT(nvarchar(30), SellStartDate) AS ConvertedDate,
-	   CONVERT(nvarchar(30), SellStartDate, 126) AS ISO8601FormatDate
+        CONVERT(nvarchar(30), SellStartDate, 126) AS ISO8601FormatDate
     FROM SalesLT.Product; 
     ```
 
 8. Replace the existing query with the following code, and run it.
 
-    ```
+    ```sql
     SELECT Name, CAST(Size AS Integer) AS NumericSize
     FROM SalesLT.Product; 
     ```
@@ -120,7 +120,7 @@ As you just saw, columns in a table are defined as specific data types, which af
 
 10. Modify the query to use a **TRY_CAST** function, as shown here.
 
-    ```
+    ```sql
     SELECT Name, TRY_CAST(Size AS Integer) AS NumericSize
     FROM SalesLT.Product; 
     ```
@@ -133,7 +133,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
 
 1. Modify the existing query as shown here:
 
-    ```
+    ```sql
     SELECT Name, ISNULL(TRY_CAST(Size AS Integer),0) AS NumericSize
     FROM SalesLT.Product;
     ```
@@ -144,7 +144,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
 
 3. Replace the query with the following code to handle *NULL* values for **Color** and **Size** values in the source table:
 
-    ```
+    ```sql
     SELECT ProductNumber, ISNULL(Color, '') + ', ' + ISNULL(Size, '') AS ProductDetails
     FROM SalesLT.Product;
     ```
@@ -153,7 +153,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
 
 4. Try the following query, which replaces the **Color** value "Multi" to *NULL*.
 
-    ```
+    ```sql
     SELECT Name, NULLIF(Color, 'Multi') AS SingleColor
     FROM SalesLT.Product;
     ```
@@ -162,7 +162,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
 
 5. Use the following query to find the first non-*NULL* date for product selling status.
 
-    ```
+    ```sql
     SELECT Name, COALESCE(SellEndDate, SellStartDate) AS StatusLastUpdated
     FROM SalesLT.Product;
     ```
@@ -173,30 +173,30 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
 
 6. Run the following query, which includes *searched* **CASE** that uses an **IS NULL** expression to check for *NULL* **SellEndDate** values.
 
-    ```
+    ```sql
     SELECT Name,
-		CASE
-			WHEN SellEndDate IS NULL THEN 'Currently for sale'
-			ELSE 'No longer available'
-		END AS SalesStatus
+        CASE
+            WHEN SellEndDate IS NULL THEN 'Currently for sale'
+            ELSE 'No longer available'
+        END AS SalesStatus
     FROM SalesLT.Product;
     ```
 
     The previous query used a *searched* **CASE** expression, which begins with a **CASE** keyword, and includes one or more **WHEN...THEN** expressions with the values and predicates to be checked. An **ELSE** expression provides a value to use if none of the **WHEN** conditions are matched, and the **END** keyword denotes the end of the **CASE** expression, which is aliased to a column name for the result using an **AS** expression.
-    
+
     In some queries, it's more appropriate to use a *simple* **CASE** expression that applies multiple **WHERE...THEN** predictes to the same value.
 
 7. Run the following query to see an example of a *simple* **CASE** expression that produced different results depending on the **Size** column value.
 
-    ```
+    ```sql
     SELECT Name,
-		CASE Size
-			WHEN 'S' THEN 'Small'
-			WHEN 'M' THEN 'Medium'
-			WHEN 'L' THEN 'Large'
-			WHEN 'XL' THEN 'Extra-Large'
-			ELSE ISNULL(Size, 'n/a')
-		END AS ProductSize
+        CASE Size
+            WHEN 'S' THEN 'Small'
+            WHEN 'M' THEN 'Medium'
+            WHEN 'L' THEN 'Large'
+            WHEN 'XL' THEN 'Extra-Large'
+            ELSE ISNULL(Size, 'n/a')
+        END AS ProductSize
     FROM SalesLT.Product;
     ```
 
@@ -241,10 +241,10 @@ Some records in the database include missing or unknown values that are returned
     - You have been asked to write a query that returns a list of customer names. The list must consist of a single column in the format *first last* (for example *Keith Harris*) if the middle name is unknown, or *first middle last* (for example *Jane M. Gates*) if a middle name is known.
 2. Retrieve primary contact details
     - Customers may provide Adventure Works with an email address, a phone number, or both. If an email address is available, then it should be used as the primary contact method; if not, then the phone number should be used. You must write a query that returns a list of customer IDs in one column, and a second column named **PrimaryContact** that contains the email address if known, and otherwise the phone number.
-    
+
         **IMPORTANT**: In the sample data provided, there are no customer records without an email address. Therefore, to verify that your query works as expected, run the following **UPDATE** statement to remove some existing email addresses before creating your query:
-    
-        ```
+
+        ```sql
         UPDATE SalesLT.Customer
         SET EmailAddress = NULL
         WHERE CustomerID % 7 = 1;
@@ -254,8 +254,8 @@ Some records in the database include missing or unknown values that are returned
     - You have been asked to create a query that returns a list of sales order IDs and order dates with a column named **ShippingStatus** that contains the text *Shipped* for orders with a known ship date, and *Awaiting Shipment* for orders with no ship date.
 
         **IMPORTANT**: In the sample data provided, there are no sales order header records without a ship date. Therefore, to verify that your query works as expected, run the following UPDATE statement to remove some existing ship dates before creating your query.
-    
-        ```
+
+        ```sql
         UPDATE SalesLT.SalesOrderHeader
         SET ShipDate = NULL
         WHERE SalesOrderID > 71899;
@@ -269,21 +269,21 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve customer details:
 
-    ```
+    ```sql
     SELECT * FROM SalesLT.Customer;
     ```
 
 2. Retrieve customer name data:
 
-    ```
+    ```sql
     SELECT Title, FirstName, MiddleName, LastName, Suffix
     FROM SalesLT.Customer;
     ```
 
 3. Retrieve customer names and phone numbers:
 
-    ```
-    SELECT Salesperson, Title + ' ' + LastName AS CustomerName, Phone
+    ```sql
+    SELECT Salesperson, ISNULL(Title,'') + ' ' + LastName AS CustomerName, Phone
     FROM SalesLT.Customer;
     ```
 
@@ -291,38 +291,38 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve a list of customer companies:
 
-    ```
+    ```sql
     SELECT CAST(CustomerID AS varchar) + ': ' + CompanyName AS CustomerCompany
     FROM SalesLT.Customer;
     ```
 
 2. Retrieve a list of sales order revisions:
 
-    ```
+    ```sql
     SELECT SalesOrderNumber + ' (' + STR(RevisionNumber, 1) + ')' AS OrderRevision,
-	   CONVERT(nvarchar(30), OrderDate, 102) AS OrderDate
+       CONVERT(nvarchar(30), OrderDate, 102) AS OrderDate
     FROM SalesLT.SalesOrderHeader;
     ```
 
-### Challenge 3:
+### Challenge 3
 
 1. Retrieve customer contact names with middle names if known:
 
-    ```
+    ```sql
     SELECT FirstName + ' ' + ISNULL(MiddleName + ' ', '') + LastName AS CustomerName
     FROM SalesLT.Customer;
     ```
 
 2. Retrieve primary contact details:
 
-    ```
+    ```sql
     SELECT CustomerID, COALESCE(EmailAddress, Phone) AS PrimaryContact
     FROM SalesLT.Customer;
     ```
 
 3. Retrieve shipping status:
 
-    ```
+    ```sql
     SELECT SalesOrderID, OrderDate,
         CASE
             WHEN ShipDate IS NULL THEN 'Awaiting Shipment'
