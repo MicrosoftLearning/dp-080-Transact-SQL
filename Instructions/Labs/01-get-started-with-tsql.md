@@ -149,7 +149,7 @@ We've seen some examples of queries that return *NULL* values. *NULL* is general
     FROM SalesLT.Product;
     ```
 
-    The **ISNULL** function replaces *NULL* values with a specified literal value. Sometimes, you may want to achieve the opposite result by replacing an explicit value with *NULL*. To do this, you can use the **NULLLIF** function.
+    The **ISNULL** function replaces *NULL* values with a specified literal value. Sometimes, you may want to achieve the opposite result by replacing an explicit value with *NULL*. To do this, you can use the **NULLIF** function.
 
 4. Try the following query, which replaces the **Color** value "Multi" to *NULL*.
 
