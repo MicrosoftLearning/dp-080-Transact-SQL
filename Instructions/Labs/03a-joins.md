@@ -27,7 +27,7 @@ An inner join is used to find related data in two tables. For example, suppose y
     ON SalesLT.Product.ProductCategoryID = SalesLT.ProductCategory.ProductCategoryID;
     ```
 
-4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which include the **ProductName** from the products table and the corresponding **Category** from the product category table. Because the query uses an **INNER** join, any products that do not have corresponding categories, and any categories that contain no products are omitted from the results.
+4. Use the **&#x23f5;Run** button to run the query, and after a few seconds, review the results, which include the **ProductName** from the products table and the corresponding **Category** from the product category table. Because the query uses an **INNER** join, any products that do not have corresponding categories, and any categories that contain no products are omitted from the results.
 
 5. Modify the query as follows to remove the **INNER** keyword, and re-run it.
 
