@@ -21,7 +21,7 @@ An inner join is used to find related data in two tables. For example, suppose y
 3. In the query editor, enter the following code:
 
     ```
-    SELECT SalesLT.Product.Name As ProductName, SalesLT.ProductCategory.Name AS Category
+    SELECT SalesLT.Product.Name AS ProductName, SalesLT.ProductCategory.Name AS Category
     FROM SalesLT.Product
     INNER JOIN SalesLT.ProductCategory
     ON SalesLT.Product.ProductCategoryID = SalesLT.ProductCategory.ProductCategoryID;
@@ -32,7 +32,7 @@ An inner join is used to find related data in two tables. For example, suppose y
 5. Modify the query as follows to remove the **INNER** keyword, and re-run it.
 
     ```
-    SELECT SalesLT.Product.Name As ProductName, SalesLT.ProductCategory.Name AS Category
+    SELECT SalesLT.Product.Name AS ProductName, SalesLT.ProductCategory.Name AS Category
     FROM SalesLT.Product
     JOIN SalesLT.ProductCategory
         ON SalesLT.Product.ProductCategoryID = SalesLT.ProductCategory.ProductCategoryID;
@@ -43,9 +43,9 @@ An inner join is used to find related data in two tables. For example, suppose y
 6. Modify the query to assign aliases to the tables in the **JOIN** clause, as shown here:
 
     ```
-    SELECT p.Name As ProductName, c.Name AS Category
+    SELECT p.Name AS ProductName, c.Name AS Category
     FROM SalesLT.Product AS p
-    JOIN SalesLT.ProductCategory As c
+    JOIN SalesLT.ProductCategory AS c
         ON p.ProductCategoryID = c.ProductCategoryID;
     ```
 
@@ -54,7 +54,7 @@ An inner join is used to find related data in two tables. For example, suppose y
 8. Replace the query with the following code, which retrieves sales order data from the **SalesLT.SalesOrderHeader**, **SalesLT.SalesOrderDetail**, and **SalesLT.Product** tables:
 
     ```
-    SELECT oh.OrderDate, oh.SalesOrderNumber, p.Name As ProductName, od.OrderQty, od.UnitPrice, od.LineTotal
+    SELECT oh.OrderDate, oh.SalesOrderNumber, p.Name AS ProductName, od.OrderQty, od.UnitPrice, od.LineTotal
     FROM SalesLT.SalesOrderHeader AS oh
     JOIN SalesLT.SalesOrderDetail AS od
         ON od.SalesOrderID = oh.SalesOrderID
@@ -143,8 +143,8 @@ A *cross* join matches all possible combinations of rows from the tables being j
 
     ```
     SELECT p.Name, c.FirstName, c.LastName, c.EmailAddress
-    FROM SalesLT.Product as p
-    CROSS JOIN SalesLT.Customer as c;
+    FROM SalesLT.Product AS p
+    CROSS JOIN SalesLT.Customer AS c;
     ```
 
 2. Run the query and note that the results contain a row for every product and customer combination (which might be used to create a mailing campaign in which an indivdual advertisement for each product is emailed to each customer - a strategy that may not endear the company to its customers!).
@@ -157,7 +157,7 @@ A *self* join isn't actually a specific kind of join, but it's a technique used 
 
     ```
     SELECT pcat.Name AS ParentCategory, cat.Name AS SubCategory
-    FROM SalesLT.ProductCategory as cat
+    FROM SalesLT.ProductCategory AS cat
     JOIN SalesLT.ProductCategory pcat
         ON cat.ParentProductCategoryID = pcat.ProductCategoryID
     ORDER BY ParentCategory, SubCategory;
@@ -265,9 +265,9 @@ This section contains suggested solutions for the challenge queries.
     ```
     SELECT pcat.Name AS ParentCategory, cat.Name AS SubCategory, prd.Name AS ProductName
     FROM SalesLT.ProductCategory pcat
-    JOIN SalesLT.ProductCategory as cat
+    JOIN SalesLT.ProductCategory AS cat
         ON pcat.ProductCategoryID = cat.ParentProductCategoryID
-    JOIN SalesLT.Product as prd
+    JOIN SalesLT.Product AS prd
         ON prd.ProductCategoryID = cat.ProductCategoryID
     ORDER BY ParentCategory, SubCategory, ProductName;
     ```
