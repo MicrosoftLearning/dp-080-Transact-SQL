@@ -108,7 +108,7 @@ Now, we'll look at how to declare variables in batches.
     SELECT @empname AS employee;
     ```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run****.
+1. Highlight the written T-SQL code and select **&#x23f5;Run**.
 1. Observe the error:
 
     Must declare the scalar variable "@empname".
