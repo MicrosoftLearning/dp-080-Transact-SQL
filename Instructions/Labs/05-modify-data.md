@@ -118,7 +118,7 @@ You use the **INSERT** statement to insert data into a table.
     ```
 
 26. Run the code and review the results, which should affect 1 row.
-27. Switch to the **SQLQuery_...** pane containing the **SELECT** query and run it to validate that a new row has been inserted with the especific **CallID** value you specified in the **INSERT** statement (9).
+27. Switch to the **SQLQuery_...** pane containing the **SELECT** query and run it to validate that a new row has been inserted with the specific **CallID** value you specified in the **INSERT** statement (9).
 
 ## Update data
 
