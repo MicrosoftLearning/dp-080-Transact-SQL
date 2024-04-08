@@ -18,7 +18,7 @@ The required software for the labs can also be installed on Linux and Apple Mac 
 
 ## Microsoft SQL Server Express 2022
 
-1. Download Microsoft SQL Server Express 2022 from [the Microsoft download center]([https://www.microsoft.com/en-us/download/details.aspx?id=104781]).
+1. Download Microsoft SQL Server Express 2022 from [the Microsoft download center](https://www.microsoft.com/en-us/download/details.aspx?id=104781).
 2. Run the downloaded installer and select the **Basic** installation option.
 
 ## Microsoft Azure Data Studio
