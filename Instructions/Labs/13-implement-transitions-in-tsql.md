@@ -331,7 +331,7 @@ SELECT COUNT(*) FROM SalesLT.Customer
 
 6. Run the SELECT COUNT(*) query and note the number of counted rows. Notice the query returns results quickly.
 
-7. Return the transaction query for the **AdventureWorks** connection and highlight BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement) Then use the **&#x23f5;Run** to run only thr highlighted code.
+7. Return the transaction query for the **AdventureWorks** connection and highlight BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement) Then use the **&#x23f5;Run** to run only the highlighted code.
 
     As this is in a transaction that hasn't been committed, running the SELECT COUNT(*) query in the other window will be blocked.
 
