@@ -323,7 +323,7 @@ BEGIN TRANSACTION;
 COMMIT TRANSACTION;
 ```
 
-5. Right-click the **(loval)\sqlexpress** connection and create a new query. Then enter the following code:
+5. Right-click the **(local)\sqlexpress** connection and create a new query. Then enter the following code:
 
 ```
 SELECT COUNT(*) FROM SalesLT.Customer
