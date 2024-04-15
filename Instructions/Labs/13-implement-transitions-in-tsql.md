@@ -52,7 +52,7 @@ Two of the statements appear to have succeeded, but the third failed.
 SELECT * FROM SalesLT.Customer ORDER BY ModifiedDate DESC;
 ```
 
-A row for *Norman Newcustomer* was inserted into the Customer table (and anotherw as in serted into the Address table). However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now inconsistent as there's no link between the new customer and their address.
+A row for *Norman Newcustomer* was inserted into the Customer table (and another was inserted into the Address table). However, the insert for the CustomerAddress table failed with a duplicate key error. The database is now inconsistent as there's no link between the new customer and their address.
 
 To fix this, you'll need to delete the two rows that were inserted.
 
