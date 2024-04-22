@@ -262,7 +262,8 @@ END CATCH
 BEGIN TRY
 BEGIN TRANSACTION;
 
-    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate)     VALUES (0, 'Ann','Othercustomr','ann0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());;
+    INSERT INTO SalesLT.Customer (NameStyle, FirstName, LastName, EmailAddress, PasswordHash, PasswordSalt, rowguid, ModifiedDate)
+    VALUES (0, 'Ann','Othercustomr','ann0@adventure-works.com','U1/CrPqSzwLTtwgBehfpIl7f1LHSFpZw1qnG1sMzFjo=','QhHP+y8=',NEWID(), GETDATE());;
 
     INSERT INTO SalesLT.Address (AddressLine1, City, StateProvince, CountryRegion, PostalCode, rowguid,  ModifiedDate) 
     VALUES ('6388 Lake City Way', 'Burnaby','British Columbia','Canada','V5A 3A6',NEWID(), GETDATE());
@@ -322,7 +323,7 @@ BEGIN TRANSACTION;
 COMMIT TRANSACTION;
 ```
 
-5. Right-click the **(loval)\sqlexpress** connection and create a new query. Then enter the following code:
+5. Right-click the **(local)\sqlexpress** connection and create a new query. Then enter the following code:
 
 ```
 SELECT COUNT(*) FROM SalesLT.Customer
@@ -330,7 +331,7 @@ SELECT COUNT(*) FROM SalesLT.Customer
 
 6. Run the SELECT COUNT(*) query and note the number of counted rows. Notice the query returns results quickly.
 
-7. Return the transaction query for the **AdventureWorks** connection and highlight BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement) Then use the **&#x23f5;Run** to run only thr highlighted code.
+7. Return the transaction query for the **AdventureWorks** connection and highlight BEGIN TRANSACTION and INSERT statements (but <u>not</u> the COMMIT TRANSACTION; statement) Then use the **&#x23f5;Run** to run only the highlighted code.
 
     As this is in a transaction that hasn't been committed, running the SELECT COUNT(*) query in the other window will be blocked.
 
