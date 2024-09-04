@@ -296,7 +296,7 @@ This section contains suggested solutions for the challenge queries.
     ```
     SELECT DISTINCT City, StateProvince
     FROM SalesLT.Address
-    ORDFER BY City
+    ORDER BY City
     ```
  
 2. Retrieve the heaviest products:
