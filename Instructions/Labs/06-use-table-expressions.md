@@ -6,40 +6,35 @@ lab:
 
 # Create queries with table expressions
 
-In this lab, you'll use table expressions to query the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use table expressions to query the **Adventureworks** database.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the **Adventureworks** database.
 
 ## Create a view
 
-You use the CREATE VIEW statement to create a view.
+A view is a predefined query that you can query like a table.
 
-1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
+1. Open a query editor for your **Adventureworks** database, and create a new query.
+1. In the query editor, enter the following code to retrieve all products that are classified as road bikes (*ProductCategoryID=6*) from the **SalesLT.Products** table:
 
-1. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-
-1. After you've connected to your database, you can query it.  Let's fetch some data. Enter the following query to retrieve all products that are classified as road bikes (*ProductCategoryID=6*) from the **SalesLT.Products** table:
-
-    ```
+    ```sql
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductCategoryID = 6;
     ```
 
-1. Select **&#x23f5;Run** to run your query.
+1. Run your query and view the results.
 
-1. The query returned all products that are categorized as road bikes. But what if you wanted to use a view for this data to ensure applications don't need to access the underlying table to fetch it? Replace your previous code with the code shown below:
+1. The query returned all products that are categorized as road bikes. But what if you wanted to use a view for this data to ensure applications don't need to access the underlying table to fetch it? Modify the code to add a CREATE VIEW clause as shown here:
 
-    ```
+    ```sql
     CREATE VIEW SalesLT.vProductsRoadBikes AS
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductCategoryID = 6;
     ```
 
-1. This code creates a view called **vProductsRoadBikes** for all road bikes. Select **&#x23f5;Run** to run the code and create the view.
+1. This code creates a view called **vProductsRoadBikes** for all road bikes. Run the code and create the view.
 
 ## Query a view
 
@@ -47,15 +42,13 @@ You've created your view. Now you can use it. For example, you can use your view
 
 1. In the query editor, replace the code you entered previously with the following code:
 
-    ```
+    ```sql
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.vProductsRoadBikes
     WHERE ListPrice < 1000;
     ```
 
-1. Select **&#x23f5;Run**.
-
-1. Review the results. You've queried your view and retrieved a list of any road bikes that have a **ListPrice** under 1000. Your query uses your view as a source for the data. This means your applications can use your view for specific searches like this, and won't need to access the underlying table to fetch the data they need.
+1. Run the query and review the results. You've queried your view and retrieved a list of any road bikes that have a **ListPrice** under 1000. Your query uses your view as a source for the data. This means your applications can use your view for specific searches like this, and won't need to query the underlying table to fetch the data they need.
 
 ## Use a derived table
 
@@ -63,17 +56,16 @@ Sometimes you might end up having to rely on complex queries. You can use derive
 
 1. In the query editor, replace the code you entered previously with the following code:
 
-    ```
+    ```sql
     SELECT ProductID, Name, ListPrice,
            CASE WHEN ListPrice > 1000 THEN N'High' ELSE N'Normal' END AS PriceType
     FROM SalesLT.Product;
     ```
 
-1. Select **&#x23f5;Run**.
+1. Run the query, which calculates whether the price of a product is considered high or normal.
+1. Now let's further build on this query based on additional criteria, without adding to its complexity. In order to do this, you can create a derived table, which you can think of conceptually as a view that is defined within the context of another query. Replace the previous code with the code below:
 
-1. The query calculates whether the price of a product is considered high or normal. But you'd like to be able to further build on this query based on additional criteria, without further adding to its complexity. In order to do this, you can create a derived table for it. Replace the previous code with the code below:
-
-    ```
+    ```sql
     SELECT DerivedTable.ProductID, DerivedTable.Name, DerivedTable.ListPrice
     FROM
         (
@@ -85,9 +77,7 @@ Sometimes you might end up having to rely on complex queries. You can use derive
     WHERE DerivedTable.PriceType = N'High';
     ```
 
-1. Select **&#x23f5;Run**.
-
-1. You've created derived table based on your previous query.  Your new code uses that derived table and fetches the **ProductID**, **Name**, and **ListPrice** of products that have a **PriceType** of *High* only. Your derived table enabled you to easily build on top of your initial query based on your additional criteria, without making the initial query any more complex.
+1. Run the code, which defines a derived table and fetches the **ProductID**, **Name**, and **ListPrice** of products that have a **PriceType** of *High* only. Your derived table enabled you to easily build on top of your initial query based on your additional criteria, without making the initial query any more complex.
 
 ## Challenges
 
@@ -133,7 +123,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Write a Transact-SQL query to create a view for customer addresses in Canada.
 
-    ```
+    ```sql
     CREATE VIEW SalesLT.vAddressCA AS
     SELECT AddressLine1, City, StateProvince, CountryRegion
     FROM SalesLT.Address
@@ -142,7 +132,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Query your new view.
 
-    ```
+    ```sql
     SELECT * FROM SalesLT.vAddressCA;
     ```
 
@@ -150,7 +140,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Write a query that classifies products as heavy and normal based on their weight.
 
-    ```
+    ```sql
     SELECT ProductID, Name, Weight, ListPrice,
            CASE WHEN Weight > 1000 THEN N'Heavy' ELSE N'Normal' END AS WeightType
     FROM SalesLT.Product;
@@ -158,7 +148,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Create a derived table based on your query.
 
-    ```
+    ```sql
     SELECT DerivedTable.ProductID, DerivedTable.Name, DerivedTable.Weight, DerivedTable.ListPrice
     FROM
         (

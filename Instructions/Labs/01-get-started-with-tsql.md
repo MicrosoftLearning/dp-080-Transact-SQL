@@ -6,69 +6,54 @@ lab:
 
 # Get Started with Transact-SQL
 
-In this lab, you will use some basic SELECT queries to retrieve data from the **AdventureWorks** database.
+In this exercise, you will use some basic SELECT queries to retrieve data from the **AdventureWorks** database.
 
-## Explore the *AdventureWorks* database
-
-We'll use the **AdventureWorks** database in this lab, so let's start by exploring it in Azure Data Studio.
-
-1. Start Azure Data Studio, and in the **Connections** tab, select the **AdventureWorks** connection by clicking on the arrow just to the left of the name. This will connect to the SQL Server instance and show the objects in the **AdventureWorks** database.
-2. Expand the **Tables** folder to see the tables that are defined in the database. Note that there are a few tables in the **dbo** schema, but most of the tables are defined in a schema named **SalesLT**.
-3. Expand the **SalesLT.Product** table and then expand its **Columns** folder to see the columns in this table. Each column has a name, a data type, an indication of whether it can contain *null* values, and in some cases an indication that the columns is used as a primary key (PK) or foreign key (FK).
-4. Right-click the **SalesLT.Product** table and use the **SELECT TOP (1000)** option to create and run a new query script that retrieves the first 1000 rows from the table.
-5. Review the query results, which consist of 1000 rows - each row representing a product that is sold by the fictitious *Adventure Works Cycles* company.
-6. Close the **SQLQuery_1** pane that contains the query and its results.
-7. Explore the other tables in the database, which contain information about product details, customers, and sales orders. The tables are related through primary and foreign keys, as shown here (you may need to resize the pane to see them clearly):
-
-    ![An entity relationship diagram of the AdventureWorks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the sample **AdventureWorks** database.
 
 ## Use SELECT queries to retrieve data
 
-Now that you've had a chance to explore the **AdventureWorks** database, it's time to dig a little deeper into the product data it contains by querying the **Product** table.
+The SELECT statement is the primary Transact-SQL statement used to query tables in a database.
 
-1. In Azure Data Studio, create a new query (you can do this from the **File** menu or on the *welcome* page).
-2. In the new **SQLQuery_...** pane, ensure that the **AdventureWorks** database is selected at the top of the query pane. If not, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-3. In the query editor, enter the following code:
+1. Open a query editor for your **AdventureWorks** database, and create a new query.
+1. In the query editor, enter the following code:
 
     ```sql
     SELECT * FROM SalesLT.Product;
     ```
 
-4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which includes all columns for all products.
-5. In the query editor, modify the query as follows:
+1. Run the query, and and after a few seconds, review the results, which includes all columns for all products.
+1. In the query editor, modify the query as follows:
 
     ```sql
     SELECT Name, StandardCost, ListPrice
     FROM SalesLT.Product;
     ```
 
-6. Use the **&#x23f5;Run** button to re-run the query, and and after a few seconds, review the results, which this time include only the **Name**, **StandardCost**, and **ListPrice** columns for all products.
-7. Modify the query as shown below to include an expression that results in a calculated column, and then re-run the query:
+1. Re-run the query, and and after a few seconds, review the results, which this time include only the **Name**, **StandardCost**, and **ListPrice** columns for all products.
+1. Modify the query as shown below to include an expression that results in a calculated column, and then re-run the query:
 
     ```sql
     SELECT Name, ListPrice - StandardCost
     FROM SalesLT.Product;
     ```
 
-8. Note that the results this time include the **Name** column and an unnamed column containing the result of subtracting the **StandardCost** from the **ListPrice**.
-9. Modify the query as shown below to assign names to the columns in the results, and then re-run the query.
+1. Note that the results this time include the **Name** column and an unnamed numeric column containing the result of subtracting the **StandardCost** from the **ListPrice**.
+1. Modify the query as shown below to assign names to the columns in the results, and then re-run the query.
 
     ```sql
     SELECT Name AS ProductName, ListPrice - StandardCost AS Markup
     FROM SalesLT.Product;
     ```
 
-10. Note that the results now include columns named **ProductName** and **Markup**. The **AS** keyword has been used to assign an *alias* for each column in the results.
-11. Replace the existing query with the following code, which also includes an expression that produces a calculated column in the results:
+1. Note that the results now include columns named **ProductName** and **Markup**. The **AS** keyword has been used to assign an *alias* for each column in the results.
+1. Replace the existing query with the following code, which also includes an expression that produces a calculated column in the results:
 
     ```sql
     SELECT ProductNumber, Color, Size, Color + ', ' + Size AS ProductDetails
     FROM SalesLT.Product;
     ```
 
-12. Run the query, and note that the **+** operator in the calculated **ProductDetails** column is used to *concatenate* the **Color** and **Size** column values (with a literal comma between them). The behavior of this operator is determined by the data types of the columns - had they been numeric values, the **+** operator would have *added* them. Note also that some results are *NULL* - we'll explore NULL values later in this lab.
+1. Run the query, and note that the **+** operator in the calculated **ProductDetails** column is used to *concatenate* the **Color** and **Size** column values (with a literal comma between them). The behavior of this operator is determined by the data types of the columns - had they been numeric values, the **+** operator would have *added* them. Note also that some results are *NULL* - we'll explore NULL values later in this lab.
 
 ## Work with data types
 
@@ -230,7 +215,7 @@ As you continue to work with the Adventure Works customer data, you must create 
     - You have been asked to provide a list of all customer companies in the format *Customer ID* : *Company Name* - for example, *78: Preferred Bikes*.
 2. Retrieve a list of sales order revisions
     - The **SalesLT.SalesOrderHeader** table contains records of sales orders. You have been asked to retrieve data for a report that shows:
-        - The sales order number and revision number in the format <Order Number> (<Revision>) – for example SO71774 (2).
+        - The purchase order number and revision number in the format *<Order Number> (<Revision>)* – for example *PO348186287 (2)*.
         - The order date converted to ANSI standard *102* format  (*yyyy.mm.dd* – for example *2015.01.31*).
 
 ### Challenge 3: Retrieve customer contact details
@@ -299,7 +284,7 @@ This section contains suggested solutions for the challenge queries.
 2. Retrieve a list of sales order revisions:
 
     ```sql
-    SELECT SalesOrderNumber + ' (' + STR(RevisionNumber, 1) + ')' AS OrderRevision,
+    SELECT PurchaseOrderNumber + ' (' + STR(RevisionNumber, 1) + ')' AS OrderRevision,
        CONVERT(nvarchar(30), OrderDate, 102) AS OrderDate
     FROM SalesLT.SalesOrderHeader;
     ```

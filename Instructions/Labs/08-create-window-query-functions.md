@@ -5,85 +5,51 @@ lab:
 ---
 # Use window functions
 
-In this lab, you'll run window functions on the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+In this exercise, you'll apply window functions on the **Adventureworks** database.
+
+> **Note**: This exercise assumes you have created the **Adventureworks** database.
 
 ## Ranking function
 
-In this exercise you will create a query that uses a window function to return a ranking value. The query uses a CTE (common table expression) called **sales**. You then use the **sales** CTE to add the RANK window function.
+Let's start by creating a query that uses a window function to return a ranking value.
 
-1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
-1. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-1. Copy the following T-SQL code into the query window, highlight it and select **&#x23f5;Run**.
+1. Open a query editor for your **Adventureworks** database, and create a new query.
+1. In the query editor, enter the following code:
 
-    ```
-    WITH sales AS
-    (
-        SELECT C.Name AS 'Category', CAST(SUM(D.LineTotal) AS numeric(12, 2)) AS 'SalesValue'
-        FROM SalesLT.SalesOrderDetail AS D
-        INNER JOIN SalesLT.Product AS P
-            ON D.ProductID = P.ProductID
-        INNER JOIN SalesLT.ProductCategory AS C
-            ON P.ProductCategoryID = C.ProductCategoryID
-        WHERE C.ParentProductCategoryID = 4
-            GROUP BY C.Name
-    )
-    SELECT Category, SalesValue, RANK() OVER(ORDER BY SalesValue DESC) AS 'Rank'
-    FROM sales
-        ORDER BY Category;
-    ```
-
-The product categories now have a rank number according to the **SalesValue** for each category. Notice that the RANK function required the rows to be ordered by **SalesValue**, but the final result set was ordered by **Category**.
-
-## Offset function
-
-In this exercise you will create a new table called **Budget** populated with budget values for five years. You will then use the LAG window function to return each year's budget, together with the previous year's budget value.  
-
-1. In the query editor, under the existing code enter the following code:
-
-    ```
-    CREATE TABLE dbo.Budget
-    (
-        [Year] int NOT NULL PRIMARY KEY,
-        Budget int NOT NULL
-    );
-
-    INSERT INTO dbo.Budget ([Year], Budget)
-        VALUES
-            (2017, 14600),
-            (2018, 16300),
-            (2019, 18200),
-            (2020, 21500),
-            (2021, 22800);
-
-    SELECT [Year], Budget, LAG(Budget, 1, 0) OVER (ORDER BY [Year]) AS 'Previous'
-        FROM dbo.Budget
-        ORDER BY [Year]; 
-    ```
-
-1. Highlight the code and select **&#x23f5;Run**.
-
-## Aggregation function
-
-In this exercise you will create a query that uses PARTITION BY to count the number of subcategories in each category.
-
-1. In the query editor, under the existing code enter the following code to return a count of products in each category:
-
-    ```
-    SELECT C.Name AS 'Category', SC.Name AS 'Subcategory', COUNT(SC.Name) OVER (PARTITION BY C.Name) AS 'SubcatCount'
+    ```sql
+    SELECT C.Name AS 'Category',
+            SUM(D.OrderQty) AS 'ItemsSold',
+            RANK() OVER(ORDER BY SUM(D.OrderQty) DESC) AS 'Rank'
     FROM SalesLT.SalesOrderDetail AS D
     INNER JOIN SalesLT.Product AS P
         ON D.ProductID = P.ProductID
-    INNER JOIN SalesLT.ProductCategory AS SC
-        ON P.ProductCategoryID = SC.ProductCategoryID
     INNER JOIN SalesLT.ProductCategory AS C
-        ON SC.ParentProductCategoryID = C.ProductCategoryID
-        GROUP BY C.Name, SC.Name
-        ORDER BY C.Name, SC.Name;
+        ON P.ProductCategoryID = C.ProductCategoryID
+    GROUP BY C.Name
+    ORDER BY Rank;
     ```
 
-1. Highlight the code and select **&#x23f5;Run**.
+1. Run the query and review the results. The product categories in the results have a rank number according to the number of items sold within each category. The rank is based on a descending order of sales (so the category with most items sold is 1, the category with the second most items sold is 2, and so on).
+
+    > **Tip**: Look closely at the results to see how rank is assigned to categories with the same number of sales.
+
+## Aggregation function by partition
+
+Now, let's create a query that returns each product with its category and list price along with the average list price for products in the same category.
+
+1. In the query editor, replace the existing query with the following code:
+
+    ```sql
+    SELECT p.Name AS Product,
+           c.Name AS Category,
+           p.ListPrice,
+           AVG(p.ListPrice) OVER (PARTITION BY c.Name) AS AvgCategoryPrice
+    FROM SalesLT.Product AS p
+    JOIN SalesLT.ProductCategory AS c
+        ON p.ProductCategoryID = c.ProductCategoryID;
+    ```
+
+1. Run the query and review the results. The OVER clause applies the average function to ListPrice, partitioning by category (in other words, it calculates the average list price for products in each category; so you can easily compare the price of an individual product to the average price of all products in the same category).
 
 ## Challenges
 
@@ -91,21 +57,13 @@ Now it's your turn to use window functions.
 
 > **Tip**: Try to determine the appropriate code for yourself. If you get stuck, suggested answers are provided at the end of this lab.
 
-### Challenge 1: Return a RANK value for products
+### Challenge 1: Rank salespeople based on orders
 
-Amend the T-SQL code with the RANK clause so that it returns a Rank value for products within each category.
+Write a query that ranks the salespeople based on the number of orders placed by the customers they are assigned to.
 
-### Challenge 2: Return the next year's budget value
+### Challenge 2: Retrieve each customer with the total number of customers in the same region
 
-Using the **Budget** table you have already created, amend the SELECT statement to return the following year’s budget value as "Next".
-
-### Challenge 3: Return the first and last budget values for each year
-
-Using the **Budget** table you have already created, amend the select statement to return the first budget value in one column, and the last budget value in another column, where budget values are ordered by year in ascending order.
-
-### Challenge 4: Count the products in each category
-
-Amend the code containing the aggregation function to return a count of products by category.
+Write a query that returns the company name of each customer, the city in which the customer has its main office, and the total number of customers with a main office in the same region.
 
 ## Challenge Solutions
 
@@ -113,53 +71,27 @@ This section contains suggested solutions for the challenge queries.
 
 ### Challenge 1
 
-```
-WITH sales AS
-(
-    SELECT C.Name AS 'Category', SC.Name AS 'Subcategory', CAST(SUM(D.LineTotal) AS numeric(12, 2)) AS 'SalesValue'
-    FROM SalesLT.SalesOrderDetail AS D
-    INNER JOIN SalesLT.Product AS P
-        ON D.ProductID = P.ProductID
-    INNER JOIN SalesLT.ProductCategory AS SC
-        ON P.ProductCategoryID = SC.ProductCategoryID
-    INNER JOIN SalesLT.ProductCategory AS C
-        ON SC.ParentProductCategoryID = C.ProductCategoryID
-        GROUP BY C.Name, SC.Name
-)
-SELECT Category, Subcategory, SalesValue, RANK() OVER(PARTITION BY Category ORDER BY SalesValue DESC) AS 'Rank'
-FROM sales
-    ORDER BY Category, SalesValue DESC;
+```sql
+SELECT c.SalesPerson,
+        COUNT(o.SalesOrderID) AS 'SalesOrders',
+        RANK() OVER(ORDER BY COUNT(o.SalesOrderID) DESC) AS 'Rank'
+FROM SalesLT.SalesOrderHeader AS o
+INNER JOIN SalesLT.Customer AS c
+    ON o.CustomerID = c.CustomerID
+GROUP BY c.SalesPerson
+ORDER BY Rank;
 ```
 
 ### Challenge 2
 
-```
-SELECT [Year], Budget, LEAD(Budget, 1, 0) OVER (ORDER BY [Year]) AS 'Next'
-FROM dbo.Budget
-    ORDER BY [Year];
-```
-
-### Challenge 3
-
-```
-SELECT [Year], Budget,
-        FIRST_VALUE(Budget) OVER (ORDER BY [Year]) AS 'First_Value',
-        LAST_VALUE(Budget) OVER (ORDER BY [Year] ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS 'Last_Value'
-FROM dbo.Budget
-    ORDER BY [Year];
-```
-
-### Challenge 4
-
-```
-SELECT C.Name AS 'Category', SC.Name AS 'Subcategory', COUNT(P.Name) OVER (PARTITION BY C.Name) AS 'ProductCount'
-FROM SalesLT.SalesOrderDetail AS D
-    INNER JOIN SalesLT.Product AS P
-        ON D.ProductID = P.ProductID
-    INNER JOIN SalesLT.ProductCategory AS SC
-        ON P.ProductCategoryID = SC.ProductCategoryID
-    INNER JOIN SalesLT.ProductCategory AS C
-        ON SC.ParentProductCategoryID = C.ProductCategoryID
-    GROUP BY C.Name, SC.Name, P.Name
-    ORDER BY C.Name, SC.Name, P.Name;
+```sql
+SELECT c.CompanyName,
+       a.CountryRegion,
+       COUNT(c.CustomerID) OVER (PARTITION BY a.CountryRegion) AS CustomersInRegion
+FROM SalesLT.Customer AS c
+JOIN SalesLT.CustomerAddress AS ca
+    ON c.CustomerID = ca.CustomerID
+JOIN SalesLT.Address AS a
+    ON ca.AddressID = a.AddressID
+WHERE ca.AddressType = 'Main Office';
 ```

@@ -6,60 +6,59 @@ lab:
 
 # Sort and Filter Query Results
 
-In this lab, you'll use the Transact-SQL **SELECT** statement to query and filter data in the **AdventureWorks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use the Transact-SQL **SELECT** statement to query and filter data in the **AdventureWorks** database.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the sample **AdventureWorks** database.
 
 ## Sort results using the ORDER BY clause
 
 It's often useful to sort query results into a particular order.
 
-1. Modify the existing query to return the **Name** and **ListPrice** of all products:
+1. Open a query editor for your **AdventureWorks** database, and create a new query.
+1. Type the following query to return the **Name** and **ListPrice** of all products:
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product;
     ```
 
-2. Run the query and note that the results are presented in no particular order.
-3. Modify the query to add an **ORDER BY** clause that sorts the results by **Name**, as shown here:
+1. Run the query and note that the results are presented in no particular order.
+1. Modify the query to add an **ORDER BY** clause that sorts the results by **Name**, as shown here:
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     ORDER BY Name;
     ```
 
-4. Run the query and review the results. This time the products are listed in alphabetical order by **Name**.
-5. Modify the query as shown below to sort the results by **ListPrice**.
+1. Run the query and review the results. This time the products are listed in alphabetical order by **Name**.
+1. Modify the query as shown below to sort the results by **ListPrice**.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice;
     ```
 
-6. Run the query and note that the results are listed in ascending order of **ListPrice**. By default, the **ORDER BY** clause applies an ascending sort order to the specified field.
-7. Modify the query as shown below to sort the results into descending order of **ListPrice**.
+1. Run the query and note that the results are listed in ascending order of **ListPrice**. By default, the **ORDER BY** clause applies an ascending sort order to the specified field.
+1. Modify the query as shown below to sort the results into descending order of **ListPrice**.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
     ```
 
-8. Run the query and note that the results now show the most expensive items first.
-9. Modify the query as shown below to sort the results into descending order of **ListPrice**, and then into ascending order of **Name**.
+1. Run the query and note that the results now show the most expensive items first.
+1. Modify the query as shown below to sort the results into descending order of **ListPrice**, and then into ascending order of **Name**.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC, Name ASC;
     ```
 
-10. Run the query and review the results. Note that they are sorted into descending order of **ListPrice**, and each set of products with the same price is sorted in ascending order of **Name**.
+1. Run the query and review the results. Note that they are sorted into descending order of **ListPrice**, and each set of products with the same price is sorted in ascending order of **Name**.
 
 ## Restrict results using TOP
 
@@ -67,7 +66,7 @@ Sometimes you only want to return a specific number of rows. For example, you mi
 
 1. Modify the existing query to return the **Name** and **ListPrice** of all products:
 
-    ```
+    ```sql
     SELECT TOP (20) Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
@@ -76,7 +75,7 @@ Sometimes you only want to return a specific number of rows. For example, you mi
 2. Run the query and note that the results contain the first twenty products in descending order of **ListPrice**. Typically, you include an **ORDER BY** clause when using the **TOP** parameter; otherwise the query just returns the first specified number of rows in an arbitrary order.
 3. Modify the query to add the **WITH TIES** parameter as shown here, and re-run it.
 
-    ```
+    ```sql
     SELECT TOP (20) WITH TIES Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
@@ -85,7 +84,7 @@ Sometimes you only want to return a specific number of rows. For example, you mi
 4. This time, there are 21 rows in the results, because there are multiple products that share the same price, one of which wasn't included when ties were ignored by the previous query.
 5. Modify the query to add the **PERCENT** parameter as shown here, and re-run it.
 
-    ```
+    ```sql
     SELECT TOP (20) PERCENT WITH TIES Name, ListPrice
     FROM SalesLT.Product
     ORDER BY ListPrice DESC;
@@ -99,7 +98,7 @@ User interfaces and reports often present large volumes of data as pages, you ma
 
 1. Modify the existing query to return product **Name** and **ListPrice** values:
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     ORDER BY Name OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;
@@ -108,7 +107,7 @@ User interfaces and reports often present large volumes of data as pages, you ma
 2. Run the query and note the effect of the **OFFSET** and **FETCH** parameters of the **ORDER BY** clause. The results start at the 0 position (the beginning of the result set) and include only the next 10 rows, essentially defining the first page of results with 10 rows per page.
 3. Modify the query as shown here, and run it to retrieve the next page of results.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     ORDER BY Name OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;
@@ -122,7 +121,7 @@ Often, multiple rows in a table may contain the same values for a given subset o
 2. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
 3. In the query editor, enter the following code:
 
-    ```
+    ```sql
     SELECT Color
     FROM SalesLT.Product;
     ```
@@ -131,7 +130,7 @@ Often, multiple rows in a table may contain the same values for a given subset o
 
 5. Modify the query as follows, and re-run it.
 
-    ```
+    ```sql
     SELECT ALL Color
     FROM SalesLT.Product;
     ```
@@ -140,7 +139,7 @@ Often, multiple rows in a table may contain the same values for a given subset o
 
 6. Modify the query to replace **ALL** with **DISTINCT**, as shown here:
 
-    ```
+    ```sql
     SELECT DISTINCT Color
     FROM SalesLT.Product;
     ```
@@ -149,7 +148,7 @@ Often, multiple rows in a table may contain the same values for a given subset o
 
 9. Modify the query to add the **Size** field as shown here:
 
-    ```
+    ```sql
     SELECT DISTINCT Color, Size
     FROM SalesLT.Product;
     ```
@@ -162,7 +161,7 @@ Most queries for application development or reporting involve filtering the data
 
 1. In Azure Data Studio, replace the existing query with the following code:
 
-    ```
+    ```sql
     SELECT Name, Color, Size
     FROM SalesLT.Product
     WHERE ProductModelID = 6
@@ -172,7 +171,7 @@ Most queries for application development or reporting involve filtering the data
 2. Run the query and review the results, which contain the **Name**, **Color**, and **Size** for each product with a **ProductModelID** value of *6* (this is the ID for the *HL Road Frame* product model, of which there are multiple variants).
 3. Replace the query with the following code, which uses the *not equal* (<>) operator, and run it.
 
-    ```
+    ```sql
     SELECT Name, Color, Size
     FROM SalesLT.Product
     WHERE ProductModelID <> 6
@@ -182,7 +181,7 @@ Most queries for application development or reporting involve filtering the data
 4. Review the results, noting that they contain all products with a **ProductModelID** other than **6**.
 5. Replace the query with the following code, and run it.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     WHERE ListPrice > 1000.00
@@ -192,7 +191,7 @@ Most queries for application development or reporting involve filtering the data
 6. Review the results, noting that they contain all products with a **ListPrice** greater than 1000.00.
 7. Modify the query as follows, and run it.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     WHERE Name LIKE 'HL Road Frame %';
@@ -204,7 +203,7 @@ Most queries for application development or reporting involve filtering the data
 
 9. Modify the query as follows, and run it.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductNumber LIKE 'FR-_[0-9][0-9]_-[0-9][0-9]';
@@ -216,7 +215,7 @@ Most queries for application development or reporting involve filtering the data
 
 11. Modify the query as follows, and run it.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     WHERE SellEndDate IS NOT NULL;
@@ -225,7 +224,7 @@ Most queries for application development or reporting involve filtering the data
 12. Note that to filter based on *NULL* values you must use **IS NULL** (or **IS NOT NULL**) you cannot compare a *NULL* value using the **=** operator.
 13. Now try the following query, which uses the **BETWEEN** operator to define a filter based on values within a defined range.
 
-    ```
+    ```sql
     SELECT Name
     FROM SalesLT.Product
     WHERE SellEndDate BETWEEN '2006/1/1' AND '2006/12/31';
@@ -235,7 +234,7 @@ Most queries for application development or reporting involve filtering the data
 
 15. Run the following query, which retrieves products with a **ProductCategoryID** value that is in a specified list.
 
-    ```
+    ```sql
     SELECT ProductCategoryID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductCategoryID IN (5,6,7);
@@ -243,7 +242,7 @@ Most queries for application development or reporting involve filtering the data
 
 16. Now try the following query, which uses the **AND** operator to combine two criteria.
 
-    ```
+    ```sql
     SELECT ProductCategoryID, Name, ListPrice, SellEndDate
     FROM SalesLT.Product
     WHERE ProductCategoryID IN (5,6,7) AND SellEndDate IS NULL;
@@ -251,7 +250,7 @@ Most queries for application development or reporting involve filtering the data
 
 17. Try the following query, which filters the results to include rows that match one (or both) of two criteria.
 
-    ```
+    ```sql
     SELECT Name, ProductCategoryID, ProductNumber
     FROM SalesLT.Product
     WHERE ProductNumber LIKE 'FR%' OR ProductCategoryID IN (5,6,7);
@@ -293,7 +292,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve a list of cities:
 
-    ```
+    ```sql
     SELECT DISTINCT City, StateProvince
     FROM SalesLT.Address
     ORDER BY City
@@ -301,7 +300,7 @@ This section contains suggested solutions for the challenge queries.
  
 2. Retrieve the heaviest products:
 
-    ```
+    ```sql
     SELECT TOP (10) PERCENT WITH TIES Name
     FROM SalesLT.Product
     ORDER BY Weight DESC;
@@ -311,7 +310,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve product details for product model 1:
 
-    ```
+    ```sql
     SELECT Name, Color, Size
     FROM SalesLT.Product
     WHERE ProductModelID = 1;
@@ -319,7 +318,7 @@ This section contains suggested solutions for the challenge queries.
 
 2. Filter products by color and size:
 
-    ```
+    ```sql
     SELECT ProductNumber, Name
     FROM SalesLT.Product
     WHERE Color IN ('Black','Red','White') AND Size IN ('S','M');
@@ -327,7 +326,7 @@ This section contains suggested solutions for the challenge queries.
 
 3. Filter products by product number:
 
-    ```
+    ```sql
     SELECT ProductNumber, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductNumber LIKE 'BK-%';
@@ -335,7 +334,7 @@ This section contains suggested solutions for the challenge queries.
 
 4. Retrieve specific products by product number:
 
-    ```
+    ```sql
     SELECT ProductNumber, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductNumber LIKE 'BK-[^R]%-[0-9][0-9]';

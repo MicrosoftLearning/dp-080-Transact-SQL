@@ -1,214 +1,301 @@
 ---
 lab:
-    title: 'Introduction to programming with T-SQL'
+    title: 'Introduction to programming with Transact-SQL'
     module: 'Additional exercises'
 ---
 
-# Introduction to programming with T-SQL
+# Introduction to programming with Transact-SQL
 
-In this lab, you'll use get an introduction to programming using T-SQL techniques using the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use get an introduction to programming with Transact-SQL using the **Adventureworks** database.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the **Adventureworks** database.
 
 ## Declare variables and retrieve values
 
-1. Start Azure Data Studio
-1. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
-1. Right click on the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-1. The previous step will open a query screen that is connected to the adventureworks database.
-1. In the query pane, type the following T-SQL code:
+1. Open a query editor for your **Adventureworks** database, and create a new query.
+1. In the query pane, type the following code:
 
-    ```
-    DECLARE @num int = 5;
+    ```sql
+    DECLARE @productID int = 680;
 
-    SELECT @num AS mynumber;
+    SELECT @productID AS ProductID;
     ```
 
-1. Highlight the above T-SQL code and select **&#x23f5;Run**.
-1. This will give the result:
+1. Run the query and review the result, which is returned as a resultset from the SELECT statement:
 
-   | mynumber |
+   | ProductID |
    | -------- |
-   | 5 |
+   | 680 |
 
-1. In the query pane, type the following T-SQL code after the previous one:
+1. Modify the code as follows:
 
-    ```
+    ```sql
+    -- Variable declarations
     DECLARE
-    @num1 int,
-    @num2 int;
+        @productID int,
+        @productPrice money;
     
-    SET @num1 = 4;
-    SET @num2 = 6;
+    -- Specify a product
+    SET @productID = 680;
+    PRINT @productID;
     
-    SELECT @num1 + @num2 AS totalnum;
+    -- Get the product price
+    SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    PRINT @ProductPrice;
     ```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.
-1. This will give the result:
-
-   | totalnum |
-   | -------- |
-   | 10 |
-
-   You've now seen how to declare variables and how to retrieve values.
-
-## Use variables with batches
-
-Now, we'll look at how to declare variables in batches.
-
-1. Right click on the TSQL connection and select **New Query**
-1. In the query pane, type the following T-SQL code:
+1. Run the code and review the output. This time, the PRINT statements result in the variable values being included in the messages produced by the code:
 
     ```
-    DECLARE 
-    @empname nvarchar(30),
-    @empid int;
-    
-    SET @empid = 5;
-    
-    SET @empname = (SELECT FirstName + N' ' + LastName FROM SalesLT.Customer WHERE CustomerID = @empid)
-    
-    SELECT @empname AS employee;
+    8:02:11 AM	Started executing on line 1
+    8:02:01 AM	Started executing query.
+    8:02:01 AM	680
+    8:02:01 AM	1431.50
+    8:02:01 AM	Finished executing query.
+    8:02:13 AM	SQL Server execution time: 00:00:00.010 | Total duration: 00:00:01.782
     ```
 
-1. Highlight the written T-SQL code and Select **&#x23f5;Run**.
-1. This will give you this result:
+1. Add a SELECT statement to output the variables as a resultset:
 
-   | employee |
-   | -------- |
-   | Lucy Harrington |
-
-1. Change the @empid variable’s value from 5 to 2 and execute the modified T-SQL code you'll get:
-
-   | employee |
-   | -------- |
-   | Keith Harris |
-
-1. Now, in the code you just copied, add the batch delimiter GO before this statement:
-
-   ```
-   SELECT @empname AS employee;
-   ```
-
-1. Make sure your T-SQL code looks like this:
-
-   ```
-    DECLARE 
-    @empname nvarchar(30),
-    @empid int;
+    ```sql
+    -- Variable declarations
+    DECLARE
+        @productID int,
+        @productPrice money;
     
-    SET @empid = 5;
+    -- Specify a product
+    SET @productID = 680;
+    PRINT @productID;
     
-    SET @empname = (SELECT FirstName + N' ' + LastName FROM SalesLT.Customer WHERE CustomerID = @empid)
+    -- Get the product price
+    SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    PRINT @productPrice;
+
+    -- Output the results
+    SELECT @productID AS ProductID, @productPrice AS Price;
+    ```
+
+1. Run the code, and view the results, which should look like this:
+
+    | ProductID | Price |
+    | -------- | -- |
+    | 680 | 1431.50 |
+
+    (Note that the variable values are still included in the messages because of the PRINT statements)
+
+## Explore variable scope
+
+Now, we'll look at the behavior of variables when code is run in batches.
+
+1. Modify the code to add the batch delimiter GO before the final SELECT statement. This causes the client to sent the code after the GO statement to the server in a new batch:
+
+    ```sql
+    -- Variable declarations
+    DECLARE
+        @productID int,
+        @productPrice money;
     
+    -- Specify a product
+    SET @productID = 680;
+    PRINT @productID;
+    
+    -- Get the product price
+    SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    PRINT @productPrice;
+
     GO
-    SELECT @empname AS employee;
+
+    -- Output the results
+    SELECT @productID AS ProductID, @productPrice AS Price;
     ```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.
-1. Observe the error:
+1. Run the code, and review the error that is returned:
 
-    Must declare the scalar variable "@empname".
+   *Must declare the scalar variable "@productID"*
 
-Variables are local to the batch in which they're defined. If you try to refer to a variable that was defined in another batch, you get an error saying that the variable wasn't defined. Also, keep in mind that GO is a client command, not a server T-SQL command.
+   Variables are local to the batch in which they're defined. If you try to refer to a variable that was defined in another batch, you get an error saying that the variable wasn't defined. Also, keep in mind that GO is a client command, not a server T-SQL command.
 
-## Write basic conditional logic
+1. Remove the GO statement and verify that the code works as before.
 
-1. Right click on the TSQL connection and select **New Query**
-1. In the query pane, type the following T-SQL code:
+## Use table variables
 
+So far, you've used variables that encapsulate a single value of a specific data type. In Transact-SQL, you can also use *table* variables to encapsulate multiple rows of data.
+
+1. Modify the code to add a declaration for a table variable to insert the results into:
+
+    ```sql
+    -- Variable declarations
+    DECLARE
+        @productID int,
+        @productPrice money;
+    
+    DECLARE @priceData TABLE(ProductID int, Price money);
+    
+    -- Specify a product
+    SET @productID = 680;
+    
+    -- Get the product price
+    SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    
+    -- Insert the data into a table variable
+    INSERT INTO @priceData VALUES(@productID, @productPrice);
+    
+    -- Output the results
+    SELECT * FROM @priceData;
     ```
+
+1. Run the code, and view the results (the data in the table variable).
+
+## Write conditional logic
+
+Conditional logic is used to *branch* program execution flow based on specific conditions. The most common form of conditional logic is the IF..ELSE statement. Transact-SQL also supports a CASE statement.
+
+1. Modify the code as follows to add logic that assigns a price level based on some conditional logic comparing the price of a specific to the averege product price:
+
+    ```sql
+    -- Variable declarations
     DECLARE 
-    @i int = 8,
-    @result nvarchar(20);
+        @productID int,
+        @productPrice money,
+        @averagePrice money,
+        @priceLevel nvarchar(20);
+
+     DECLARE @priceData TABLE(ProductID int, Price money, PriceLevel nvarchar(20));
     
-    IF @i < 5
-        SET @result = N'Less than 5'
-    ELSE IF @i <= 10
-        SET @result = N'Between 5 and 10'
-    ELSE if @i > 10
-        SET @result = N'More than 10'
+    -- Specify a product
+    SET @productID = 680;
+    PRINT @productID;
+    
+    -- Get the product price
+    SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    PRINT @productPrice;
+    
+    -- Get average product price
+    SELECT @averagePrice = AVG(ListPrice) FROM SalesLT.Product;
+    PRINT @averagePrice;
+    
+    -- Determine the price level
+    IF @ProductPrice < @averagePrice
+        SET @priceLevel = N'Below average'
+    ELSE IF @ProductPrice > @averagePrice
+        SET @priceLevel = N'Above average'
     ELSE
-        SET @result = N'Unknown';
+        SET @priceLevel = N'Average';
     
-    SELECT @result AS result;
+    -- Insert the data into a table variable
+    INSERT INTO @priceData VALUES(@productID, @productPrice, @priceLevel);
+    
+    -- Output the results
+    SELECT * FROM @priceData;
     ```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.
-1. Which should result in:
+1. Run the code and review the results.
 
-   | result |
-   | -------- |
-   | Between 5 and 10 |
+    The IF..ELSE statement block checks a series of conditions, running the statements for the first one that is found to be true, or statement under the final ELSE block if no match is found.
 
-1. In the query pane, type the following T-SQL code after the previous code:
+1. Modify the code to perform the conditional logic using a CASE statement:
 
-    ```
+    ```sql
+    -- Variable declarations
     DECLARE 
-    @i int = 8,
-    @result nvarchar(20);
+        @productID int,
+        @productPrice money,
+        @averagePrice money,
+        @priceLevel nvarchar(20);
     
-    SET @result = 
-    CASE 
-    WHEN @i < 5 THEN
-        N'Less than 5'
-    WHEN @i <= 10 THEN
-        N'Between 5 and 10'
-    WHEN @i > 10 THEN
-        N'More than 10'
-    ELSE
-        N'Unknown'
-    END;
+    DECLARE @priceData TABLE(ProductID int, Price money, PriceLevel nvarchar(20));
 
-    SELECT @result AS result;
+    -- Specify a product
+    SET @productID = 680;
+    PRINT @productID;
+    
+    -- Get the product price
+    SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    PRINT @productPrice;
+    
+    -- Get average product price
+    SELECT @averagePrice = AVG(ListPrice) FROM SalesLT.Product;
+    PRINT @averagePrice;
+    
+    -- Determine the price level
+    SET @priceLevel =
+        CASE
+            WHEN @ProductPrice < @averagePrice THEN
+                N'Below average'
+            WHEN @ProductPrice > @averagePrice THEN
+                N'Above average'
+            ELSE
+                N'Average'
+        END;
+    
+    -- Insert the data into a table variable
+    INSERT INTO @priceData VALUES(@productID, @productPrice, @priceLevel);
+    
+    -- Output the results
+    SELECT * FROM @priceData
     ```
 
-This code uses a CASE expression and only one SET expression to get the same result as the previous T-SQL code. Remember to use a CASE expression when it's a matter of returning an expression. However, if you need to execute multiple statements, you can't replace IF with CASE.
+1. Run the code and verify that the results are same as before.
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.
-1. Which should result in the same answer that we had before:
+## Use a loop to write iterative code
 
-   | result |
-   | -------- |
-   | Between 5 and 10 |
+Loops are used to perform logic iteratively, running the same code multiple times - usually until a condition is met. In Transact-SQL, you can implement loops using the WHILE statement.
 
-## Execute loops with WHILE statements
+1. Modify the code to use a WHILE loop to retrieve the price for each of the top 10 selling products (by quantity sold) and determine the price level for each of those products:
 
-1. Right click on the TSQL connection and select **New Query**
-1. In the query pane, type the following T-SQL code:
-
-    ```
-    DECLARE @i int = 1;
+    ```sql
+    -- Variable declarations
+    DECLARE 
+        @productID int,
+        @productPrice money,
+        @averagePrice money,
+        @priceLevel nvarchar(20);
     
-    WHILE @i <= 10
+    DECLARE @priceData TABLE(Rank int, ProductID int, Price money, PriceLevel nvarchar(20));
+    
+    -- Get average product price
+    SELECT @averagePrice = AVG(ListPrice) FROM SalesLT.Product;
+    
+    -- Loop through the top 10 selling product to determine their price levels
+    DECLARE @salesRank int = 1
+    WHILE @salesRank <= 10
     BEGIN
-        PRINT @i;
-        SET @i = @i + 1;
+        -- Get the product ID for the current sales rank
+        WITH RankedProductSales AS(
+            SELECT ProductID, RANK() OVER(ORDER BY SUM(OrderQty) DESC) AS 'Rank'
+            FROM SalesLT.SalesOrderDetail
+            GROUP BY ProductID)
+        SELECT @productID = ProductID FROM RankedProductSales WHERE Rank = @salesRank;
+    
+        -- Get the product price
+        SELECT @productPrice = ListPrice FROM SalesLT.Product WHERE ProductID = @productID;
+    
+        -- Determine the price level
+        SET @priceLevel =
+            CASE
+                WHEN @ProductPrice < @averagePrice THEN
+                    N'Below average'
+                WHEN @ProductPrice > @averagePrice THEN
+                    N'Above average'
+                ELSE
+                    N'Average'
+            END;
+    
+        -- Insert the results into a table variable
+        INSERT INTO @priceData VALUES (@salesRank, @productID, @productPrice, @priceLevel);
+    
+        -- Increment the sales rank by 1 so we can get the next one in the next loop iteration
+        SET @salesRank += 1;
+    
     END;
+    
+    -- Display the results
+    SELECT * FROM @priceData;
     ```
 
-1. Highlight the written T-SQL code and select **&#x23f5;Run**.
-1. This will result in:
+1. Run the code and review the results.
 
-    | Started executing query at Line 1 |
-    | ------------- |
-    | 1 |
-    | 2 |
-    | 3 |
-    | 4 |
-    | 5 |
-    | 6 |
-    | 7 |
-    | 8 |
-    | 9 |
-    | 10 |
-
-## Return to Microsoft Learn
-
-When you've finished the exercise, make sure to end the lab environment before you complete the knowledge check in Microsoft Learn.  
+    > **Note**: This code is designed to demonstrate how to use a loop. While loops can be useful, it can often be more efficient to use set-based operations to achieve similar results.
 
 ## Challenges
 
@@ -218,25 +305,25 @@ Now it's time to try using what you've learnt.
 
 ### Challenge 1: Assignment of values to variables
 
-You are developing a new T-SQL application that needs to temporarily store values drawn from the database, and depending on their values, display the outcome to the user.
+You are developing a new Transact-SQL application that needs to temporarily store values drawn from the database, and depending on their values, display the outcome to the user.
 
 1. Create your variables.
-    - Write a T-SQL statement to declare two variables. The first is an nvarchar with length 30 called salesOrderNumber, and the other is an integer called customerID.
+    - Write a Transact-SQL statement to declare two variables. The first is an nvarchar with length 30 called salesOrderNumber, and the other is an integer called customerID.
 1. Assign a value to the integer variable.
-    - Extend your TSQL code to assign the value 29847 to the customerID.
+    - Extend your Transact-SQL code to assign the value 29847 to the customerID.
 1. Assign a value from the database and display the result.
-    - Extend your TSQL to set the value of the variable salesOrderNumber using the column **salesOrderNUmber** from the SalesOrderHeader table, filter using the **customerID** column and the customerID variable.  Display the result to the user as OrderNumber.
+    - Extend your Transact-SQL to set the value of the variable salesOrderNumber using the column **salesOrderNumber** from the SalesOrderHeader table, filter using the **customerID** column and the customerID variable.  Display the result to the user as OrderNumber.
 
 ### Challenge 2: Aggregate product sales
 
 The sales manager would like a list of the first 10 customers that registered and made purchases online as part of a promotion. You've been asked to build the list.
 
 1. Declare the variables:
-   - Write a T-SQL statement to declare three variables. The first is called **customerID** and will be an Integer with an initial value of 1. The next two variables will be called **fname** and **lname**. Both will be NVARCHAR, give fname a length 20 and lname a length 30.
+   - Write a Transact-SQL statement to declare three variables. The first is called **customerID** and will be an Integer with an initial value of 1. The next two variables will be called **fname** and **lname**. Both will be NVARCHAR, give fname a length 20 and lname a length 30.
 1. Construct a terminating loop:
-   - Extend your T-SQL code and create a WHILE loop that will stop when the customerID variable reaches 10.
+   - Extend your Transact-SQL code and create a WHILE loop that will stop when the customerID variable reaches 10.
 1. Select the customer first name and last name and display:
-   - Extend the T-SQL code, adding a SELECT statement to retrieve the **FirstName** and **LastName** columns and assign them respectively to fname and lname. Combine and PRINT the fname and lname.  Filter using the **customerID** column and the customerID variable.
+   - Extend the Transact-SQL code, adding a SELECT statement to retrieve the **FirstName** and **LastName** columns and assign them respectively to fname and lname. Combine and PRINT the fname and lname.  Filter using the **customerID** column and the customerID variable.
 
 ## Challenge Solutions
 
@@ -244,75 +331,30 @@ This section contains suggested solutions for the challenge queries.
 
 ### Challenge 1
 
-1. Create your variables
-
-    ```
-    DECLARE 
-    @salesOrderNUmber nvarchar(30),
-    @customerID int;
-    ```
-
-1. Assign a value to the integer variable.
-
-    ```
-    DECLARE 
+```sql
+DECLARE 
     @salesOrderNUmber nvarchar(30),
     @customerID int;
 
-    SET @customerID = 29847;
-    ```
+SET @customerID = 29847;
 
-1. Assign a value from the database and display the result
+SET @salesOrderNUmber = (SELECT salesOrderNumber FROM SalesLT.SalesOrderHeader WHERE CustomerID = @customerID)
 
-    ```
-    DECLARE 
-    @salesOrderNUmber nvarchar(30),
-    @customerID int;
-
-    SET @customerID = 29847;
-    
-    SET @salesOrderNUmber = (SELECT salesOrderNumber FROM SalesLT.SalesOrderHeader WHERE CustomerID = @customerID)
-
-    SELECT @salesOrderNUmber as OrderNumber;
-    ```
+SELECT @salesOrderNUmber as OrderNumber;
+```
 
 ### Challenge 2
 
-The sales manager would like a list of the first 10 customers that registered and made purchases online as part of a promotion. You've been asked to build the list.
+```sql
+DECLARE @customerID AS INT = 1;
+DECLARE @fname AS NVARCHAR(20);
+DECLARE @lname AS NVARCHAR(30);
 
-1. Declare the variables:
-
-    ```
-    DECLARE @customerID AS INT = 1;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    ```
-
-1. Construct a terminating loop:
-
-    ```
-    DECLARE @customerID AS INT = 1;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    
-    WHILE @customerID <=10
-    BEGIN
-        SET @customerID += 1;
-    END;
-    ```
-
-1. Select the customer first name and last name and display:
-
-    ```
-    DECLARE @customerID AS INT = 1;
-    DECLARE @fname AS NVARCHAR(20);
-    DECLARE @lname AS NVARCHAR(30);
-    
-    WHILE @customerID <=10
-    BEGIN
-        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-            WHERE CustomerID = @CustomerID;
-        PRINT @fname + N' ' + @lname;
-        SET @customerID += 1;
-    END;
-    ```
+WHILE @customerID <=10
+BEGIN
+    SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
+        WHERE CustomerID = @CustomerID;
+    PRINT @fname + N' ' + @lname;
+    SET @customerID += 1;
+END;
+```

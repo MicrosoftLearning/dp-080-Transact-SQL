@@ -6,49 +6,59 @@ lab:
 
 # Use pivoting and grouping sets
 
-In this lab, you'll use pivoting and grouping sets to query the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use pivoting and grouping sets to query the **Adventureworks** database.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the **Adventureworks** database.
 
 ## Pivot data using the PIVOT operator
 
-1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
+1. Open a query editor for your **Adventureworks** database, and create a new query.
+1. In the query editor, enter the following code to create a view that contains the ID, company name, and main office region for all customers
 
-1. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-
-1. Once you've connected to your database, you can use it. First, let's create a view that the contains the information we want to pivot. Write the following code in the query pane:
-
-    ```
-    CREATE VIEW SalesLT.vCustGroups AS
-    SELECT AddressID, CHOOSE(AddressID % 3 + 1, N'A', N'B', N'C') AS custgroup, CountryRegion
-    FROM SalesLT.Address;
-    ```
-
-1. Select **&#x23f5;Run** to run your query.
-
-1. The code creates a custom view named **SalesLT.CustGroups** from the **SalesLT.Address** table that groups customers based on their address ID. You can query this view to retrieve results from it. Replace the previous code with the code below:
-
-    ```
-    SELECT AddressID, custgroup, CountryRegion
-    FROM SalesLT.vCustGroups;
+    ```sql
+    CREATE VIEW SalesLT.v_CustomerRegions
+    AS
+    SELECT c.CustomerID, c.CompanyName,a. CountryRegion
+    FROM SalesLT.Customer AS c
+    JOIN SalesLT.CustomerAddress AS ca
+        ON c.CustomerID = ca.CustomerID
+    JOIN SalesLT.Address AS a
+        ON ca.AddressID = a.AddressID
+    WHERE ca.AddressType = 'Main Office';
+    GO
     ```
 
-1. Select **&#x23f5;Run**.
+1. Run your code to create the view
+1. You can now query the view to retrieve information about the regions where customers have their main office. For example, run the following query:
 
-1. The query returns a list of records from the view that shows each customer's address ID, their assigned customer group based on their address ID, and their country. Let's pivot the data using the **PIVOT** operator. Replace the code with the code below:
-
-    ```
-    SELECT CountryRegion, p.A, p.B, p.C
-    FROM SalesLT.vCustGroups PIVOT (
-            COUNT(AddressID) FOR custgroup IN (A, B, C)
-    ) AS p;
+    ```sql
+    SELECT CountryRegion, COUNT(CustomerID) AS Customers
+    FROM SalesLT.v_CustomerRegions
+    GROUP BY CountryRegion;
     ```
 
-1. Select **&#x23f5;Run** to run your query.
+    The query returns the number of customers in each region. Howeverm suppose you wanted the data presented as a single row that contains the number of offices in each region, like this:
 
-1. Review the results. The result set shows the total number of customers in each customer group for each country. Notice that the result set has changed its orientation.  Each customer group (A, B, and C) has a dedicated column, alongside the **CountryRegion** column. With this new orientation, it's easier to understand how many customers are in each group, across all countries.
+    | Data | Canada | United Kingdom | United States |
+    |--|--|--|--|
+    | Customer Count | 106 | 38 | 263 |
+
+1. To accomplish this, you can use retrieve the necessary columns (**CustomerID** and **CountryRegion** and a literal "Customer Count" row header) from the view, and then use the PIVOT operator to count the customer IDs in each named region, like this:
+
+    ```sql
+    SELECT *
+    FROM
+        (
+          SELECT 'Customer Count' AS Data, CustomerID, CountryRegion
+          FROM SalesLT.v_CustomerRegions
+        ) AS SourceData
+    PIVOT 
+        (
+          COUNT(CustomerID) FOR CountryRegion IN ([Canada], [United Kingdom], [United States])
+        ) AS PivotedData
+    ```
+
+1. Run the query to view the results.
 
 ## Group data using a grouping subclause
 
@@ -56,35 +66,67 @@ Use subclauses like **GROUPING SETS**, **ROLLUP**, and **CUBE** to group data in
 
 For example, let's see how you can use **ROLLUP** to group a set of data.
 
-1. Create a view that captures sales information based on details from the **SalesLT.Customer** and **SalesLT.SalesOrderHeader** tables. To do this, replace the previous code with the code below, then select **&#x23f5;Run**:
+1. Create a view that includes details of sales of products to customers from multiple tables in the database. To do this, Run the following code:
 
-    ```
-    CREATE VIEW SalesLT.vCustomerSales AS 
-    SELECT Customer.CustomerID, Customer.CompanyName, Customer.SalesPerson, SalesOrderHeader.TotalDue 
-    FROM SalesLT.Customer 
-    INNER JOIN SalesLT.SalesOrderHeader 
-        ON Customer.CustomerID = SalesOrderHeader.CustomerID;
-    ```
-
-1. Your view (**SalesLT.vCustomerSales**) cross-references information from two different tables, to display the **TotalDue** amount for customer companies who have made orders, along with their assigned sales representative. Have a look at the view by replacing the previous code with the code below:
-
-    ```
-    SELECT * FROM SalesLT.vCustomerSales;
-    ```
-
-1. Select **&#x23f5;Run**.
-
-1. Let's use **ROLLUP** to group this data. Replace your previous code with the code below:
-
-    ```
-    SELECT SalesPerson, CompanyName, SUM(TotalDue) AS TotalSales
-    FROM SalesLT.vCustomerSales
-        GROUP BY ROLLUP (SalesPerson, CompanyName);
+    ```sql
+    CREATE VIEW SalesLT.v_ProductSales AS 
+    SELECT c.CustomerID, c.CompanyName, c.SalesPerson,
+           a.City, a.StateProvince, a.CountryRegion,
+           p.Name As Product, pc.Name AS Category,
+           o.SubTotal + o.TaxAmt + o.Freight AS TotalDue 
+    FROM SalesLT.Customer AS c
+    INNER JOIN SalesLT.CustomerAddress AS ca
+        ON c.CustomerID = ca.CustomerID
+    INNER JOIN SalesLT.Address AS a
+        ON ca.AddressID = a.AddressID
+    INNER JOIN SalesLT.SalesOrderHeader AS o
+        ON c.CustomerID = o.CustomerID
+    INNER JOIN SalesLT.SalesOrderDetail AS od
+        ON o.SalesOrderID = od.SalesOrderID
+    INNER JOIN SalesLT.Product AS p
+        ON od.ProductID = p.ProductID
+    INNER JOIN SalesLT.ProductCategory AS pc
+        ON p.ProductCategoryID = pc.ProductCategoryID
+    WHERE ca.AddressType = 'Main Office';
     ```
 
-1. Select **&#x23f5;Run**.
+1. Your view (**SalesLT.v_ProductSales**) enables you to summarize sales by attributes of products (for example category) and attributes of customers (for example, geographical location). Run the query below to view sales totals grouped by geographical region and product category:
 
-1. Review the results. You were able you to retrieve customer sales data, and the use of **ROLLUP** enabled you to group the data in a way that allowed you to get the subtotal for historical sales for each sales person, and a final grand total for all sales at the bottom of the result set.
+    ```sql
+    SELECT CountryRegion, Category, SUM(TotalDue) AS TotalSales
+    FROM SalesLT.v_ProductSales
+    GROUP BY CountryRegion, Category
+    ```
+
+    The results show the sales totals for each combination of region and product category.
+
+1. Now let's use **ROLLUP** to group this data. Replace your previous code with the code below:
+
+    ```sql
+    SELECT CountryRegion, Category, SUM(TotalDue) AS TotalSales
+    FROM SalesLT.v_ProductSales
+    GROUP BY ROLLUP (CountryRegion, Category);
+    ```
+
+1. Run the query and review the results.
+
+    The results contain a row for each region and product category as before. Additionally, after the rows for each region there is a row containing a *NULL* category and the subtotal for all products sold in that region, and at the end of the resultset there's a row with NULL region and category values containing the grand total for sales of all product categories in all regions.
+
+1. Modify the query to use the CUBE operator instead of ROLLUP:
+
+    ```sql
+    SELECT CountryRegion, Category, SUM(TotalDue) AS TotalSales
+    FROM SalesLT.v_ProductSales
+    GROUP BY CUBE (CountryRegion, Category);
+    ```
+
+1. Run the modified query and review the results.
+
+    This time, the results include:
+    - Sales for each category in each region
+    - A subtotal for each product category in all regions (with a *NULL* **CountryRegion**)
+    - A subtotal for each region for all product categories (with a *NULL* **Category**)
+    - A grand total for sales of all product categories in all regions (with *NULL* **CountryRegion** and **Category** values)
 
 ## Challenges
 
@@ -92,25 +134,21 @@ Now it's your turn to pivot and group data.
 
 > **Tip**: Try to determine the appropriate code for yourself. If you get stuck, suggested answers are provided at the end of this lab.
 
-### Challenge 1: Pivot product data
+### Challenge 1: Count product colors by category
 
-The Adventure Works marketing team wants to conduct research into the relationship between colors and products.
-To give them a starting point, you've been asked to provide information on how many products are available across the different color types.
+The Adventure Works marketing team wants to conduct research into the relationship between colors and products. To give them a starting point, you've been asked to provide information on how many products are available across the different color types.
 
-1. For each product category, count how many products are available across all the color types.
-   - Use the **SalesLT.Product** and **SalesLT.ProductCategory** tables to get a list of products, their colors, and product categories.
-   - Pivot your data so that the color types become columns.
+- Use the **SalesLT.Product** and **SalesLT.ProductCategory** tables to get a list of products, their colors, and product categories.
+- Pivot the data so that the colors become columns with a value indicating how many products in each category are that color.
 
-### Challenge 2: Group sales data
+### Challenge 2: Aggregate sales data by product and salesperson
 
-The sales team at Adventure Works wants to write a report on sales data. To help them, your manager has asked if you can group historical sales data for them using all possible combinations of groupings based on the **CompanyName** and **SalesPerson** columns.
+The sales team at Adventure Works wants to compare sales of individual products by salesperson.
+To accomplish this, write a query that groups data from the **SalesLT.v_ProductSales** view you created previously to return:
 
-To help, you're going to write a query to:
-
-1. Retrieve customer sales data, and group the data.
-   - In your query, fetch all data from the **Sales.vCustomerSales** view.
-   - Group the data using **CompanyName** and **SalesPerson**.
-   - Use the appropriate subclause that allows you to creates groupings for all possible combinations of your columns.
+- The sales amount for each product by each salesperson
+- The subtotal of sales for each product by all salespeople
+- The grand total for all products by all saleseople
 
 ## Challenge Solutions
 
@@ -118,31 +156,28 @@ This section contains suggested solutions for the challenge queries.
 
 ### Challenge 1
 
-1. For each product category, count how many products are available across the different color types. Pivot the data so the color types become columns.
-
-    ```
-    SELECT * 
-    FROM 
-    (
-        SELECT P.ProductID, PC.Name, ISNULL(P.Color, 'Uncolored') AS Color 
-        FROM Saleslt.ProductCategory AS PC 
-        JOIN SalesLT.Product AS P 
-            ON PC.ProductCategoryID = P.ProductCategoryID
-    ) AS PPC PIVOT(
-        COUNT(ProductID) FOR Color IN(
-            [Red], [Blue], [Black], [Silver], [Yellow], 
-            [Grey], [Multi], [Uncolored]
-        )
-    ) AS pvt 
-        ORDER BY Name;
-    ```
+```sql
+SELECT *
+FROM 
+(
+  SELECT P.ProductID, PC.Name AS Category, ISNULL(P.Color, 'Uncolored') AS Color 
+  FROM Saleslt.ProductCategory AS PC 
+  JOIN SalesLT.Product AS P 
+      ON PC.ProductCategoryID = P.ProductCategoryID
+) AS ProductColors
+PIVOT
+(
+  COUNT(ProductID) FOR Color IN(
+    [Red], [Blue], [Black], [Silver], [Yellow], 
+    [Grey], [Multi], [Uncolored])
+) AS ColorCountsByCategory 
+ORDER BY Category;
+```
 
 ### Challenge 2
 
-1. Retrieve customer sales data, and group the data.
-
-    ```
-    SELECT CompanyName, SalesPerson, SUM(TotalDue) AS TotalSales
-    FROM SalesLT.vCustomerSales
-        GROUP BY CUBE (CompanyName, SalesPerson);
-    ```
+```sql
+SELECT Product, SalesPerson, SUM(TotalDue) AS TotalSales
+FROM SalesLT.v_ProductSales
+GROUP BY ROLLUP (Product, SalesPerson);
+```

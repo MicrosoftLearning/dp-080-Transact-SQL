@@ -6,30 +6,27 @@ lab:
 
 # Use Subqueries
 
-In this lab, you'll use subqueries to retrieve data from tables in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use subqueries to retrieve data from tables in the **adventureworks** database.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the sample **AdventureWorks** database.
 
 ## Use simple subqueries
 
 A subquery is a query that is nested within another query. The subquery is often referred to as the *inner* query, and the query within which it is nested is referred to as the *outer* query.
 
-1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
-2. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-3. In the query editor, enter the following code:
+1. Open a query editor for your **AdventureWorks** database, and create a new query.
+1. In the query editor, enter the following code:
 
-    ```
+    ```sql
     SELECT MAX(UnitPrice)
     FROM SalesLT.SalesOrderDetail;
     ```
 
-4. Use the **&#x23f5;Run** button to run the query, and and after a few seconds, review the results, which consists of the maximum **UnitPrice** in the **SalesLT.SalesOrderDetail** (the highest price for which any individual product has been sold).
+1. Run the query, and and after a few seconds, review the results, which consists of the maximum **UnitPrice** in the **SalesLT.SalesOrderDetail** (the highest price for which any individual product has been sold).
 
-5. Modify the query as follows to use the query you just ran as a subquery in an outer query that retrieves products with a **ListPrice** higher than the maximum selling price.
+1. Modify the query as follows to use the query you just ran as a subquery in an outer query that retrieves products with a **ListPrice** higher than the maximum selling price.
 
-    ```
+    ```sql
     SELECT Name, ListPrice
     FROM SalesLT.Product
     WHERE ListPrice >
@@ -37,19 +34,19 @@ A subquery is a query that is nested within another query. The subquery is often
          FROM SalesLT.SalesOrderDetail);
     ```
 
-6. Run the query and review the results, which include all products that have a **listPrice** that is higher than the maximum price for which any product has been sold.
-7. Replace the existing query with the following code:
+1. Run the query and review the results, which include all products that have a **listPrice** that is higher than the maximum price for which any product has been sold.
+1. Replace the existing query with the following code:
 
-    ```
+    ```sql
     SELECT DISTINCT ProductID
     FROM SalesLT.SalesOrderDetail
     WHERE OrderQty >= 20;
     ```
 
-8. Run the query and note that it returns the **ProductID** for each product that has been ordered in quantities of 20 or more.
-9. Modify the query as follows to use it in a subquery that finds the names of the products that have been ordered in quantities of 20 or more.
+1. Run the query and note that it returns the **ProductID** for each product that has been ordered in quantities of 20 or more.
+1. Modify the query as follows to use it in a subquery that finds the names of the products that have been ordered in quantities of 20 or more.
 
-    ```
+    ```sql
     SELECT Name FROM SalesLT.Product
     WHERE ProductID IN
         (SELECT DISTINCT ProductID
@@ -57,10 +54,10 @@ A subquery is a query that is nested within another query. The subquery is often
          WHERE OrderQty >= 20);
     ```
 
-10. Run the query and note that it returns the product names.
-11. Replace the query with the following code:
+1. Run the query and note that it returns the product names.
+1. Replace the query with the following code:
 
-    ```
+    ```sql
     SELECT DISTINCT Name
     FROM SalesLT.Product AS p
     JOIN SalesLT.SalesOrderDetail AS o
@@ -68,7 +65,7 @@ A subquery is a query that is nested within another query. The subquery is often
     WHERE OrderQty >= 20;
     ```
 
-12. Run the query and note that it returns the same results. Often you can achieve the same outcome with a subquery or a join, and often a subquery approach can be more easily interpreted by a developer looking at the code than a complex join query because the operation can be broken down into discrete components. In most cases, the performance of equivalent join or subquery operations is similar, but in some cases where existence checks need to be performed, joins perform better.
+1. Run the query and note that it returns the same results. Often you can achieve the same outcome with a subquery or a join, and often a subquery approach can be more easily interpreted by a developer looking at the code than a complex join query because the operation can be broken down into discrete components. In most cases, the performance of equivalent join or subquery operations is similar, but in some cases where existence checks need to be performed, joins perform better.
 
 ## Use correlated subqueries
 
@@ -76,7 +73,7 @@ So far, the subqueries we've used have been independent of the outer query. In s
 
 1. Replace the existing query with the following code:
 
-    ```
+    ```sql
     SELECT od.SalesOrderID, od.ProductID, od.OrderQty
     FROM SalesLT.SalesOrderDetail AS od
     ORDER BY od.ProductID;
@@ -85,7 +82,7 @@ So far, the subqueries we've used have been independent of the outer query. In s
 2. Run the query and note that the results contain the order ID, product ID, and quantity for each sale of a product.
 3. Modify the query as follows to filter it using a subquery in the **WHERE** clause that retrieves the maximum purchased quantity for each product retrieved by the outer query. Note that the inner query references a table alias that is declared in the outer query.
 
-    ```
+    ```sql
     SELECT od.SalesOrderID, od.ProductID, od.OrderQty
     FROM SalesLT.SalesOrderDetail AS od
     WHERE od.OrderQty =
@@ -98,7 +95,7 @@ So far, the subqueries we've used have been independent of the outer query. In s
 4. Run the query and review the results, which should only contain product order records for which the quantity ordered is the maximum ordered for that product.
 5. Replace the query with the following code:
 
-    ```
+    ```sql
     SELECT o.SalesOrderID, o.OrderDate, o.CustomerID
     FROM SalesLT.SalesOrderHeader AS o
     ORDER BY o.SalesOrderID;
@@ -107,7 +104,7 @@ So far, the subqueries we've used have been independent of the outer query. In s
 6. Run the query and note that it returns the order ID, order date, and customer ID for each order that has been placed.
 7. Modify the query as follows to retrieve the company name for each customer using a correlated subquery in the **SELECT** clause.
 
-    ```
+    ```sql
     SELECT o.SalesOrderID, o.OrderDate,
           (SELECT CompanyName
           FROM SalesLT.Customer AS c
@@ -151,7 +148,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve products whose list price is higher than the average unit price:
 
-    ```
+    ```sql
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ListPrice >
@@ -159,10 +156,10 @@ This section contains suggested solutions for the challenge queries.
          FROM SalesLT.SalesOrderDetail)
     ORDER BY ProductID;
     ```
- 
+
 2. Retrieve Products with a list price of 100 or more that have been sold for less than 100:
 
-    ```
+    ```sql
     SELECT ProductID, Name, ListPrice
     FROM SalesLT.Product
     WHERE ProductID IN
@@ -177,7 +174,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve the cost, list price, and average selling price for each product:
 
-    ```
+    ```sql
     SELECT p.ProductID, p.Name, p.StandardCost, p.ListPrice,
         (SELECT AVG(o.UnitPrice)
          FROM SalesLT.SalesOrderDetail AS o
@@ -188,7 +185,7 @@ This section contains suggested solutions for the challenge queries.
 
 2. Retrieve products that have an average selling price that is lower than the cost:
 
-    ```
+    ```sql
     SELECT p.ProductID, p.Name, p.StandardCost, p.ListPrice,
         (SELECT AVG(o.UnitPrice)
         FROM SalesLT.SalesOrderDetail AS o

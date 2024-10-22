@@ -1,268 +1,154 @@
 ---
 lab:
-    title: 'Implement error handling with T-SQL'
+    title: 'Implement error handling with Transact-SQL'
     module: 'Additional exercises'
 ---
 
-# Implement error handling with T-SQL
+# Implement error handling with Transact-SQL
 
-In this lab, you'll use T-SQL statements to test various error handling techniques in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use various Transact-SQL error handling techniques.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
+> **Note**: This exercise assumes you have created the **Adventureworks** database.
 
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+## Observe unhandled error behavior in Transact-SQL
 
-## Write a basic TRY/CATCH construct
+The Adventureworks database contains details of products, including their size. Numeric values indicate the product size in centimeters, and you will use a stored procedure to convert these sizes to inches. 
 
-1. Start Azure Data Studio
-2. From the Servers pane, double-click the **AdventureWorks connection**. A green dot will appear when the connection is successful.
-3. Right click the AdventureWorks connection and select **New Query**. A new query window is displayed with a connection to the AdventureWorks database.
-4. The previous step will open a query screen that is connected to the TSQL database.
-5. In the query pane, type the following T-SQL code:
+1. Open a query editor for your **Adventureworks** database, and create a new query.
+1. In the query pane, type the following code:
 
-```
-SELECT CAST(N'Some text' AS int);
-```
-
-6. Select **&#x23f5;Run** to run the code.
-7. Notice the conversion error:
-
-   | Result|
-   |-------|
-   | Conversion failed when converting the nvarchar value 'Some text' to data type int. |
-
-8. Write a TRY/CATCH construct. Your T-SQL code should look like this:
-
-```
-BEGIN TRY
-    SELECT CAST(N'Some text' AS int);
-END TRY
-BEGIN CATCH
-    PRINT 'Error';
-END CATCH;
-```
-
-9. Run the modified code, and review the response. The results should include no rows, and the **Messages** tab should include the text **Error**.
-
-## Display an error number and an error message
-
-1. Right click the AdventureWorks connection and select New Query
-2. Enter the following T-SQL code:
-
-```
-DECLARE @num varchar(20) = '0';
-
-BEGIN TRY
-    PRINT 5. / CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-
-END CATCH;
-```
-
-3. Select **&#x23f5;Run**. Notice that you didn't get an error because you used the TRY/CATCH construct.
-4. Modify the T-SQL code by adding two PRINT statements. The T-SQL code should look like this:
-
-```
-DECLARE @num varchar(20) = '0';
-
-BEGIN TRY
-    PRINT 5. / CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-    PRINT 'Error Message: ' + ERROR_MESSAGE();
-END CATCH;
-```
-
-5. Run the modified code, and notice that an error is produced, but it's one that you defined.
-
-   | Started executing query at line 1 |
-   | ------ |
-   | Error Number: 8134 |
-   | Error Message: Divide by zero error encountered. |
-
-6. Now change the value of the @num variable to look like this:
-
-```
-DECLARE @num varchar(20) = 'A';
-```
-
-7. Run the modified code. Notice that you get a different error number and message.
-
-   | Started executing query at line 1 |
-   | ------ |
-   | Error Message: Error converting data type varchar to numeric.|
-   | Error Number: 8114 |
-
-8. Change the value of the @num variable to look like this:
-
-```
-DECLARE @num varchar(20) = ' 1000000000';
-```
-
-9. Run the modified code. Notice that you get a different error number and message.
-
-   | Started executing query at line 1 |
-   | ------ |
-   | Error Number: 8115 |
-   | Error Message: Arithmetic overflow error converting varchar to data type numeric. |
-
-## Add conditional logic to a CATCH block
-
-1. Modify the T-SQL code you used previously so it looks like this:
-
-```
-DECLARE @num varchar(20) = 'A';
-
-BEGIN TRY
-    PRINT 5. / CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-    IF ERROR_NUMBER() IN (245, 8114)
+    ```sql
+    CREATE PROCEDURE SalesLT.up_GetProductSizeInInches (@productID int, @SizeInInches int OUTPUT)
+    AS
     BEGIN
-        PRINT 'Handling conversion error...'
-    END
-    ELSE
-    BEGIN 
-        PRINT 'Handling non-conversion error...';
+        SELECT @SizeInInches = CAST(Size AS decimal) * 0.394
+        FROM SalesLT.Product
+        WHERE ProductID = @productID;
     END;
+    ```
 
-    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-    PRINT 'Error Message: ' + ERROR_MESSAGE();
-END CATCH;
-```
+1. Run the code to create the stored procedure.
+1. Create a second query, and run the following code to test your stored procedure using product *680*, which has a numeric size value:
 
-2. Run the modified code.  You'll see that message returned now contains more information:
+    ```sql
+    DECLARE @SizeInInches int;
+    EXECUTE SalesLT.up_GetProductSizeInInches 680, @SizeInInches OUTPUT;
+    SELECT @SizeInInches;
+    ```
 
-   | Started executing query at line 1 |
-   | ------ |
-   | Handling conversion error...|
-   | Error Number: 8114 |
-   | Error Message: Error converting data type varchar to numeric.|
+1. Review the results, noting that the size in inches of product *680* is returned successfully.
+1. Modify the test code to use product *710*, which has the size value "L":
 
-3. Change the value of the @num variable to look like this:
+    ```sql
+    DECLARE @SizeInInches int;
+    EXECUTE SalesLT.up_GetProductSizeInInches 710, @SizeInInches OUTPUT;
+    SELECT @SizeInInches;
+    ```
 
-```
-DECLARE @num varchar(20) = '0';
-```
+1. Run the modified test code and review the output messages. An error occurs, causing query execution to stop.
 
-4. Run the modified code. This produces a different type of error message:
+## Use TRY/CATCH to handle an error
 
-   | Started executing query at line 1 |
-   | ------ |
-   | Handling non-conversion error...|
-   | Error Number: 8134 |
-   | Error Message: Divide by zero error encountered. |
+Transact-SQL supports structured exception handling through the use of a TRY/CATCH block.
 
-## Create a stored procedure to display an error message
+1. Return to the query used to create the stored procedure, and alter the procedure code to add a TRY/CATCH block, like this:
 
-1. Right click the AdventureWorks connection and select New Query
-2. Enter the following T-SQL code:
-
-```
-CREATE PROCEDURE dbo.GetErrorInfo AS
-PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-PRINT 'Error Message: ' + ERROR_MESSAGE();
-PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
-PRINT 'Error State: ' + CAST(ERROR_STATE() AS varchar(10));
-PRINT 'Error Line: ' + CAST(ERROR_LINE() AS varchar(10));
-PRINT 'Error Proc: ' + COALESCE(ERROR_PROCEDURE(), 'Not within procedure');
-```
-
-3. Select **&#x23f5;Run**. to run the code, which creates a stored procedure named **dbo.GetErrorInfo**.
-4. Return to the query that previously resulted in a "Divide by zero" error, and modify it as follows:
-
-```
-DECLARE @num varchar(20) = '0';
-
-BEGIN TRY
-    PRINT 5. / CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-    EXECUTE dbo.GetErrorInfo;
-END CATCH;
-```
-
-5. Run the code.  This will trigger the stored procedure and display:
-
-   | Started executing query at line 1 |
-   | ------ |
-   | Error Number: 8134|
-   | Error Message: Divide by zero error encountered.|
-   | Error Severity: 16|
-   | Error State: 1|
-   | Error Line: 4|
-   | Error Proc: Not within procedure|
-
-## Rethrow the Existing Error Back to a Client
-
-1. Modify the CATCH block of your code to include a THROW command, so that your code looks like this:
-
-```
-DECLARE @num varchar(20) = '0';
-
-BEGIN TRY
-    PRINT 5. / CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-    EXECUTE dbo.GetErrorInfo; 
-    THROW;
-END CATCH;
-```
-
-2. Run the modified code.  Here you'll see that it executes the stored procedure, and then throws the error message again (so a client application can catch and process it).
-
-   | Started executing query at line 1 |
-   | ------ |
-   | Error Number: 8134|
-   | Error Message: Divide by zero error encountered.|
-   | Error Severity: 16|
-   | Error State: 1|
-   | Error Line: 4|
-   | Error Proc: Not within procedure|
-   | Msg 8134, Level 16, State 1, Line 4|
-   | Divide by zero error encountered.|
-
-## Add an Error Handling Routine
-
-1. Modify your code to look like this:
-
-```
-DECLARE @num varchar(20) = 'A';
-
-BEGIN TRY
-    PRINT 5. / CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-    EXECUTE dbo.GetErrorInfo;
-    
-    IF ERROR_NUMBER() = 8134
+    ```sql
+    ALTER PROCEDURE SalesLT.up_GetProductSizeInInches (@productID int, @SizeInInches int OUTPUT)
+    AS
     BEGIN
-        PRINT 'Handling devision by zero...';
+        BEGIN TRY
+            SELECT @SizeInInches = CAST(Size AS decimal) * 0.394
+            FROM SalesLT.Product
+            WHERE ProductID = @productID;
+        END TRY
+        BEGIN CATCH
+            PRINT 'An error occurred';
+            SET @sizeInInches = 0;
+        END CATCH
     END
-    ELSE 
+    ```
+
+1. Run the code to alter the stored procedure.
+1. Return to the query used to test the stored procedure and re-run the code that attempts to get the size for product *710*:
+
+    ```sql
+    DECLARE @SizeInInches int;
+    EXECUTE SalesLT.up_GetProductSizeInInches 710, @SizeInInches OUTPUT;
+    SELECT @SizeInInches;
+    ```
+
+1. Review the results, which show the size as *0*. Then review the output messages and note that they include a notification that an error occurred. The code in the CATCH block has handled the error and enabled the stored procedure to fail gracefully.
+
+## Capture error details
+
+The message returned in the CATCH block indicates that an error occurred, but provides no details that would help troubleshoot the problem. You can use built-in functions to get more information about the current error and use those to provide more details.
+
+1. Return to the query used to create the stored procedure, and alter the procedure code to print the error number and message, like this:
+
+    ```sql
+    ALTER PROCEDURE SalesLT.up_GetProductSizeInInches (@productID int, @SizeInInches int OUTPUT)
+    AS
     BEGIN
-        PRINT 'Throwing original error';
-        THROW;
-    END;
-    
-END CATCH;
-```
+        BEGIN TRY
+            SELECT @SizeInInches = CAST(Size AS decimal) * 0.394
+            FROM SalesLT.Product
+            WHERE ProductID = @productID;
+        END TRY
+        BEGIN CATCH
+            PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+            PRINT 'Error Message: ' + ERROR_MESSAGE();
+            SET @sizeInInches = 0;
+        END CATCH
+    END
+    ```
 
-2. Run the modified code  As you'll see, it executes the stored procedure to display the error, identifies that it isn't error number 8134, and throws the error again.
+1. Run the code to alter the stored procedure.
+1. Return to the query used to test the stored procedure and re-run the code that attempts to get the size for product *710*:
 
-   | Started executing query at line 1 |
-   | ------ |
-   | Error Number: 8114|
-   | Error Message: Error converting data type varchar to numeric.|
-   | Error Severity: 16|
-   | Error State: 5|
-   | Error Line: 5|
-   | Error Proc: Not within procedure|
-   | Throwing original error|
-   | Msg 8114, Level 16, State 5, Line 5|
-   | Error converting data type varchar to numeric.|
+    ```sql
+    DECLARE @SizeInInches int;
+    EXECUTE SalesLT.up_GetProductSizeInInches 710, @SizeInInches OUTPUT;
+    SELECT @SizeInInches;
+    ```
+
+1. Review the results, which again show the size as *0*. Then review the output messages and note that they include the error number and message.
+
+    > **Tip**: In this example, the error details are just printed in the query message output. In a production solution, you might write the error details to a log table to assist in troubleshooting.
+
+## Throw the error to the client application
+
+So far, you've used a TRY/CATCH block to handle an error gracefully. The client application that calls the stored procedure does not encounter an exception. In multi-tier application designs, a common practice is to handle exceptions in the data tier to log details for troubleshooting purposes and ensure the integrity of the database, but then propagate the error to the calling application tier, which includes its own exception handling logic. 
+
+1. Return to the query used to create the stored procedure, and alter the procedure code to print the error number and message, like this:
+
+    ```sql
+    ALTER PROCEDURE SalesLT.up_GetProductSizeInInches (@productID int, @SizeInInches int OUTPUT)
+    AS
+    BEGIN
+        BEGIN TRY
+            SELECT @SizeInInches = CAST(Size AS decimal) * 0.394
+            FROM SalesLT.Product
+            WHERE ProductID = @productID;
+        END TRY
+        BEGIN CATCH
+            PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+            PRINT 'Error Message: ' + ERROR_MESSAGE();
+            THROW;
+        END CATCH
+    END
+    ```
+
+1. Run the code to alter the stored procedure.
+1. Return to the query used to test the stored procedure and re-run the code that attempts to get the size for product *710*:
+
+    ```sql
+    DECLARE @SizeInInches int;
+    EXECUTE SalesLT.up_GetProductSizeInInches 710, @SizeInInches OUTPUT;
+    SELECT @SizeInInches;
+    ```
+
+1. Review the output, which indicates that an error caused the query to fail. Note that the code in the CATCH block intercepted the error and printed details before re-throwing it to the calling client application (in this case, the query editor).
 
 ## Challenges
 
@@ -270,49 +156,47 @@ Now it's time to try using what you've learned.
 
 > **Tip**: Try to determine the appropriate solutions for yourself. If you get stuck, suggested answers are provided at the end of this lab.
 
-### Challenge 1: Catch errors and display only valid records
+### Challenge 1: Handle errors gracefully
 
-The marketing manager is using the following T-SQL query, but they are getting unexpected results. They have asked you to make the code more resilient, to stop it crashing and to not display duplicates when there is no data.
+Adventure Works has decided to calculate shipping cost for products based on their price and weight. A developer has created the following stored procedure to calculate the shipping cost for a specific product:
 
-```
-DECLARE @customerID AS INT = 30110;
-DECLARE @fname AS NVARCHAR(20);
-DECLARE @lname AS NVARCHAR(30);
-DECLARE @maxReturns AS INT = 1; 
-
-WHILE @maxReturns <= 10
+```sql
+CREATE PROCEDURE SalesLT.up_GetShippingPrice (@productID int, @ShippingPrice money OUTPUT)
+AS
 BEGIN
-    SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-        WHERE CustomerID = @CustomerID;
-    PRINT @fname + N' ' + @lname;
-    SET @maxReturns += 1;
-    SET @CustomerID += 1;
-END;
+    DECLARE @price money, @weight decimal;
+
+    SELECT @price = ISNULL(ListPrice, 0.00), @weight = ISNULL(Weight, 0.00)
+    FROM SalesLT.Product
+    WHERE ProductID = @productID;
+
+    SET @ShippingPrice = @price/@weight;
+END
 ```
 
-1. Catch the error
-    - Add a TRY .. CATCH block around the SELECT query.
-2. Warn the user that an error has occurred
-    - Extend your TSQL code to display a warning to the user that their is an error.
-3. Only display valid customer records
-    - Extend the T-SQL using the @@ROWCOUNT > 0 check to only display a result if the customer ID exists.
+When testing the stored procedure with the following code, the developer has found that the procedure works successfully:
 
-### Challenge 2: Create a simple error display procedure
-
-Error messages and error handling are essential for good code. Your manager has asked you to develop a common error display procedure.  Use this sample code as your base.
-
-```
-DECLARE @num varchar(20) = 'Challenge 2';
-
-PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
+```sql
+DECLARE @productID int = 680;
+DECLARE @shippingPrice money;
+EXECUTE SalesLT.up_GetShippingPrice @productID, @shippingPrice OUTPUT
+SELECT @shippingPrice;
 ```
 
-1. Catch the error
-   - Add a TRY...CATCH around the PRINT statement.
-2. Create a stored procedure
-   - Create a stored procedure called dbo.DisplayErrorDetails.  It should display a title and the value for **ERROR_NUMBER**, **ERROR_MESSAGE** and **ERROR_SEVERITY**.
-3. Display the error information
-   - Use the stored procedure to display the error information when an error occurs.
+However, when using a different product ID, the stored procedure fails with an error:
+
+```sql
+DECLARE @productID int = 710;
+DECLARE @shippingPrice money;
+EXECUTE SalesLT.up_GetShippingPrice @productID, @shippingPrice OUTPUT
+SELECT @shippingPrice;
+```
+
+You must modify the stored procedure, without changing the logic used to calculate the shipping price, so that if an error occurs, it is handled gracefully; returning a shipping price of 0.00 and including the error number and message in the query output message.
+
+### Challenge 2: Propagate an error to the calling client application
+
+Having written code to handle errors in the shipping price stored procedure, you must now modify it to handle the error and return its number and message in the output as before, but also cause the error to be propagated back to the client application that called it to be handled there.
 
 ## Challenge Solutions
 
@@ -320,118 +204,44 @@ This section contains suggested solutions for the challenge queries.
 
 ### Challenge 1
 
-1. Catch the error
-
-```
-DECLARE @customerID AS INT = 30110;
-DECLARE @fname AS NVARCHAR(20);
-DECLARE @lname AS NVARCHAR(30);
-DECLARE @maxReturns AS INT = 1;
-
-WHILE @maxReturns <= 10
+```sql
+ALTER PROCEDURE SalesLT.up_GetShippingPrice (@productID int, @ShippingPrice money OUTPUT)
+AS
 BEGIN
-    BEGIN TRY
-        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-            WHERE CustomerID = @CustomerID;
+    DECLARE @price money, @weight decimal;
 
-        PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
+    BEGIN TRY
+        SELECT @price = ISNULL(ListPrice, 0.00), @weight = ISNULL(Weight, 0.00)
+        FROM SalesLT.Product
+        WHERE ProductID = @productID;
+        SET @ShippingPrice = @price/@weight;
     END TRY
     BEGIN CATCH
-
-    END CATCH;
-
-    SET @maxReturns += 1;
-    SET @CustomerID += 1;
-END;
-```
-
-2. Warn the user that an error has occurred
-
-```
-DECLARE @customerID AS INT = 30110;
-DECLARE @fname AS NVARCHAR(20);
-DECLARE @lname AS NVARCHAR(30);
-DECLARE @maxReturns AS INT = 1;
-
-WHILE @maxReturns <= 10
-BEGIN
-    BEGIN TRY
-        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-            WHERE CustomerID = @CustomerID;
-
-            PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
-    END TRY
-    BEGIN CATCH
-        PRINT 'Unable to run query'
-    END CATCH;
-
-    SET @maxReturns += 1;
-    SET @CustomerID += 1;
-END;
-```
-
-3. Only display valid customer records
-
-```
-DECLARE @customerID AS INT = 30110;
-DECLARE @fname AS NVARCHAR(20);
-DECLARE @lname AS NVARCHAR(30);
-DECLARE @maxReturns AS INT = 1;
-
-WHILE @maxReturns <= 10
-BEGIN
-    BEGIN TRY
-        SELECT @fname = FirstName, @lname = LastName FROM SalesLT.Customer
-            WHERE CustomerID = @CustomerID;
-
-        IF @@ROWCOUNT > 0 
-        BEGIN
-            PRINT CAST(@customerID as NVARCHAR(20)) + N' ' + @fname + N' ' + @lname;
-        END
-    END TRY
-    BEGIN CATCH
-        PRINT 'Unable to run query'
+        PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        SET @ShippingPrice = 0.00;
     END CATCH
-
-    SET @maxReturns += 1;
-    SET @CustomerID += 1;
-END;
+END
 ```
 
 ### Challenge 2
 
-1. Catch the error
+```sql
+ALTER PROCEDURE SalesLT.up_GetShippingPrice (@productID int, @ShippingPrice money OUTPUT)
+AS
+BEGIN
+    DECLARE @price money, @weight decimal;
 
-```
-DECLARE @num varchar(20) = 'Challenge 2';
-
-BEGIN TRY
-    PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-
-END CATCH;
-```
-
-2. Create a stored procedure
-
-```
-CREATE PROCEDURE dbo.DisplayErrorDetails AS
-PRINT 'ERROR INFORMATION';
-PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
-PRINT 'Error Message: ' + ERROR_MESSAGE();
-PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS varchar(10));
-```
-
-3. Display the error information
-
-```
-DECLARE @num varchar(20) = 'Challenge 2';
-
-BEGIN TRY
-    PRINT 'Casting: ' + CAST(@num AS numeric(10,4));
-END TRY
-BEGIN CATCH
-    EXECUTE dbo.DisplayErrorDetails;
-END CATCH;
+    BEGIN TRY
+        SELECT @price = ISNULL(ListPrice, 0.00), @weight = ISNULL(Weight, 0.00)
+        FROM SalesLT.Product
+        WHERE ProductID = @productID;
+        SET @ShippingPrice = @price/@weight;
+    END TRY
+    BEGIN CATCH
+        PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS varchar(10));
+        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        THROW;
+    END CATCH
+END
 ```

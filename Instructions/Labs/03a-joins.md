@@ -6,32 +6,29 @@ lab:
 
 # Query Multiple Tables with Joins
 
-In this lab, you'll use the Transact-SQL **SELECT** statement to query multiple tables in the **adventureworks** database. For your reference, the following diagram shows the tables in the database (you may need to resize the pane to see them clearly).
+In this exercise, you'll use the Transact-SQL **SELECT** statement to query multiple tables in the **Adventureworks** database.
 
-![An entity relationship diagram of the adventureworks database](./images/adventureworks-erd.png)
-
-> **Note**: If you're familiar with the standard **AdventureWorks** sample database, you may notice that in this lab we are using a simplified version that makes it easier to focus on learning Transact-SQL syntax.
+> **Note**: This exercise assumes you have created the sample **AdventureWorks** database.
 
 ## Use inner joins
 
 An inner join is used to find related data in two tables. For example, suppose you need to retrieve data about a product and its category from the **SalesLT.Product** and **SalesLT.ProductCategory** tables. You can find the relevant product category record for a product based on its **ProductCategoryID** field; which is a foreign-key in the product table that matches a primary key in the product category table.
 
-1. Start Azure Data Studio, and create a new query (you can do this from the **File** menu or on the *welcome* page).
-2. In the new **SQLQuery_...** pane, use the **Connect** button to connect the query to the **AdventureWorks** saved connection.
-3. In the query editor, enter the following code:
+1. Open a query editor for your **AdventureWorks** database, and create a new query.
+1. In the query editor, enter the following code:
 
-    ```
+    ```sql
     SELECT SalesLT.Product.Name AS ProductName, SalesLT.ProductCategory.Name AS Category
     FROM SalesLT.Product
     INNER JOIN SalesLT.ProductCategory
     ON SalesLT.Product.ProductCategoryID = SalesLT.ProductCategory.ProductCategoryID;
     ```
 
-4. Use the **&#x23f5;Run** button to run the query, and after a few seconds, review the results, which include the **ProductName** from the products table and the corresponding **Category** from the product category table. Because the query uses an **INNER** join, any products that do not have corresponding categories, and any categories that contain no products are omitted from the results.
+1. Run the query, and after a few seconds, review the results, which include the **ProductName** from the products table and the corresponding **Category** from the product category table. Because the query uses an **INNER** join, any products that do not have corresponding categories, and any categories that contain no products are omitted from the results.
 
-5. Modify the query as follows to remove the **INNER** keyword, and re-run it.
+1. Modify the query as follows to remove the **INNER** keyword, and re-run it.
 
-    ```
+    ```sql
     SELECT SalesLT.Product.Name AS ProductName, SalesLT.ProductCategory.Name AS Category
     FROM SalesLT.Product
     JOIN SalesLT.ProductCategory
@@ -40,21 +37,21 @@ An inner join is used to find related data in two tables. For example, suppose y
 
     The results should be the same as before. **INNER** joins are the default kind of join.
 
-6. Modify the query to assign aliases to the tables in the **JOIN** clause, as shown here:
+1. Modify the query to assign aliases to the tables in the **JOIN** clause, as shown here:
 
-    ```
+    ```sql
     SELECT p.Name AS ProductName, c.Name AS Category
     FROM SalesLT.Product AS p
     JOIN SalesLT.ProductCategory AS c
         ON p.ProductCategoryID = c.ProductCategoryID;
     ```
 
-7. Run the modified query and confirm that it returns the same results as before. The use of table aliases can greatly simplify a query, particularly when multiple joins must be used.
+1. Run the modified query and confirm that it returns the same results as before. The use of table aliases can greatly simplify a query, particularly when multiple joins must be used.
 
-8. Replace the query with the following code, which retrieves sales order data from the **SalesLT.SalesOrderHeader**, **SalesLT.SalesOrderDetail**, and **SalesLT.Product** tables:
+1. Replace the query with the following code, which retrieves sales order data from the **SalesLT.SalesOrderHeader**, **SalesLT.SalesOrderDetail**, and **SalesLT.Product** tables:
 
-    ```
-    SELECT oh.OrderDate, oh.SalesOrderNumber, p.Name AS ProductName, od.OrderQty, od.UnitPrice, od.LineTotal
+    ```sql
+    SELECT oh.OrderDate, oh.PurchaseOrderNumber, p.Name AS ProductName, od.OrderQty, od.UnitPrice
     FROM SalesLT.SalesOrderHeader AS oh
     JOIN SalesLT.SalesOrderDetail AS od
         ON od.SalesOrderID = oh.SalesOrderID
@@ -63,7 +60,7 @@ An inner join is used to find related data in two tables. For example, suppose y
     ORDER BY oh.OrderDate, oh.SalesOrderID, od.SalesOrderDetailID;
     ```
 
-9. Run the modified query and note that it returns data from all three tables.
+1. Run the modified query and note that it returns data from all three tables.
 
 ## Use outer joins
 
@@ -71,8 +68,8 @@ An outer join is used to retrieve all rows from one table, and any corresponding
 
 1. Replace the existing query with the following code:
 
-    ```
-    SELECT c.FirstName, c.LastName, oh.SalesOrderNumber
+    ```sql
+    SELECT c.FirstName, c.LastName, oh.PurchaseOrderNumber
     FROM SalesLT.Customer AS c
     LEFT OUTER JOIN SalesLT.SalesOrderHeader AS oh
         ON c.CustomerID = oh.CustomerID
@@ -85,8 +82,8 @@ An outer join is used to retrieve all rows from one table, and any corresponding
 
 3. Modify the query to remove the **OUTER** keyword, as shown here:
 
-    ```
-    SELECT c.FirstName, c.LastName, oh.SalesOrderNumber
+    ```sql
+    SELECT c.FirstName, c.LastName, oh.PurchaseOrderNumber
     FROM SalesLT.Customer AS c
     LEFT JOIN SalesLT.SalesOrderHeader AS oh
         ON c.CustomerID = oh.CustomerID
@@ -96,8 +93,8 @@ An outer join is used to retrieve all rows from one table, and any corresponding
 4. Run the query and review the results, which should be the same as before. Using the **LEFT** (or **RIGHT**) keyword automatically identifies the join as an **OUTER** join.
 5. Modify the query as shown below to take advantage of the fact that it identifies non-matching rows and return only the customers who have not placed any orders.
 
-    ```
-    SELECT c.FirstName, c.LastName, oh.SalesOrderNumber
+    ```sql
+    SELECT c.FirstName, c.LastName, oh.PurchaseOrderNumber
     FROM SalesLT.Customer AS c
     LEFT JOIN SalesLT.SalesOrderHeader AS oh
         ON c.CustomerID = oh.CustomerID
@@ -108,8 +105,8 @@ An outer join is used to retrieve all rows from one table, and any corresponding
 6. Run the query and review the results, which contain data for customers who have not placed any orders.
 7. Replace the query with the following one, which uses outer joins to retrieve data from three tables.
 
-    ```
-    SELECT p.Name As ProductName, oh.SalesOrderNumber
+    ```sql
+    SELECT p.Name As ProductName, oh.PurchaseOrderNumber
     FROM SalesLT.Product AS p
     LEFT JOIN SalesLT.SalesOrderDetail AS od
         ON p.ProductID = od.ProductID
@@ -121,8 +118,8 @@ An outer join is used to retrieve all rows from one table, and any corresponding
 8. Run the query and note that the results include all products, with order numbers for any that have been purchased. This required a sequence of joins from **Product** to **SalesOrderDetail** to **SalesOrderHeader**. Note that when you join multiple tables like this, after an outer join has been specified in the join sequence, all subsequent outer joins must be of the same direction  (**LEFT** or **RIGHT**).
 9. Modify the query as shown below to add an inner join to return category information. When mixing inner and outer joins, it can be helpful to be explicit about the join types by using the **INNER** and **OUTER** keywords.
 
-    ```
-    SELECT p.Name As ProductName, c.Name AS Category, oh.SalesOrderNumber
+    ```sql
+    SELECT p.Name As ProductName, c.Name AS Category, oh.PurchaseOrderNumber
     FROM SalesLT.Product AS p
     LEFT OUTER JOIN SalesLT.SalesOrderDetail AS od
         ON p.ProductID = od.ProductID
@@ -141,7 +138,7 @@ A *cross* join matches all possible combinations of rows from the tables being j
 
 1. Replace the existing query with the following code:
 
-    ```
+    ```sql
     SELECT p.Name, c.FirstName, c.LastName, c.EmailAddress
     FROM SalesLT.Product AS p
     CROSS JOIN SalesLT.Customer AS c;
@@ -155,7 +152,7 @@ A *self* join isn't actually a specific kind of join, but it's a technique used 
 
 1. Replace the existing query with the following code, which includes a self join between two instances of the **SalesLT.ProductCategory** table (with aliases **cat** and **pcat**):
 
-    ```
+    ```sql
     SELECT pcat.Name AS ParentCategory, cat.Name AS SubCategory
     FROM SalesLT.ProductCategory AS cat
     JOIN SalesLT.ProductCategory pcat
@@ -176,7 +173,7 @@ Now that you've seen some examples of joins, it's your turn to try retrieving da
 Adventure Works Cycles sells directly to retailers, who must be invoiced for their orders. You have been tasked with writing a query to generate a list of invoices to be sent to customers.
 
 1. Retrieve customer orders
-    - As an initial step towards generating the invoice report, write a query that returns the company name from the **SalesLT.Customer** table, and the sales order ID and total due from the **SalesLT.SalesOrderHeader** table.
+    - As an initial step towards generating the invoice report, write a query that returns the company name from the **SalesLT.Customer** table, and the purchase order number and total due (calculated as the sub-total + tax + freight) from the **SalesLT.SalesOrderHeader** table.
 2. Retrieve customer orders with addresses
     - Extend your customer orders query to include the *Main Office* address for each customer, including the full street address, city, state or province, postal code, and country or region
     - **Tip**: Note that each customer can have multiple addressees in the **SalesLT.Address** table, so the database developer has created the **SalesLT.CustomerAddress** table to enable a many-to-many relationship between customers and addresses. Your query will need to include both of these tables, and should filter the results so that only *Main Office* addresses are included.
@@ -186,7 +183,7 @@ Adventure Works Cycles sells directly to retailers, who must be invoiced for the
 As you continue to work with the Adventure Works customer and sales data, you must create queries for reports that have been requested by the sales team.
 
 1. Retrieve a list of all customers and their orders
-    - The sales manager wants a list of all customer companies and their contacts (first name and last name), showing the sales order ID and total due for each order they have placed. Customers who have not placed any orders should be included at the bottom of the list with NULL values for the order ID and total due.
+    - The sales manager wants a list of all customer companies and their contacts (first name and last name), showing the purchase order number and total due for each order they have placed. Customers who have not placed any orders should be included at the bottom of the list with NULL values for the purchase order number and total due.
 2. Retrieve a list of customers with no address
     - A sales employee has noticed that Adventure Works does not have address information for all customers. You must write a query that returns a list of customer IDs, company names, contact names (first name and last name), and phone numbers for customers with no address stored in the database.
 
@@ -205,16 +202,18 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve customer orders:
 
-    ```
-    SELECT c.CompanyName, oh.SalesOrderID, oh.TotalDue
+    ```sql
+    SELECT c.CompanyName,
+           oh.PurchaseOrderNumber,
+           oh.SubTotal + oh.TaxAmt + oh.Freight As TotalDue
     FROM SalesLT.Customer AS c
     JOIN SalesLT.SalesOrderHeader AS oh
         ON oh.CustomerID = c.CustomerID;
-    ```
+        ```
  
 2. Retrieve customer orders with addresses:
 
-    ```
+    ```sql
     SELECT c.CompanyName,
            a.AddressLine1,
            ISNULL(a.AddressLine2, '') AS AddressLine2,
@@ -222,8 +221,8 @@ This section contains suggested solutions for the challenge queries.
            a.StateProvince,
            a.PostalCode,
            a.CountryRegion,
-           oh.SalesOrderID,
-           oh.TotalDue
+           oh.PurchaseOrderNumber,
+           oh.SubTotal + oh.TaxAmt + oh.Freight As TotalDue
     FROM SalesLT.Customer AS c
     JOIN SalesLT.SalesOrderHeader AS oh
         ON oh.CustomerID = c.CustomerID
@@ -234,23 +233,23 @@ This section contains suggested solutions for the challenge queries.
     WHERE ca.AddressType = 'Main Office';
     ```
 
-
 ### Challenge 2
 
 1. Retrieve a list of all customers and their orders:
 
-    ```
+    ```sql
     SELECT c.CompanyName, c.FirstName, c.LastName,
-           oh.SalesOrderID, oh.TotalDue
+           oh.PurchaseOrderNumber,
+           oh.SubTotal + oh.TaxAmt + oh.Freight As TotalDue
     FROM SalesLT.Customer AS c
     LEFT JOIN SalesLT.SalesOrderHeader AS oh
         ON c.CustomerID = oh.CustomerID
-    ORDER BY oh.SalesOrderID DESC;
+    ORDER BY oh.PurchaseOrderNumber DESC;
     ```
 
 2. Retrieve a list of customers with no address:
 
-    ```
+    ```sql
     SELECT c.CompanyName, c.FirstName, c.LastName, c.Phone
     FROM SalesLT.Customer AS c
     LEFT JOIN SalesLT.CustomerAddress AS ca
@@ -262,7 +261,7 @@ This section contains suggested solutions for the challenge queries.
 
 1. Retrieve product information by category:
 
-    ```
+    ```sql
     SELECT pcat.Name AS ParentCategory, cat.Name AS SubCategory, prd.Name AS ProductName
     FROM SalesLT.ProductCategory pcat
     JOIN SalesLT.ProductCategory AS cat

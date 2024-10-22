@@ -12,7 +12,12 @@ These exercises and demos support Microsoft course [DP-080: Querying with Transa
 - [Write advanced Transact-SQl queries](https://docs.microsoft.com/training/paths/write-advanced-transact-sql-queries/)
 - [Program with Transact-SQL](https://docs.microsoft.com/training/paths/program-transact-sql/)
 
-Links to each of the lab exercises and demos are listed below.
+You can complete the exercises using:
+
+-  A local installation of SQL Server
+- Azure SQL Database
+
+Setup instructions are provided for both of these options.
 
 {% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
 | Module | Lab |
@@ -20,7 +25,7 @@ Links to each of the lab exercises and demos are listed below.
 {% for activity in labs  %}| {{ activity.lab.module }} | [{{ activity.lab.title }}{% if activity.lab.type %} - {{ activity.lab.type }}{% endif %}]({{ site.github.url }}{{ activity.url }}) |
 {% endfor %}
 
-## Demos
+### Instructor demo's
 
 {% assign demos = site.pages | where_exp:"page", "page.url contains '/Instructions/Demos'" %}
 | Module | Demo |
