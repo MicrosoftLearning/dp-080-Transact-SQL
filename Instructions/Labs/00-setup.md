@@ -6,13 +6,11 @@ lab:
 
 # Lab Environment Setup
 
-The labs in this repo are designed to be performed in a hosted environment, provided on Microsoft Learn or in official course deliveries by Microsoft and partners.
-
-> **Note**: The following information is provided to help you understand what's installed in the hosted environment, and to provide a guide for what you need to install if you want to try the labs on your own computer. However, please note that these guidelines are provided as-is with no warranty. Microsoft cannot provide support for your own lab environment.
+> **Note**: The following information provides a guide for what you need to install if you want to try the labs using SQL Server on your own computer. However, please note that these guidelines are provided as-is with no warranty. Due to the variability of operating system configuration and additionally installed software, Microsoft cannot provide support for your own lab environment.
 
 ## Base Operating System
 
-The hosted lab environment provided for this course is based on Microsoft Windows 11 with the latest updates applied as of April 8th 2024.
+The setup for these labs has been tested on Microsoft Windows 11 with the latest updates applied as of April 8th 2024.
 
 The required software for the labs can also be installed on Linux and Apple Mac computers, but this configuration has not been tested.
 
