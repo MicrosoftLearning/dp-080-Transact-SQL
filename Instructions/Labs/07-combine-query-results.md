@@ -134,19 +134,7 @@ Now you will write a table-valued function to return the product category and qu
 
 1. Run the query and view the results.
 
-## Challenges
-
-Now it's your turn to use set operators.
-
-> **Tip**: Try to determine the appropriate code for yourself. If you get stuck, suggested answers are provided at the end of this lab.
-
-### Challenge 1: Find non-managerial salespeople
-
-Each customer has an allocated employee as a salesperson, indicated by the **SalesPerson** field in the **SalesLT.Customer** table. Additionally, some employees are managers, indicated by their employee ID being listed as the **ManagerID** for other employees in the **SalesLT.Employee** table.
-
-You must write a query that returns the ID and name for each employee who is assigned as a salesperson for a customer but who is <u>not</u> a manager.
-
-### Challenge 2: Return addresses for each customer
+## Challenge
 
 Use the following code to create a table-valued function that retrieves address details for a given customer:
 
@@ -163,39 +151,11 @@ RETURN
 
 Now write a query that returns every customer ID and company name along with all of the address fields retrieved by the function.
 
-## Challenge Solutions
+> **Tip**: Try to determine the appropriate code for yourself. If you get stuck, a suggested answer is provided below.
 
-This section contains suggested solutions for the challenge queries.
+## Challenge Solution
 
-### Challenge 1
-
-```sql
-SELECT EmployeeID, EmployeeName
-FROM SalesLT.Employee
-WHERE EmployeeName IN (SELECT SalesPerson FROM SalesLT.Customer)
-EXCEPT
-SELECT EmployeeID, EmployeeName
-FROM SalesLT.Employee
-WHERE EmployeeID IN (SELECT ManagerID FROM SalesLT.Employee)
-ORDER BY EmployeeID;
-```
-
-*or*
-
-```sql
-SELECT DISTINCT e.EmployeeID, e.EmployeeName
-FROM SalesLT.Employee as e
-JOIN SalesLT.Customer as c
-    ON e.EmployeeName = c.SalesPerson
-EXCEPT
-SELECT DISTINCT m.EmployeeID, m.EmployeeName
-FROM SalesLT.Employee AS e
-JOIN SalesLT.Employee AS m
-    ON e.ManagerID = m.EmployeeID
-ORDER BY EmployeeID;
-```
-
-### Challenge 2
+This section contains a suggested solution for the challenge query.
 
 ```sql
 SELECT c.CustomerID, c.CompanyName, a.*
