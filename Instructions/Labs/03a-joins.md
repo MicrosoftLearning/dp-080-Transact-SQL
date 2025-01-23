@@ -209,7 +209,7 @@ This section contains suggested solutions for the challenge queries.
     FROM SalesLT.Customer AS c
     JOIN SalesLT.SalesOrderHeader AS oh
         ON oh.CustomerID = c.CustomerID;
-        ```
+    ```
  
 2. Retrieve customer orders with addresses:
 
