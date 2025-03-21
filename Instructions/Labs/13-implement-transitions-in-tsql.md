@@ -12,7 +12,7 @@ In this exercise, you'll use transactions to enforce data integrity in the **Adv
 
 ## Insert data without transactions
 
-Consider a website that needs to store customer information. As part of the customer registration, data about a customer and their address need to stored. A customer without an address will cause problems for the shipping when orders are made.
+Consider a website that needs to store customer information. As part of the customer registration, data about a customer and their address need to be stored. A customer without an address will cause problems for the shipping when orders are made.
 
 In this exercise you'll use a transaction to ensure that when a row is inserted into the **Customer** and **Address** tables, a row is also added to the **CustomerAddress** table to create a link between the customer record and the address record. If one insert fails, then all should fail.
 
