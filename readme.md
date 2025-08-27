@@ -1,4 +1,4 @@
-# DP-080: Querying Data with Microsoft Transact-SQL
+# DP-080: Query and modify data with Transact-SQL
 
 - **Are you a MCT?** - Have a look at our [GitHub User Guide for MCTs](https://microsoftlearning.github.io/MCT-User-Guide/)
 - **Need to manually build the lab instructions?** - Instructions are available in the [MicrosoftLearning/Docker-Build](https://github.com/MicrosoftLearning/Docker-Build) repository
