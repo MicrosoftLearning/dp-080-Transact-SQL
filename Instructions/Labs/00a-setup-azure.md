@@ -1,7 +1,16 @@
 ---
 lab:
-    title: 'Lab Environment Setup - Azure SQL Database'
-    module: 'Setup'
+  title: Lab Environment Setup - Azure SQL Database
+  module: Setup
+  description: You can complete the Transact-SQL exercises in a sample database in
+    Microsoft Azure SQL Database. Use the instructions in this page to prepare a suitable
+    Azure SQL Database environment.
+  duration: 32 minutes
+  level: 400
+  islab: true
+  primarytopics:
+  - Azure
+  - Azure SQL Database
 ---
 
 # Lab Environment Setup
