@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Implement transactions with Transact SQL'
-    module: 'Additional exercises'
+  title: Implement transactions with Transact SQL
+  module: Additional exercises
+  description: In this exercise, you'll use transactions to enforce data integrity
+    in the **AdventureWorks** database.
+  duration: 72 minutes
+  level: 100
+  islab: true
 ---
 
 # Implement transactions with Transact SQL
