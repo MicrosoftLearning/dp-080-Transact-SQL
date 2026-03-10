@@ -1,8 +1,14 @@
 ---
 lab:
-    title: 'Use window functions'
-    module: 'Additional exercises'
+  title: Use window functions
+  module: Additional exercises
+  description: In this exercise, you'll apply window functions on the **Adventureworks**
+    database.
+  duration: 36 minutes
+  level: 100
+  islab: true
 ---
+
 # Use window functions
 
 In this exercise, you'll apply window functions on the **Adventureworks** database.
