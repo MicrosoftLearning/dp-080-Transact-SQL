@@ -1,7 +1,15 @@
 ---
 lab:
-    title: 'Lab Environment Setup - Microsoft Fabric'
-    module: 'Setup'
+  title: Lab Environment Setup - Microsoft Fabric
+  module: Setup
+  description: You can complete the Transact-SQL exercises in a sample database in
+    Microsoft Fabric. Use the instructions in this page to prepare a suitable Fabric
+    Database environment.
+  duration: 36 minutes
+  level: 200
+  islab: true
+  primarytopics:
+  - Microsoft Fabric
 ---
 
 # Lab Environment Setup
