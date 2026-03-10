@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Sort and Filter Query Results'
-    module: 'Module 2: Sorting and Filtering Query Results'
+  title: Sort and Filter Query Results
+  module: 'Module 2: Sorting and Filtering Query Results'
+  description: In this exercise, you'll use the Transact-SQL **SELECT** statement
+    to query and filter data in the **AdventureWorks** database.
+  duration: 148 minutes
+  level: 100
+  islab: true
 ---
 
 # Sort and Filter Query Results
