@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Query Multiple Tables with Joins'
-    module: 'Module 3: Using Joins and Subqueries'
+  title: Query Multiple Tables with Joins
+  module: 'Module 3: Using Joins and Subqueries'
+  description: In this exercise, you'll use the Transact-SQL **SELECT** statement
+    to query multiple tables in the **Adventureworks** database.
+  duration: 98 minutes
+  level: 100
+  islab: true
 ---
 
 # Query Multiple Tables with Joins
