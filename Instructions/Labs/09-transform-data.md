@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Use pivoting and grouping sets'
-    module: 'Additional exercises'
+  title: Use pivoting and grouping sets
+  module: Additional exercises
+  description: In this exercise, you'll use pivoting and grouping sets to query the
+    **Adventureworks** database.
+  duration: 50 minutes
+  level: 100
+  islab: true
 ---
 
 # Use pivoting and grouping sets
