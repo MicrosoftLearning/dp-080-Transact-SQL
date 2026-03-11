@@ -1,7 +1,11 @@
 ---
 lab:
-    title: 'Introduction to programming with Transact-SQL'
-    module: 'Additional exercises'
+  title: Introduction to programming with Transact-SQL
+  module: Additional exercises
+  description: In this exercise, you'll use get an introduction to programming with Transact-SQL using the Adventureworks database.
+  duration: 80 minutes
+  level: 100
+  islab: true
 ---
 
 # Introduction to programming with Transact-SQL
