@@ -3,7 +3,7 @@ lab:
   title: Create stored procedures and functions in Transact-SQL
   module: Additional exercises
   description: In this exercise, you'll create and run stored procedures in the Adventureworks database.
-  duration: 72 minutes
+  duration: 30
   level: 100
   islab: true
 ---
@@ -29,7 +29,7 @@ Stored procedures are named groups of Transact-SQL statements that can be used a
     GROUP BY Name, ListPrice
     ORDER BY ListPrice DESC;
     ```
-    
+
 1. Run the code to create a stored procedure named **SalesLT.up_GetTopProducts**.
 1. In the query pane, type the following code under the CREATE PROCEDURE statement:
 
@@ -220,4 +220,3 @@ FROM SalesLT.ProductCategory AS c
 CROSS APPLY SalesLT.fn_SubCategories(c.ProductCategoryID) AS sc
 ORDER BY Category, SubCategory;
 ```
-

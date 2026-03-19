@@ -3,7 +3,7 @@ lab:
   title: Sort and Filter Query Results
   module: 'Module 2: Sorting and Filtering Query Results'
   description: In this exercise, you'll use the Transact-SQL SELECT statement to query and filter data in the AdventureWorks database.
-  duration: 148 minutes
+  duration: 30
   level: 100
   islab: true
 ---
@@ -150,14 +150,14 @@ Often, multiple rows in a table may contain the same values for a given subset o
 
 7. Run the modified query and note that the results include one row for each unique **Color** value. This ability to remove duplicates from the results can often be useful - for example to retrieve values in order to populate a drop-down list of color options in a user interface.
 
-9. Modify the query to add the **Size** field as shown here:
+8. Modify the query to add the **Size** field as shown here:
 
     ```sql
     SELECT DISTINCT Color, Size
     FROM SalesLT.Product;
     ```
 
-8. Run the modified query and note that it returns each unique combination of color and size.
+9. Run the modified query and note that it returns each unique combination of color and size.
 
 ## Filter results with the WHERE clause
 
@@ -301,7 +301,7 @@ This section contains suggested solutions for the challenge queries.
     FROM SalesLT.Address
     ORDER BY City
     ```
- 
+
 2. Retrieve the heaviest products:
 
     ```sql

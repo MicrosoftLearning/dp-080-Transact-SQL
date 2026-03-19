@@ -3,7 +3,7 @@ lab:
   title: Query Multiple Tables with Joins
   module: 'Module 3: Using Joins and Subqueries'
   description: In this exercise, you'll use the Transact-SQL SELECT statement to query multiple tables in the Adventureworks database.
-  duration: 98 minutes
+  duration: 30
   level: 100
   islab: true
 ---
@@ -214,7 +214,7 @@ This section contains suggested solutions for the challenge queries.
     JOIN SalesLT.SalesOrderHeader AS oh
         ON oh.CustomerID = c.CustomerID;
     ```
- 
+
 2. Retrieve customer orders with addresses:
 
     ```sql

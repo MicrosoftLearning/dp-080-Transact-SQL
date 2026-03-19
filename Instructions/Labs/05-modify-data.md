@@ -3,7 +3,7 @@ lab:
   title: Modify Data
   module: 'Module 5: Modifying Data'
   description: In this exercise, you'll insert, update, and delete data in the Adventureworks database.
-  duration: 134 minutes
+  duration: 30
   level: 100
   islab: true
 ---

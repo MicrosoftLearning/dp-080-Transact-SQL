@@ -3,7 +3,7 @@ lab:
   title: Implement transactions with Transact SQL
   module: Additional exercises
   description: In this exercise you'll use a transaction to ensure that when a row is inserted into the Customer and Address tables, a row is also added to the CustomerAddress table to create a link between the customer record and the address record. If one insert fails, then all should fail.
-  duration: 72 minutes
+  duration: 30
   level: 100
   islab: true
 ---
@@ -38,7 +38,7 @@ In this exercise you'll use a transaction to ensure that when a row is inserted 
 
     *Conversion failed when converting date and/or time from character string.*
 
-1. Create a new query and enter the following code into the new query window: 
+1. Create a new query and enter the following code into the new query window:
 
     ```sql
     SELECT TOP 1 c.CustomerID, c.FirstName, c.LastName, ca.AddressID, a.City, c.ModifiedDate
@@ -110,7 +110,7 @@ Lower level errors can require that you explicitly handle the error and rollback
         VALUES (IDENT_CURRENT('SalesLT.Customer'), IDENT_CURRENT('SalesLT.Address'), 'Home', '16765338-dbe4-4421-b5e9-3836b9278e63', GETDATE());
     
     COMMIT TRANSACTION;
-    ``` 
+    ```
 
 1. Run the modified code. This time, a different error (with a lower severity level) occurs:
 

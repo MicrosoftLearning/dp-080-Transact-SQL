@@ -3,7 +3,7 @@ lab:
   title: Use Subqueries
   module: 'Module 3: Using Joins and Subqueries'
   description: In this exercise, you'll use subqueries to retrieve data from tables in the adventureworks database.
-  duration: 80 minutes
+  duration: 30
   level: 100
   islab: true
 ---

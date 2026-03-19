@@ -3,7 +3,7 @@ lab:
   title: Implement error handling with Transact-SQL
   module: Additional exercises
   description: In this exercise, you'll use various Transact-SQL error handling techniques.
-  duration: 68 minutes
+  duration: 30
   level: 100
   islab: true
 ---
@@ -16,7 +16,7 @@ In this exercise, you'll use various Transact-SQL error handling techniques.
 
 ## Observe unhandled error behavior in Transact-SQL
 
-The Adventureworks database contains details of products, including their size. Numeric values indicate the product size in centimeters, and you will use a stored procedure to convert these sizes to inches. 
+The Adventureworks database contains details of products, including their size. Numeric values indicate the product size in centimeters, and you will use a stored procedure to convert these sizes to inches.
 
 1. Open a query editor for your **Adventureworks** database, and create a new query.
 1. In the query pane, type the following code:
@@ -122,7 +122,7 @@ The message returned in the CATCH block indicates that an error occurred, but pr
 
 ## Throw the error to the client application
 
-So far, you've used a TRY/CATCH block to handle an error gracefully. The client application that calls the stored procedure does not encounter an exception. In multi-tier application designs, a common practice is to handle exceptions in the data tier to log details for troubleshooting purposes and ensure the integrity of the database, but then propagate the error to the calling application tier, which includes its own exception handling logic. 
+So far, you've used a TRY/CATCH block to handle an error gracefully. The client application that calls the stored procedure does not encounter an exception. In multi-tier application designs, a common practice is to handle exceptions in the data tier to log details for troubleshooting purposes and ensure the integrity of the database, but then propagate the error to the calling application tier, which includes its own exception handling logic.
 
 1. Return to the query used to create the stored procedure, and alter the procedure code to print the error number and message, like this:
 

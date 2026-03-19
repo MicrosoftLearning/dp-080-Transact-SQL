@@ -3,7 +3,7 @@ lab:
   title: Introduction to programming with Transact-SQL
   module: Additional exercises
   description: In this exercise, you'll use get an introduction to programming with Transact-SQL using the Adventureworks database.
-  duration: 80 minutes
+  duration: 30
   level: 100
   islab: true
 ---
@@ -51,12 +51,12 @@ In this exercise, you'll use get an introduction to programming with Transact-SQ
 1. Run the code and review the output. This time, the PRINT statements result in the variable values being included in the messages produced by the code:
 
     ```
-    8:02:11 AM	Started executing on line 1
-    8:02:01 AM	Started executing query.
-    8:02:01 AM	680
-    8:02:01 AM	1431.50
-    8:02:01 AM	Finished executing query.
-    8:02:13 AM	SQL Server execution time: 00:00:00.010 | Total duration: 00:00:01.782
+    8:02:11 AM Started executing on line 1
+    8:02:01 AM Started executing query.
+    8:02:01 AM 680
+    8:02:01 AM 1431.50
+    8:02:01 AM Finished executing query.
+    8:02:13 AM SQL Server execution time: 00:00:00.010 | Total duration: 00:00:01.782
     ```
 
 1. Add a SELECT statement to output the variables as a resultset:

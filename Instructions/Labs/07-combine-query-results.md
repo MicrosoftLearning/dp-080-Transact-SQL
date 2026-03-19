@@ -3,7 +3,7 @@ lab:
   title: Combine query results with set operators
   module: Additional exercises
   description: In this lab, you will use set operators to retrieve results from the Adventureworks database.
-  duration: 56 minutes
+  duration: 30
   level: 100
   islab: true
 ---

@@ -3,7 +3,7 @@ lab:
   title: Get Started with Transact-SQL
   module: 'Module 1: Getting Started with Transact-SQL'
   description: In this exercise, you will use some basic SELECT queries to retrieve data from the AdventureWorks database.
-  duration: 124 minutes
+  duration: 30
   level: 100
   islab: true
 ---

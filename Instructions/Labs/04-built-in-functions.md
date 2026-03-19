@@ -3,7 +3,7 @@ lab:
   title: Use Built-in Functions
   module: 'Module 4: Using Built-in Functions'
   description: In this exercise, you'll use built-in functions to retrieve and aggregate data in the Adventureworks database.
-  duration: 114 minutes
+  duration: 30
   level: 100
   islab: true
 ---
