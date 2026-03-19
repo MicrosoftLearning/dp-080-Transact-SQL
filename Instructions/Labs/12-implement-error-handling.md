@@ -1,7 +1,11 @@
 ---
 lab:
-    title: 'Implement error handling with Transact-SQL'
-    module: 'Additional exercises'
+  title: Implement error handling with Transact-SQL
+  module: Additional exercises
+  description: In this exercise, you'll use various Transact-SQL error handling techniques.
+  duration: 68 minutes
+  level: 100
+  islab: true
 ---
 
 # Implement error handling with Transact-SQL

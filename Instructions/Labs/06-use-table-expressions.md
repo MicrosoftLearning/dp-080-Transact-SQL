@@ -1,7 +1,11 @@
 ---
 lab:
-    title: 'Create queries with table expressions'
-    module: 'Additional exercises'
+  title: Create queries with table expressions
+  module: Additional exercises
+  description: In this exercise, you'll use table expressions to query the Adventureworks database.
+  duration: 66 minutes
+  level: 100
+  islab: true
 ---
 
 # Create queries with table expressions
