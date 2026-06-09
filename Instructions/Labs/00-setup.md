@@ -1,7 +1,6 @@
 ---
 lab:
     title: 'Lab Environment Setup - Local SQL Server'
-    module: 'Setup'
     description: 'Install SQL Server and the AdventureWorks sample database on a local computer to run the Transact-SQL exercises.'
     duration: 30  # duration in minutes
     level: 100 # 100 basic concepts, 200 foundations, 300 practical usage, 400 advanced scenarios, 500 expert design
