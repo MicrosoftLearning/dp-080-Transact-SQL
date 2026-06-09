@@ -1,11 +1,12 @@
 ---
 lab:
-  title: Query Multiple Tables with Joins
-  module: 'Module 3: Using Joins and Subqueries'
-  description: In this exercise, you'll use the Transact-SQL SELECT statement to query multiple tables in the Adventureworks database.
-  duration: 30
-  level: 100
-  islab: true
+    title: 'Query Multiple Tables with Joins'
+    description: "In this exercise, you'll use the Transact-SQL SELECT statement to query multiple tables in the Adventureworks database."
+    duration: 30  # duration in minutes
+    level: 100 # 100 basic concepts, 200 foundations, 300 practical usage, 400 advanced scenarios, 500 expert design
+    islab: true # if this is not a lab that should be listed in the catalog, set to false
+    status: 'released' # in-development or released
+    targetDate: '2099-01-01' # Set to the future date when you expect an in-development lab to be released
 ---
 
 # Query Multiple Tables with Joins

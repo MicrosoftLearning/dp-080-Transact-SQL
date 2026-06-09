@@ -1,11 +1,12 @@
 ---
 lab:
-  title: Create stored procedures and functions in Transact-SQL
-  module: Additional exercises
-  description: In this exercise, you'll create and run stored procedures in the Adventureworks database.
-  duration: 30
-  level: 100
-  islab: true
+    title: 'Create stored procedures and functions in Transact-SQL'
+    description: "In this exercise, you'll create and run stored procedures in the Adventureworks database."
+    duration: 30  # duration in minutes
+    level: 100 # 100 basic concepts, 200 foundations, 300 practical usage, 400 advanced scenarios, 500 expert design
+    islab: true # if this is not a lab that should be listed in the catalog, set to false
+    status: 'released' # in-development or released
+    targetDate: '2099-01-01' # Set to the future date when you expect an in-development lab to be released
 ---
 
 # Create stored procedures and functions in Transact-SQL

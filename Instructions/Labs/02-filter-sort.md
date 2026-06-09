@@ -1,11 +1,12 @@
 ---
 lab:
-  title: Sort and Filter Query Results
-  module: 'Module 2: Sorting and Filtering Query Results'
-  description: In this exercise, you'll use the Transact-SQL SELECT statement to query and filter data in the AdventureWorks database.
-  duration: 30
-  level: 100
-  islab: true
+    title: 'Sort and Filter Query Results'
+    description: "In this exercise, you'll use the Transact-SQL SELECT statement to query and filter data in the AdventureWorks database."
+    duration: 30  # duration in minutes
+    level: 100 # 100 basic concepts, 200 foundations, 300 practical usage, 400 advanced scenarios, 500 expert design
+    islab: true # if this is not a lab that should be listed in the catalog, set to false
+    status: 'released' # in-development or released
+    targetDate: '2099-01-01' # Set to the future date when you expect an in-development lab to be released
 ---
 
 # Sort and Filter Query Results

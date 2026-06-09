@@ -1,11 +1,12 @@
 ---
 lab:
-  title: Implement transactions with Transact SQL
-  module: Additional exercises
-  description: In this exercise you'll use a transaction to ensure that when a row is inserted into the Customer and Address tables, a row is also added to the CustomerAddress table to create a link between the customer record and the address record. If one insert fails, then all should fail.
-  duration: 30
-  level: 100
-  islab: true
+    title: 'Implement transactions with Transact SQL'
+    description: "In this exercise you'll use a transaction to ensure that when a row is inserted into the Customer and Address tables, a row is also added to the CustomerAddress table to create a link between the customer record and the address record. If one insert fails, then all should fail."
+    duration: 30  # duration in minutes
+    level: 100 # 100 basic concepts, 200 foundations, 300 practical usage, 400 advanced scenarios, 500 expert design
+    islab: true # if this is not a lab that should be listed in the catalog, set to false
+    status: 'released' # in-development or released
+    targetDate: '2099-01-01' # Set to the future date when you expect an in-development lab to be released
 ---
 
 # Implement transactions with Transact SQL
