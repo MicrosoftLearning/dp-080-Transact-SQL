@@ -14,10 +14,11 @@ These exercises and demos support Microsoft course [DP-080: Querying with Transa
 
 You can complete the exercises using:
 
--  A local installation of SQL Server
+- A local installation of SQL Server
 - Azure SQL Database
+- Microsoft Fabric
 
-Setup instructions are provided for both of these options.
+Setup instructions are provided for all three of these options.
 
 {% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
 | Lab |
